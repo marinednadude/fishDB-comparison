@@ -1,0 +1,133 @@
+---
+title: "rCRUX Manuscript Comparisons"
+output: html_document
+author: Zachary Gold
+date: "2023-04-19"
+---
+```{r,echo=FALSE, hide=TRUE, warnings=FALSE,message=FALSE}
+library(tidyverse)
+library(here)
+library(DECIPHER)
+library(phyloseq)
+library(ggVennDiagram)
+library(patchwork)
+library(ggpubr)
+library(VennDiagram) 
+
+```
+
+# Tax Credit Figure 7
+
+```{r}
+library(wesanderson)
+library(multcompView)
+
+cv_data <- read.table(here("paper_figs","cv-07-level_results.tsv"), header=T, sep = "\t") %>%   tibble::as_tibble() 
+novel_data <- read.table(here("paper_figs","novel-07-accuracy_results.tsv"), header=T, sep = "\t") %>%   tibble::as_tibble() 
+
+
+cv_data %>% 
+  filter(., level == 6) %>% 
+  mutate(., Dataset = recode(Dataset,
+                             `CRABS_ecoPCR` = "ecoPCR",
+                             `CRABS_MiFish` = "CRABS",
+                             `MetaCurator_MiFish` = "MetaCurator",
+                             `rCRUX_12S` = "rCRUX",
+                             `rCRUX_12S_exp` = "rCRUX expanded",
+                             `RESCRIPt_MiFish` = "RESCRIPt")) -> cv_data2
+  
+# analysis of variance
+anova <- aov(F.measure ~ Dataset, data = cv_data2)
+
+# Tukey's test
+tukey <- TukeyHSD(anova)
+
+# compact letter display
+cld <- multcompLetters4(anova, tukey)
+cld$Dataset %>%  as.data.frame.list() %>% tibble::rownames_to_column("Dataset") -> matcher_cld
+
+dt <- group_by(cv_data2, Dataset) %>%
+  summarise(w=mean(F.measure), sd = sd(F.measure)) %>%
+  arrange(desc(w))
+
+ cv_data2 %>% 
+  left_join(matcher_cld) %>% 
+  left_join(dt) %>% 
+  ggplot(aes(x= Dataset, y=F.measure, fill=Dataset)) +geom_violin(color="darkgrey") +
+  theme_pubclean() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        legend.position = "none",
+        axis.title = element_text(face="bold", size=24),
+        axis.text = element_text(size=16)) +
+  geom_boxplot(width=0.1) +
+  scale_fill_manual(values = c("#6C8645", "#CEB175", "#CB7A5C" ,"#5785C1", "#0A9F9D", "#FBA72A")) + ylim(0,1) +ylab("F-measure") + xlab("Databases") +
+   geom_text(aes(label = Letters, y = w, vjust = -0.7), size = 12) -> cv_plot
+cv_plot
+
+```
+
+```{r}
+
+novel_data %>% 
+  filter(., level == 6) %>% 
+  mutate(., Dataset = recode(Dataset,
+                             `CRABS_ecoPCR` = "ecoPCR",
+                             `CRABS_MiFish` = "CRABS",
+                             `MetaCurator_MiFish` = "MetaCurator",
+                             `rCRUX_12S` = "rCRUX",
+                             `rCRUX_12S_exp` = "rCRUX expanded",
+                             `RESCRIPt_MiFish` = "RESCRIPt")) -> novel_data2
+  
+# analysis of variance
+anova <- aov(F.measure ~ Dataset, data = novel_data2)
+
+# Tukey's test
+tukey <- TukeyHSD(anova)
+
+# compact letter display
+cld <- multcompLetters4(anova, tukey)
+cld$Dataset %>%  as.data.frame.list() %>% tibble::rownames_to_column("Dataset") -> matcher_novel
+
+dt2 <- group_by(novel_data2, Dataset) %>%
+  summarise(w=mean(F.measure), sd = sd(F.measure)) %>%
+  arrange(desc(w))
+
+ novel_data2 %>% 
+  left_join(matcher_novel) %>% 
+   left_join(dt2) %>% 
+  ggplot(aes(x= Dataset, y=F.measure, fill=Dataset)) +geom_violin(color="darkgrey") +
+  theme_pubclean() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        legend.position = "none",
+        axis.title = element_text(face="bold", size=24),
+        axis.text = element_text(size=16)) +
+  geom_boxplot(width=0.1) +
+  scale_fill_manual(values = c("#6C8645", "#CEB175", "#CB7A5C" ,"#5785C1", "#0A9F9D", "#FBA72A")) + ylim(0,1) +ylab("F-measure") + xlab("Databases") +
+   geom_text(aes(label = Letters, y = w, vjust = -0.7), size = 12)-> novel_plot
+
+novel_plot
+```
+
+```{r}
+fig_7 <- cv_plot+novel_plot + plot_annotation(tag_levels = 'a') + plot_layout(guides = "collect")
+
+
+
+
+ggsave(plot= fig_7, 
+       filename = here("Figures","Figure 7.png"),
+       width=16,
+       height = 8,
+       dpi = 300,
+      units = c("in"))
+```
+
+
+
+
+
+
+
+
+
+
