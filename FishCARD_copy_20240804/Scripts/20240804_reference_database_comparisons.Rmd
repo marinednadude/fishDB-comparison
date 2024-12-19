@@ -1,0 +1,203 @@
+---
+title: 'Comparison of Global vs. Local Reference Databases and Taxonomic Cutoff Scores for Metabarcoding Taxonomic Assignment: Case Study on MiFish 12S Specific Reference Databases and California Current Large Marine Ecosystem Fishes'
+author: "Zack Gold"
+date: "12/4/2020"
+output: html_document
+---
+
+```{r global-options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+```{r, echo=FALSE}
+#Load Libraries
+library(dplyr)
+library(tidyverse)
+library(knitr)
+library(here)
+```
+
+```{r}
+#Load Data
+
+## California Fish Species
+ca_fish_list <- read.table(here("Data","CA_fish_species","CA_fish_list_20210216.csv"), header = 1, sep = ",", stringsAsFactors = F)
+
+## Species Monitored by PISCO, KFM, and RCCA
+monitored <- read.table(here("Data","CA_fish_species","Monitored_Species_list_2020216.txt"), header = 1, sep = "\t", stringsAsFactors = F)
+
+## Final Accessions
+final_accessions <- read.table(here("Data","Supplemental Tables","final_accessions_20210521.txt"), header = 1, sep = "\t", stringsAsFactors = F)
+
+## Local DB
+FishCARD_db <- read.table(here("Data","local_database","Reference_db","trimmed","fishcard_12S_all_taxonomy_20201204.csv"), header = 1, sep = ",", stringsAsFactors = F)
+
+FishCARD_db %>%
+  filter(., str_detect(Final_name, "FISH")) %>% dplyr::select(Final_name) -> to_check_accessions 
+setdiff(to_check_accessions$Final_name, final_accessions$Accession)
+setdiff( final_accessions$Accession,to_check_accessions$Final_name)
+
+FishCARD_db2 <- read.table(here("Data","local_database","Reference_db","trimmed","fishcard_12S_all_taxonomy.txt"), header = FALSE, sep = "\t", stringsAsFactors = F)
+
+FishCARD_db2 %>%
+  filter(., str_detect(V1, "FISH")) %>% dplyr::select(V1) -> to_check_accessions2
+setdiff(to_check_accessions2$V1, final_accessions$Accession)
+setdiff( final_accessions$Accession,to_check_accessions2$V1)
+
+## Global DB
+Global_db <- read.table(here("Data","global_database","Reference_db","trimmed","global_database_taxonomy_20201204.csv"), header = 1, sep = ",", stringsAsFactors = F)
+
+Global_db %>%
+  filter(., str_detect(Final_name, "FISH")) %>% dplyr::select(Final_name) -> to_check_accessions 
+setdiff(to_check_accessions$Final_name, final_accessions$Accession)
+setdiff( final_accessions$Accession,to_check_accessions$Final_name)
+
+Global_db2 <- read.table(here("Data","global_database","Reference_db","trimmed","c19_fishcard_taxonomy.txt"), header = FALSE, sep = "\t", stringsAsFactors = F)
+
+Global_db2 %>%
+  filter(., str_detect(V1, "FISH")) %>% dplyr::select(V1) -> to_check_accessions2
+setdiff(to_check_accessions2$V1, final_accessions$Accession)
+setdiff( final_accessions$Accession,to_check_accessions2$V1)
+
+```
+
+# Barcoding Effort Statistics
+
+#### List of All California Fish Species
+```{r}
+ca_fish_list$Walker_Miller_Lea_Combo_20210216 %>% unique() %>% length()
+#1144 species in CA
+```
+
+#### CA Fish Species Barcoded by our Efforts
+```{r}
+FishCARD_db %>% 
+  filter(., str_detect(Final_name,"FISHCARD_")) %>% 
+  filter(., !str_detect(Species," sp[.]")) %>% 
+dplyr::select(Species) %>% unique() -> fishcard_only_species
+
+fishcard_only_species %>% dim()
+#607 total species barcoded
+```
+
+#### Average Numbder of Barcodes per Species
+```{r}
+FishCARD_db %>% 
+  filter(., str_detect(Final_name,"FISHCARD_")) %>% 
+dplyr::select(Species) %>% 
+group_by(Species) %>% 
+  dplyr::count() %>% ungroup() %>% 
+  dplyr::summarise(mean(n), max(n), min(n))
+```
+
+#### Average Numbder of Barcodes per Species
+```{r}
+FishCARD_db %>% 
+  filter(., str_detect(Final_name,"FISHCARD_")) %>% 
+  filter(., str_detect(Final_name,"elas")) %>% 
+dplyr::select(Species) %>% 
+group_by(Species) %>% 
+  dplyr::count() %>% ungroup() %>% 
+  dplyr::summarise(mean(n), max(n), min(n))
+```
+
+#### Average Numbder of Barcodes per Species
+```{r}
+FishCARD_db %>% 
+  filter(., str_detect(Final_name,"FISHCARD_")) %>% 
+  filter(., str_detect(Final_name,"miu")) %>%
+dplyr::select(Species) %>% 
+group_by(Species) %>% 
+  dplyr::count() %>% ungroup() %>% 
+  dplyr::summarise(mean(n), max(n), min(n))
+```
+
+### Species in Global
+```{r}
+
+Global_db %>% 
+  dplyr::select(Species) %>%  unique() %>%  dim()
+
+Global_db %>% dim()
+
+```
+
+#### Teleost in Local DB
+```{r}
+FishCARD_db %>% 
+  filter(., str_detect(Final_name,"FISHCARD_")) %>% 
+  filter(., Class=="Actinopteri") %>% 
+    filter(., !str_detect(Species," sp[.]")) %>%
+  dplyr::select(Species) %>% unique() %>% dim()
+#552 Bony Fish species
+```
+
+
+#### Sharks and Rays in Local DB
+```{r}
+FishCARD_db %>% 
+  filter(., str_detect(Final_name,"FISHCARD_")) %>% 
+  filter(., Class=="Chondrichthyes") %>% 
+    filter(., !str_detect(Species," sp[.]")) %>% 
+  dplyr::select(Species) %>% unique() %>% dim()
+#49 shark Fish species
+```
+
+#### Boneless Fish Species
+```{r}
+FishCARD_db %>% 
+  filter(., str_detect(Final_name,"FISHCARD_")) %>% 
+  filter(., Class %in% c("Myxini","Hyperoartia")) %>% 
+  dplyr::select(Species) %>% unique() %>% dim()
+
+#4 boneless Fish species
+```
+
+#### Check CA Fish Species List
+```{r}
+FishCARD_db %>% 
+  filter(., str_detect(Final_name,"FISHCARD_")) %>% 
+  dplyr::select(Species) -> FishCARD_df
+setdiff(FishCARD_df$Species,ca_fish_list$Walker_Miller_Lea_Combo_20210216) -> barcodes_with_genus_level_ids
+barcodes_with_genus_level_ids
+## 2 taxa barcoded could only be identified to Genus level, will remove for calculating statistics
+```
+
+#### List of All CA Fish Species that Now Have MiFish *12S* References
+```{r}
+
+FishCARD_db %>% 
+  dplyr::select(Species) %>% 
+  filter(., !Species %in% barcodes_with_genus_level_ids) -> FishCARD_df_total
+
+FishCARD_df_total$Species %>% unique() -> local_db_species_list
+local_db_species_list %>%  length()
+
+write.csv(local_db_species_list, file =here("Data","CA_fish_species","CA_fish_covered.csv"))
+
+```
+
+#### CA Fish Species that are still missing MiFish Reference Barcodes
+```{r}
+
+setdiff(ca_fish_list$Walker_Miller_Lea_Combo_20210216,local_db_species_list) -> Ca_fish_missing_mifish_barcodes
+
+setdiff(local_db_species_list,ca_fish_list$Walker_Miller_Lea_Combo_20210216)
+
+local_db_species_list %>% length()
+
+Ca_fish_missing_mifish_barcodes %>%  length()
+ca_fish_list$Walker_Miller_Lea_Combo_20210216 %>% length()
+local_db_species_list %>%  length()
+
+write.csv(Ca_fish_missing_mifish_barcodes,file=here("Data","CA_fish_species","Ca_fish_missing_mifish_barcodes.csv"))
+```
+
+#### Percent of CA Fish species Now Barcoded
+
+```{r}
+length(local_db_species_list)/length(ca_fish_list$Walker_Miller_Lea_Combo_20210216)*100
+
+```
+
+

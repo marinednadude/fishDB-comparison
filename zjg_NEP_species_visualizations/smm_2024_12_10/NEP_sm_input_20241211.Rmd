@@ -1,0 +1,1505 @@
+---
+title: "NEP Analysis Updated August 18 2024"
+author: "Zack Gold"
+date: "2024-08-18"
+output: html_document
+---
+
+
+```{r}
+library(taxonomizr)
+library(here)
+library(tidyverse)
+library(readxl)
+library(worrms)
+library(ggpubr)
+library(patchwork)
+```
+
+```{r}
+
+# Had to save as a .csv because of bad special character issues
+
+NEP_list_FINAL_merge_records <- read_delim(here("zjg_NEP_species_visualizations","smm_2024_12_10","NEP_list_FINAL_merge_records.txt"), col_types = cols(.default = col_character()), na = c("","NA"))
+
+FINAL_SPECIES_DB <- read_delim(here("zjg_NEP_species_visualizations","smm_2024_12_10","scientificNameTable_FINAL_CompleteDatabase.txt"), col_types = cols(.default = col_character()), na = c("","NA"))
+
+FINAL_SPECIES_DB %>%  
+  filter(taxonRank %in% c("Species", "Subspecies", "Forma", "Variety")) ->
+  FINAL_SPECIES_DB_species
+
+```
+
+
+## General Summary Stats
+
+```{r}
+
+FINAL_SPECIES_DB_species$kingdom %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$phylum %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$class %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$order %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$family %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$genus %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$scientificName %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$scientificName  %>%  length()
+
+```
+
+
+```{r}
+
+FINAL_SPECIES_DB_species$NCBI_accepted_kingdom %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$NCBI_accepted_phylum %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$NCBI_accepted_class %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$NCBI_accepted_order %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$NCBI_accepted_family %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$NCBI_accepted_genus %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$NCBI_accepted_species %>% unique() %>% length() -1
+FINAL_SPECIES_DB_species$NCBI_identifier_species %>% unique() %>% length() -1
+
+```
+
+```{R}
+
+FINAL_SPECIES_DB_species %>% 
+ count() -> total_unique_species
+
+FINAL_SPECIES_DB_species %>% 
+  mutate(., Matched = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    !is.na(identifier)  ~"WORMS query in NCBI",
+is.na(identifier) & !is.na(accepted_NCBI) ~"WORMS accepted in NCBI",
+    TRUE ~"OTHER")) %>% 
+  group_by(Matched) %>% 
+  count() %>% 
+  mutate(., perc= n/total_unique_species$n*100) 
+
+# 35% of species are not in NCBI
+  
+```
+
+
+## Bar Plot of Missing Phyla
+```{r}
+library(NatParksPalettes)
+natparks.pals("Yellowstone") -> yellowstone_pal
+
+
+FINAL_SPECIES_DB_species %>% 
+  mutate(., Matched = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    !is.na(identifier)  ~"WORMS query in NCBI",
+is.na(identifier) & !is.na(accepted_NCBI) ~"WORMS accepted in NCBI",
+    TRUE ~"OTHER"))%>% 
+  group_by(phylum, Matched)%>% 
+  count() %>% 
+  arrange(desc(n)) -> plot_1_format 
+
+plot_1_format$Matched <- factor(plot_1_format$Matched, levels = c("Not in NCBI","WORMS query in NCBI","WORMS accepted in NCBI"))
+
+plot_1_format %>% 
+  ggplot(., aes(x=reorder(phylum, -n), y=n, fill=Matched)) +  geom_bar(position="fill", stat="identity")  + theme_pubclean()  +
+  theme(axis.text.x = element_text(angle = -70, vjust = 0, hjust=0.2),
+        legend.position = "right")+ ylab("Percent") + xlab("Phyla") +scale_fill_manual(values=c(yellowstone_pal[3], yellowstone_pal[4],yellowstone_pal[1]))+ guides(fill=guide_legend(title="Metric"))+ theme(plot.title = element_text(hjust = 0.5,size = 20, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5,size = 18, face = "bold"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.text=element_text(size=14), 
+        axis.title=element_text(size=16,face="bold"),
+        legend.title = element_text( size=16, face="bold"),
+        legend.text = element_text(size=14)
+        )-> plot1a
+plot1a
+```
+
+```{r}
+plot_1_format %>% 
+  ggplot(., aes(x=reorder(phylum, -n), y=n, fill=Matched)) + 
+    geom_bar(position="stack", stat="identity")  + theme_pubclean()  +
+  theme(axis.text.x = element_text(angle = -70, vjust = 0, hjust=0.2),
+        legend.position = "right")+ ylab("Species") + xlab("Phyla")  +scale_fill_manual(values=c(yellowstone_pal[3], yellowstone_pal[4],yellowstone_pal[1]))+ guides(fill=guide_legend(title="Metric"))+ theme(plot.title = element_text(hjust = 0.5,size = 20, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5,size = 18, face = "bold"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.text=element_text(size=14), 
+        axis.title=element_text(size=16,face="bold"),
+        legend.title = element_text( size=16, face="bold"),
+        legend.text = element_text(size=14)
+        )-> plot1b
+plot1b
+```
+
+```{r}
+
+plot1a+plot1b + plot_layout(guides = "collect")
+
+ggsave(plot= plot1a+plot1b + plot_layout(guides = "collect"), 
+       filename = here("zjg_NEP_species_visualizations","smm_2024_12_10","figures","figure_1_metrics_20241211.png"),
+       width=16,
+       height = 6,
+       dpi = 300,
+      units = c("in"))
+```
+# Mitogenome
+
+```{r}
+
+FINAL_SPECIES_DB_species %>% 
+ mutate(., Matched_mitogenome = case_when(!is.na(circular_complete_verified_subTreeHits) | !is.na(circular_complete_unverified_subTreeHits) | !is.na(linear_complete_verified_subTreeHits) | !is.na(linear_complete_unverified_subTreeHits) ~"Circular/Linear Complete Mitogenome",
+    !is.na(circular_claimComplete_verified_subTreeHits) | !is.na(circular_noClaim_verified_subTreeHits) | !is.na(circular_noClaim_unverified_subTreeHits) | !is.na(linear_claimComplete_verified_subTreeHits) | !is.na(linear_noClaim_verified_subTreeHits) | !is.na(linear_noClaim_unverified_subTreeHits) ~"Other Mitogenome",
+    TRUE ~"No Mitogenome")) %>% 
+   group_by(phylum, Matched_mitogenome)%>% 
+  count() %>% 
+  arrange(desc(n)) -> plot_mitogenome_data
+
+natparks.pals("Olympic") -> Olympic_pal
+ 
+
+plot_mitogenome_data$Matched_mitogenome <- factor(plot_mitogenome_data$Matched_mitogenome, levels = c("No Mitogenome","Other Mitogenome","Circular/Linear Complete Mitogenome"))
+
+plot_mitogenome_data %>% 
+  ggplot(., aes(x=reorder(phylum, -n), y=n, fill=Matched_mitogenome)) + 
+    geom_bar(position="stack", stat="identity")  + theme_pubclean()  +
+  theme(axis.text.x = element_text(angle = -70, vjust = 0, hjust=0.2),
+        legend.position = "right")+ ylab("Species") + xlab("Phyla")  +scale_fill_manual(values=c(Olympic_pal[8], Olympic_pal[4],Olympic_pal[2])) +ggtitle(label="All Phyla")+ guides(fill=guide_legend(title="Metric"))+ theme(plot.title = element_text(hjust = 0.5,size = 20, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5,size = 18, face = "bold"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.text=element_text(size=16), 
+        axis.title=element_text(size=16,face="bold"),
+        legend.title = element_text( size=16, face="bold"),
+        legend.text = element_text(size=14)
+        )-> plot_mito
+
+plot_mito
+
+
+ggsave(plot= plot_mito, 
+       filename = here("zjg_NEP_species_visualizations","smm_2024_12_10","figures","figure_plot_mito_20241211.png"),
+       width=16,
+       height = 6,
+       dpi = 300,
+      units = c("in"))
+
+```
+
+# Broad rCRUX Analyses
+
+### Leray CO1
+```{r}
+
+### NEED TO DOWNLOAD the rCRUX DB from GitHub or our shared google drive: https://drive.google.com/drive/folders/1LVh4T6OGW_TNCbOC__Ru3DScXuLdnv4j?usp=drive_link
+
+leray_co1_db <- read.csv(file=here("rCRUX_dbs","CO1_combined","blast_seeds_output","summary.csv"))
+
+leray_co1_db$species %>%  unique() -> leray_co1_species
+
+natparks.pals("DeathValley") -> DeathValley_pal
+
+FINAL_SPECIES_DB_species %>% 
+ mutate(., Matched_co1 = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    NCBI_identifier_species %in% leray_co1_species ~"Leray CO1 Reference Exists",
+    NCBI_accepted_species %in% leray_co1_species ~"Leray CO1 Reference Exists",
+    TRUE ~"No Leray CO1 Reference")) %>% 
+   group_by(phylum, Matched_co1)%>% 
+  count() %>% 
+  arrange(desc(n)) -> plot_2_data
+
+plot_2_data$Matched_co1 <- factor(plot_2_data$Matched_co1, levels = c("Not in NCBI","No Leray CO1 Reference","Leray CO1 Reference Exists"))
+
+plot_2_data %>% 
+  ggplot(., aes(x=reorder(phylum, -n), y=n, fill=Matched_co1)) + 
+    geom_bar(position="stack", stat="identity")  + theme_pubclean()  +
+  theme(axis.text.x = element_text(angle = -70, vjust = 0, hjust=0.2),
+        legend.position = "right")+ ylab("Species") + xlab("Phyla")  +scale_fill_manual(values=c(DeathValley_pal[1], DeathValley_pal[2],DeathValley_pal[5], DeathValley_pal[7])) +ggtitle(label="All Phyla")+ guides(fill=guide_legend(title="Metric"))+ theme(plot.title = element_text(hjust = 0.5,size = 20, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5,size = 18, face = "bold"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.text=element_text(size=16), 
+        axis.title=element_text(size=16,face="bold"),
+        legend.title = element_text( size=16, face="bold"),
+        legend.text = element_text(size=14)
+        )-> plot_2a
+
+plot_2a
+```
+
+```{r}
+
+
+FINAL_SPECIES_DB_species %>% 
+  mutate(., Matched_co1 = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    NCBI_identifier_species %in% leray_co1_species ~"Leray CO1 Reference Exists",
+    NCBI_accepted_species %in% leray_co1_species ~"Leray CO1 Reference Exists",
+    TRUE ~"No Leray CO1 Reference")) %>% 
+    filter(., phylum=="Arthropoda") %>% 
+   group_by(family, Matched_co1)%>% 
+  count() %>% 
+  arrange(desc(n)) ->  co1_arthropods
+
+
+co1_arthropods$Matched_co1 <- factor(co1_arthropods$Matched_co1, levels = c("Not in NCBI","No Leray CO1 Reference","Leray CO1 Reference Exists"))
+
+co1_arthropods %>% 
+  filter(., n >20) %>% 
+    dplyr::select(family) -> co1_arthropods_families_to_keep
+
+co1_arthropods %>% 
+  filter(family %in% co1_arthropods_families_to_keep$family) ->co1_arthropods_clean
+
+co1_arthropods_clean %>% 
+  group_by(family) %>% 
+  dplyr::summarise(tot=sum(n)) -> tot_arth_co1
+  
+  co1_arthropods_clean %>% 
+    left_join(tot_arth_co1) %>% 
+  ggplot(., aes(x=reorder(family, -tot), y=n, fill=Matched_co1)) + 
+    geom_bar(position="stack", stat="identity")  + theme_pubclean()  +
+  theme(axis.text.x = element_text(angle = -70, vjust = 0, hjust=0.2),
+        legend.position = "right")+ ylab("Species") + xlab("Families")  +scale_fill_manual(values=c(DeathValley_pal[1], DeathValley_pal[2],DeathValley_pal[5], DeathValley_pal[7]))+ggtitle(label="Arthropoda") + guides(fill=guide_legend(title="Metric"))+ theme(plot.title = element_text(hjust = 0.5,size = 20, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5,size = 18, face = "bold"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.text=element_text(size=12), 
+        axis.title=element_text(size=16,face="bold"),
+        legend.title = element_text( size=16, face="bold"),
+        legend.text = element_text(size=14)
+        )-> plot_2b
+
+  plot_2b
+```
+
+```{r}
+
+plot_2a+plot_2b + plot_layout(guides = "collect")
+
+ggsave(plot= plot_2a+plot_2b + plot_layout(guides = "collect"), 
+       filename = here("zjg_NEP_species_visualizations","smm_2024_12_10","figures","figure_2_CO1_20241211.png"),
+       width=16,
+       height = 6,
+       dpi = 300,
+      units = c("in"))
+```
+
+### MiFish
+
+```{r}
+
+mifish_db <- read.csv(file=here("rCRUX_dbs","MiFish_12S","blast_seeds_output","summary.csv"))
+
+mifish_db$species %>%  unique() -> mifish_species
+
+natparks.pals("Arches") -> arches_pal
+
+FINAL_SPECIES_DB_species %>% 
+ mutate(., Matched_mifish = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    NCBI_identifier_species %in% mifish_species ~"MiFish 12S Reference Exists",
+    NCBI_accepted_species %in% mifish_species ~"MiFish 12S Reference Exists",
+    TRUE ~"No MiFish 12S Reference")) %>% 
+    filter(., phylum=="Chordata") %>% 
+   group_by(class, Matched_mifish)%>% 
+  count() %>% 
+  arrange(desc(n)) -> plot_3_data
+
+plot_3_data %>% 
+  group_by(class) %>% 
+  dplyr::summarise(tot=sum(n)) -> tot_mifish12S
+
+plot_3_data$Matched_mifish <- factor(plot_3_data$Matched_mifish, levels = c("Not in NCBI","No MiFish 12S Reference","MiFish 12S Reference Exists"))
+
+  
+plot_3_data %>% 
+ left_join(tot_mifish12S) %>% 
+  ggplot(., aes(x=reorder(class, -tot), y=n, fill=Matched_mifish)) + 
+    geom_bar(position="stack", stat="identity")  + theme_pubclean()  +
+  theme(axis.text.x = element_text(angle = -70, vjust = 0, hjust=0.2),
+        legend.position = "right")+ ylab("Species") + xlab("Classes")  +scale_fill_manual(values=c(arches_pal[1], arches_pal[3],arches_pal[4])) +ggtitle(label="All Classes")+ guides(fill=guide_legend(title="Metric"))+ guides(fill=guide_legend(title="Metric"))+ theme(plot.title = element_text(hjust = 0.5,size = 20, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5,size = 18, face = "bold"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.text=element_text(size=16), 
+        axis.title=element_text(size=16,face="bold"),
+        legend.title = element_text( size=16, face="bold"),
+        legend.text = element_text(size=14)
+        )-> plot_3a
+
+plot_3a
+```
+
+```{r}
+
+
+FINAL_SPECIES_DB_species %>% 
+  mutate(., Matched_mifish = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    NCBI_identifier_species %in% mifish_species ~"MiFish 12S Reference Exists",
+    NCBI_identifier_species %in% mifish_species ~"MiFish 12S Reference Exists",
+    TRUE ~"No MiFish 12S Reference"))  %>% 
+   filter(., class=="Teleostei") %>% 
+   group_by(family, Matched_mifish)%>% 
+  count() %>% 
+  arrange(desc(n)) %>% 
+    filter(., !is.na(family)) -> mifish_verts_fam
+
+mifish_verts_fam %>% 
+  filter(., n >7) %>% 
+    dplyr::select(family) -> mifish_verts_fam_to_keep
+
+mifish_verts_fam %>% 
+  filter(family %in% mifish_verts_fam_to_keep$family) ->mifish_verts_fam_clean
+
+mifish_verts_fam_clean %>% 
+  group_by(family) %>% 
+  dplyr::summarise(tot=sum(n)) -> tot_mifish12S_fam
+
+mifish_verts_fam_clean$Matched_mifish <- factor(mifish_verts_fam_clean$Matched_mifish, levels = c("Not in NCBI","No MiFish 12S Reference","MiFish 12S Reference Exists"))
+
+
+mifish_verts_fam_clean %>% 
+ left_join(tot_mifish12S_fam) %>% 
+  ggplot(., aes(x=reorder(family, -tot), y=n, fill=Matched_mifish)) + 
+    geom_bar(position="stack", stat="identity")  + theme_pubclean()  +
+  theme(axis.text.x = element_text(angle = -70, vjust = 0, hjust=0.2),
+        legend.position = "right")+ ylab("Species") + xlab("Families")  +scale_fill_manual(values=c(arches_pal[1], arches_pal[3],arches_pal[4])) +ggtitle(label="Bony Fishes") + guides(fill=guide_legend(title="Metric"))+ guides(fill=guide_legend(title="Metric"))+ theme(plot.title = element_text(hjust = 0.5,size = 20, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5,size = 18, face = "bold"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.text=element_text(size=16), 
+        axis.title=element_text(size=16,face="bold"),
+        legend.title = element_text( size=16, face="bold"),
+        legend.text = element_text(size=14)
+        )-> plot_3b
+
+plot_3b
+
+```
+
+
+
+```{r}
+
+plot_3a+plot_3b + plot_layout(guides = "collect")
+
+ggsave(plot= plot_3a+plot_3b + plot_layout(guides = "collect"), 
+       filename = here("zjg_NEP_species_visualizations","smm_2024_12_10","figures","figure_3_mifish.png"),
+       width=16,
+       height = 6,
+       dpi = 300,
+      units = c("in"))
+```
+
+### Kelly 16S
+
+```{r}
+
+K16S_co1_db <- read.csv(file=here("rCRUX_dbs","Kelly_16S","blast_seeds_output","summary.csv"))
+
+K16S_co1_db$species %>%  unique() -> K16S_species
+
+natparks.pals("Olympic") -> Olympic_pal
+
+FINAL_SPECIES_DB_species %>% 
+ mutate(., Matched_K16S = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    NCBI_identifier_species %in% K16S_species ~"Kelly 16S Reference Exists",
+    NCBI_accepted_species %in% K16S_species ~"Kelly 16S Reference Exists",
+    TRUE ~"No Kelly 16S Reference")) %>% 
+   group_by(phylum, Matched_K16S)%>% 
+  count() %>% 
+  arrange(desc(n))-> plot_4_data
+  
+  
+plot_4_data$Matched_K16S <- factor(plot_4_data$Matched_K16S, levels = c("Not in NCBI","No Kelly 16S Reference","Kelly 16S Reference Exists"))
+
+  
+  plot_4_data %>% 
+  filter(., n>8) %>% 
+  ggplot(., aes(x=reorder(phylum, -n), y=n, fill=Matched_K16S)) + 
+    geom_bar(position="stack", stat="identity")  + theme_pubclean()  +
+  theme(axis.text.x = element_text(angle = -70, vjust = 0, hjust=0.2),
+        legend.position = "right")+ ylab("Species") + xlab("Phyla")  +scale_fill_manual(values=c(Olympic_pal[8], Olympic_pal[7],Olympic_pal[2])) +ggtitle(label="All Phyla")+ guides(fill=guide_legend(title="Metric"))+ theme(plot.title = element_text(hjust = 0.5,size = 20, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5,size = 18, face = "bold"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.text=element_text(size=16), 
+        axis.title=element_text(size=16,face="bold"),
+        legend.title = element_text( size=16, face="bold"),
+        legend.text = element_text(size=14)
+        )-> plot_4a
+
+plot_4a
+```
+
+```{r}
+
+
+FINAL_SPECIES_DB_species %>% 
+ mutate(., Matched_K16S = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    NCBI_identifier_species %in% K16S_species ~"Kelly 16S Reference Exists",
+    NCBI_accepted_species %in% K16S_species ~"Kelly 16S Reference Exists",
+    TRUE ~"No Kelly 16S Reference")) %>% 
+    filter(., phylum=="Arthropoda") %>% 
+   group_by(family, Matched_K16S)%>% 
+  count() %>% 
+  arrange(desc(n)) %>% 
+  ungroup() -> K16S_arthropods
+
+K16S_arthropods %>% 
+  filter(., n >15) %>% 
+    dplyr::select(family) -> K16S_fam_to_keep
+
+K16S_arthropods %>% 
+  filter(family %in% K16S_fam_to_keep$family) -> K16S_arthropods_clean
+    
+K16S_arthropods_clean %>% 
+  group_by(family) %>% 
+  dplyr::summarise(tot=sum(n)) -> tot_arth_K16S
+
+K16S_arthropods_clean$Matched_K16S <- factor(K16S_arthropods_clean$Matched_K16S, levels = c("Not in NCBI","No Kelly 16S Reference","Kelly 16S Reference Exists"))
+
+  
+K16S_arthropods_clean %>% 
+    left_join(tot_arth_K16S) %>% 
+  ggplot(., aes(x=reorder(family, -tot), y=n, fill=Matched_K16S)) + 
+    geom_bar(position="stack", stat="identity")  + theme_pubclean()  +
+  theme(axis.text.x = element_text(angle = -70, vjust = 0, hjust=0.2),
+        legend.position = "right")+ ylab("Species") + xlab("Families")  +scale_fill_manual(values=c(Olympic_pal[8], Olympic_pal[7],Olympic_pal[2]))+ggtitle(label="Arthropoda") + guides(fill=guide_legend(title="Metric"))+ theme(plot.title = element_text(hjust = 0.5,size = 20, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5,size = 18, face = "bold"),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(), 
+        axis.text=element_text(size=16), 
+        axis.title=element_text(size=16,face="bold"),
+        legend.title = element_text( size=16, face="bold"),
+        legend.text = element_text(size=14)
+        )-> plot_4b
+  
+plot_4b
+```
+
+```{r}
+
+plot_4a+plot_4b + plot_layout(guides = "collect")
+
+ggsave(plot= plot_4a+plot_4b + plot_layout(guides = "collect"), 
+       filename = here("zjg_NEP_species_visualizations","smm_2024_12_10","figures","figure_4_kelly_16s.png"),
+       width=16,
+       height = 6,
+       dpi = 300,
+      units = c("in"))
+```
+
+```{r}
+plot_mito /
+(plot_2a+plot_2b +plot_layout(guides = "collect")) /
+(plot_3a+plot_3b+plot_layout(guides = "collect")) + plot_annotation(tag_levels = 'A')
+
+
+ggsave( filename = here("zjg_NEP_species_visualizations","smm_2024_12_10","figures","combined_plots.png"),
+       width=16,
+       height = 16,
+       dpi = 300,
+      units = c("in"))
+
+```
+
+# Comparison of Fish Resolution
+
+
+### Load Data
+
+
+```{r}
+
+FINAL_SPECIES_DB_species %>% 
+      filter(str_detect(phylum, "Chordata")) -> vert_DB_species
+
+
+```
+
+### MiFish
+
+```{r, warning=FALSE}
+Mifish_separated <- readRDS(here("LCA","barcodes_unique","MiFish_12S_vertebrates_only_merged_data_set.RDS"))
+
+Mifish_separated %>% 
+  filter(str_detect(lca_taxonomic_path, "Chordata")) %>% 
+  rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> Mifish_separated_2
+
+Mifish_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+  mutate(., Barcode= "MiFish 12S") %>% 
+  mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD")) -> Mifish_cat
+
+Mifish_cat %>% 
+  ungroup() %>% 
+  dplyr::select(-cluster,-data,-Accesions, -Species_per_cluster) %>% distinct() ->Mifish_cat_u
+
+vert_DB_species %>% 
+  left_join(Mifish_cat_u, by=join_by("NCBI_identifier_species"=="Species")) -> vert_DB_Mifish_cat
+
+vert_DB_Mifish_cat %>% 
+  filter(Type=="Species Level ID") %>%
+  dplyr::rename(Species=NCBI_identifier_species) -> vert_DB_Mifish_cat_species_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_Mifish_cat_species_level$row_ids) %>%
+    left_join(Mifish_cat_u, by=join_by("NCBI_identifier_genus"=="Genus")) -> vert_DB_Mifish_cat_g
+
+vert_DB_Mifish_cat_g %>% 
+  filter(Type=="Genus Level ID") %>%
+  dplyr::rename(Genus=NCBI_identifier_genus)-> vert_DB_Mifish_cat_genus_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_Mifish_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_Mifish_cat_genus_level$row_ids) %>% 
+    left_join(Mifish_cat_u, by=join_by("NCBI_identifier_family"=="Family")) -> vert_DB_Mifish_cat_f
+
+vert_DB_Mifish_cat_f %>% 
+  filter(Type=="Family Level ID") %>%
+  dplyr::rename(Family=NCBI_identifier_family)-> vert_DB_Mifish_cat_family_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_Mifish_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_Mifish_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_Mifish_cat_family_level$row_ids) %>% 
+    left_join(Mifish_cat_u, by=join_by("NCBI_identifier_order"=="Order")) -> vert_DB_Mifish_cat_o
+
+vert_DB_Mifish_cat_o %>% 
+  filter(Type=="Order Level ID") %>%
+  dplyr::rename(Order=NCBI_identifier_order)-> vert_DB_Mifish_cat_order_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_Mifish_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_Mifish_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_Mifish_cat_family_level$row_ids) %>% 
+        filter(., !row_ids %in% vert_DB_Mifish_cat_order_level$row_ids) %>% 
+    left_join(Mifish_cat_u, by=join_by("NCBI_identifier_class"=="Class")) -> vert_DB_Mifish_cat_c
+
+vert_DB_Mifish_cat_c %>% 
+  filter(Type=="Class Level ID") %>%
+  dplyr::rename(Class=NCBI_identifier_class)-> vert_DB_Mifish_cat_class_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_Mifish_cat_species_level$row_ids) %>%
+    filter(., !row_ids %in% vert_DB_Mifish_cat_genus_level$row_ids) %>%
+      filter(., !row_ids %in% vert_DB_Mifish_cat_family_level$row_ids) %>% 
+        filter(., !row_ids %in% vert_DB_Mifish_cat_order_level$row_ids) %>% 
+          filter(., !row_ids %in% vert_DB_Mifish_cat_class_level$row_ids) %>% 
+    left_join(Mifish_cat_u, by=join_by("NCBI_identifier_phylum"=="Phylum")) -> vert_DB_Mifish_cat_p
+
+vert_DB_Mifish_cat_p %>% 
+  filter(Type=="Phylum Level ID") %>%
+  dplyr::rename(Phylum=NCBI_identifier_phylum)-> vert_DB_Mifish_cat_phylum_level
+
+vert_DB_Mifish_cat_phylum_level$class %>% unique()
+Mifish_cat_u$Class %>% unique()
+
+bind_rows(vert_DB_Mifish_cat_species_level,vert_DB_Mifish_cat_genus_level,vert_DB_Mifish_cat_family_level,vert_DB_Mifish_cat_class_level,vert_DB_Mifish_cat_order_level, vert_DB_Mifish_cat_phylum_level) -> comb_Mifish_cat_match_levels
+
+vert_DB_species %>% 
+ mutate(., Type = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    NCBI_identifier_species %in% comb_Mifish_cat_match_levels$NCBI_identifier_species ~"Ford 16S Reference Exists",
+    NCBI_accepted_species %in% comb_Mifish_cat_match_levels$NCBI_accepted_species ~"Ford 16S Reference Exists",
+    TRUE ~"No Reference Barcode")) %>% filter(Type != "Ford 16S Reference Exists" ) %>% left_join(Mifish_cat_u, by=join_by(Type)) %>% distinct() -> Mifish_cat_missing_holder
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% comb_Mifish_cat_match_levels$row_ids) %>% 
+    filter(., !row_ids %in% Mifish_cat_missing_holder$row_ids) %>%
+  filter(., !is.na(NCBI_identifier_species) | !is.na(NCBI_accepted_species)) %>% 
+  left_join(Mifish_cat_u, by=join_by("NCBI_accepted_species"=="Species")) %>% 
+  mutate(., Type =if_else(is.na(Type), "No Reference Barcode", Type )) -> vert_DB_Mifish_cat_accepted_fix
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% comb_Mifish_cat_match_levels$row_ids) %>% 
+      filter(., !row_ids %in% Mifish_cat_missing_holder$row_ids) %>%
+  filter(., is.na(NCBI_identifier_species) & is.na(NCBI_accepted_species)) %>% 
+   left_join(Mifish_cat_u, by=join_by("NCBI_accepted_species"=="Species")) %>% 
+  mutate(., Type =if_else(is.na(Type), "No Reference Barcode", Type )) -> vert_DB_Mifish_cat_accepted_fix_2
+
+
+bind_rows(comb_Mifish_cat_match_levels,Mifish_cat_missing_holder,vert_DB_Mifish_cat_accepted_fix,vert_DB_Mifish_cat_accepted_fix_2) -> comb_Mifish_cat_levels
+
+dim(comb_Mifish_cat_match_levels)
+dim(Mifish_cat_missing_holder)
+dim(vert_DB_Mifish_cat_accepted_fix)
+dim(vert_DB_Mifish_cat_accepted_fix_2)
+
+dim(vert_DB_species)
+dim(comb_Mifish_cat_levels)
+
+```
+
+
+
+### Ford 16S
+
+```{r, warning=FALSE}
+Ford_16S_separated <- readRDS(here("LCA","barcodes_unique","Ford_16S_vertebrates_only_merged_data_set.RDS"))
+
+Ford_16S_separated %>% 
+     filter(str_detect(lca_taxonomic_path, "Chordata")) %>% 
+  rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> Ford_16S_separated_2
+
+Ford_16S_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+    mutate(., Barcode= "Ford 16S") %>% 
+  mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD")) -> Ford_16S_cat
+
+Ford_16S_cat %>% 
+  ungroup() %>% 
+  dplyr::select(-cluster,-data,-Accesions, -Species_per_cluster) %>% distinct() ->Ford_16S_cat_u
+
+vert_DB_species %>% 
+  left_join(Ford_16S_cat_u, by=join_by("NCBI_identifier_species"=="Species")) -> vert_DB_Ford_16S_cat
+
+vert_DB_Ford_16S_cat %>% 
+  filter(Type=="Species Level ID") %>%
+  dplyr::rename(Species=NCBI_identifier_species) -> vert_DB_Ford_16S_cat_species_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_Ford_16S_cat_species_level$row_ids) %>% 
+    left_join(Ford_16S_cat_u, by=join_by("NCBI_identifier_genus"=="Genus")) -> vert_DB_Ford_16S_cat_g
+
+vert_DB_Ford_16S_cat_g %>% 
+  filter(Type=="Genus Level ID") %>%
+  dplyr::rename(Genus=NCBI_identifier_genus)-> vert_DB_Ford_16S_cat_genus_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_Ford_16S_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_Ford_16S_cat_genus_level$row_ids) %>% 
+    left_join(Ford_16S_cat_u, by=join_by("NCBI_identifier_family"=="Family")) -> vert_DB_Ford_16S_cat_f
+
+vert_DB_Ford_16S_cat_f %>% 
+  filter(Type=="Family Level ID") %>%
+  dplyr::rename(Family=NCBI_identifier_family)-> vert_DB_Ford_16S_cat_family_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_Ford_16S_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_Ford_16S_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_Ford_16S_cat_family_level$row_ids) %>% 
+    left_join(Ford_16S_cat_u, by=join_by("NCBI_identifier_order"=="Order")) -> vert_DB_Ford_16S_cat_o
+
+vert_DB_Ford_16S_cat_o %>% 
+  filter(Type=="Order Level ID") %>%
+  dplyr::rename(Order=NCBI_identifier_order)-> vert_DB_Ford_16S_cat_order_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_Ford_16S_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_Ford_16S_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_Ford_16S_cat_family_level$row_ids) %>% 
+        filter(., !row_ids %in% vert_DB_Ford_16S_cat_order_level$row_ids) %>% 
+    left_join(Ford_16S_cat_u, by=join_by("NCBI_identifier_class"=="Class")) -> vert_DB_Ford_16S_cat_c
+
+vert_DB_Ford_16S_cat_c %>% 
+  filter(Type=="Class Level ID") %>%
+  dplyr::rename(Class=NCBI_identifier_class)-> vert_DB_Ford_16S_cat_class_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_Ford_16S_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_Ford_16S_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_Ford_16S_cat_family_level$row_ids) %>% 
+        filter(., !row_ids %in% vert_DB_Ford_16S_cat_order_level$row_ids) %>% 
+          filter(., !row_ids %in% vert_DB_Ford_16S_cat_class_level$row_ids) %>% 
+    left_join(Ford_16S_cat_u, by=join_by("NCBI_identifier_phylum"=="Phylum")) -> vert_DB_Ford_16S_cat_p
+
+vert_DB_Ford_16S_cat_p %>% 
+  filter(Type=="Phylum Level ID") %>%
+  dplyr::rename(Phylum=NCBI_identifier_phylum)-> vert_DB_Ford_16S_cat_phylum_level
+
+bind_rows(vert_DB_Ford_16S_cat_species_level,vert_DB_Ford_16S_cat_genus_level,vert_DB_Ford_16S_cat_family_level,vert_DB_Ford_16S_cat_class_level,vert_DB_Ford_16S_cat_order_level, vert_DB_Ford_16S_cat_phylum_level) -> comb_Ford_16S_cat_match_levels
+
+vert_DB_species %>% 
+ mutate(., Type = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    NCBI_identifier_species %in% comb_Ford_16S_cat_match_levels$NCBI_identifier_species ~"Ford 16S Reference Exists",
+    NCBI_accepted_species %in% comb_Ford_16S_cat_match_levels$NCBI_accepted_species ~"Ford 16S Reference Exists",
+    TRUE ~"No Reference Barcode")) %>% filter(Type != "Ford 16S Reference Exists" ) %>% left_join(Ford_16S_cat_u, by=join_by(Type)) %>% distinct() -> Ford_16S_cat_missing_holder
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% comb_Ford_16S_cat_match_levels$row_ids) %>% 
+    filter(., !row_ids %in% Ford_16S_cat_missing_holder$row_ids) %>%
+  filter(., !is.na(NCBI_identifier_species) | !is.na(NCBI_accepted_species)) %>% 
+  left_join(Ford_16S_cat_u, by=join_by("NCBI_accepted_species"=="Species")) %>% 
+  mutate(., Type =if_else(is.na(Type), "No Reference Barcode", Type )) -> vert_DB_Ford_16S_cat_accepted_fix
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% comb_Ford_16S_cat_match_levels$row_ids) %>% 
+      filter(., !row_ids %in% Ford_16S_cat_missing_holder$row_ids) %>%
+  filter(., is.na(NCBI_identifier_species) & is.na(NCBI_accepted_species)) %>% 
+   left_join(Ford_16S_cat_u, by=join_by("NCBI_accepted_species"=="Species")) %>% 
+  mutate(., Type =if_else(is.na(Type), "No Reference Barcode", Type )) -> vert_DB_Ford_16S_cat_accepted_fix_2
+
+
+bind_rows(comb_Ford_16S_cat_match_levels,Ford_16S_cat_missing_holder,vert_DB_Ford_16S_cat_accepted_fix,vert_DB_Ford_16S_cat_accepted_fix_2) -> comb_Ford_16S_cat_levels
+
+dim(comb_Ford_16S_cat_match_levels)
+dim(Ford_16S_cat_missing_holder)
+dim(vert_DB_Ford_16S_cat_accepted_fix)
+dim(vert_DB_Ford_16S_cat_accepted_fix_2)
+
+dim(vert_DB_species)
+dim(comb_Ford_16S_cat_levels)
+
+```
+
+### MarVer3
+
+```{r, warning=FALSE}
+MarVer3_separated <- readRDS(here("LCA","barcodes_unique","MarVer3_vertebrates_only_merged_data_set.RDS"))
+
+MarVer3_separated %>% 
+     filter(str_detect(lca_taxonomic_path, "Chordata")) %>% 
+  rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> MarVer3_separated_2
+
+MarVer3_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+      mutate(., Barcode= "MarVer3") %>% 
+   mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD")) -> MarVer3_cat
+
+
+MarVer3_cat %>% 
+  ungroup() %>% 
+  dplyr::select(-cluster,-data,-Accesions, -Species_per_cluster) %>% distinct() ->MarVer3_cat_u
+
+vert_DB_species %>% 
+  left_join(MarVer3_cat_u, by=join_by("NCBI_identifier_species"=="Species")) -> vert_DB_MarVer3_cat
+
+vert_DB_MarVer3_cat %>% 
+  filter(Type=="Species Level ID") %>%
+  dplyr::rename(Species=NCBI_identifier_species) -> vert_DB_MarVer3_cat_species_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_MarVer3_cat_species_level$row_ids) %>% 
+    left_join(MarVer3_cat_u, by=join_by("NCBI_identifier_genus"=="Genus")) -> vert_DB_MarVer3_cat_g
+
+vert_DB_MarVer3_cat_g %>% 
+  filter(Type=="Genus Level ID") %>%
+  dplyr::rename(Genus=NCBI_identifier_genus)-> vert_DB_MarVer3_cat_genus_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_MarVer3_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_MarVer3_cat_genus_level$row_ids) %>% 
+    left_join(MarVer3_cat_u, by=join_by("NCBI_identifier_family"=="Family")) -> vert_DB_MarVer3_cat_f
+
+vert_DB_MarVer3_cat_f %>% 
+  filter(Type=="Family Level ID") %>%
+  dplyr::rename(Family=NCBI_identifier_family)-> vert_DB_MarVer3_cat_family_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_MarVer3_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_MarVer3_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_MarVer3_cat_family_level$row_ids) %>% 
+    left_join(MarVer3_cat_u, by=join_by("NCBI_identifier_order"=="Order")) -> vert_DB_MarVer3_cat_o
+
+vert_DB_MarVer3_cat_o %>% 
+  filter(Type=="Order Level ID") %>%
+  dplyr::rename(Order=NCBI_identifier_order)-> vert_DB_MarVer3_cat_order_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_MarVer3_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_MarVer3_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_MarVer3_cat_family_level$row_ids) %>% 
+        filter(., !row_ids %in% vert_DB_MarVer3_cat_order_level$row_ids) %>% 
+    left_join(MarVer3_cat_u, by=join_by("NCBI_identifier_class"=="Class")) -> vert_DB_MarVer3_cat_c
+
+vert_DB_MarVer3_cat_c %>% 
+  filter(Type=="Class Level ID") %>%
+  dplyr::rename(Class=NCBI_identifier_class)-> vert_DB_MarVer3_cat_class_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_MarVer3_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_MarVer3_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_MarVer3_cat_family_level$row_ids) %>% 
+        filter(., !row_ids %in% vert_DB_MarVer3_cat_order_level$row_ids) %>% 
+          filter(., !row_ids %in% vert_DB_MarVer3_cat_class_level$row_ids) %>% 
+    left_join(MarVer3_cat_u, by=join_by("NCBI_identifier_phylum"=="Phylum")) -> vert_DB_MarVer3_cat_p
+
+vert_DB_MarVer3_cat_p %>% 
+  filter(Type=="Phylum Level ID") %>%
+  dplyr::rename(Phylum=NCBI_identifier_phylum)-> vert_DB_MarVer3_cat_phylum_level
+
+bind_rows(vert_DB_MarVer3_cat_species_level,vert_DB_MarVer3_cat_genus_level,vert_DB_MarVer3_cat_family_level,vert_DB_MarVer3_cat_class_level,vert_DB_MarVer3_cat_order_level, vert_DB_MarVer3_cat_phylum_level) -> comb_MarVer3_cat_match_levels
+
+vert_DB_species %>% 
+ mutate(., Type = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    NCBI_identifier_species %in% comb_MarVer3_cat_match_levels$NCBI_identifier_species ~"Ford 16S Reference Exists",
+    NCBI_accepted_species %in% comb_MarVer3_cat_match_levels$NCBI_accepted_species ~"Ford 16S Reference Exists",
+    TRUE ~"No Reference Barcode")) %>% filter(Type != "Ford 16S Reference Exists" ) %>% left_join(MarVer3_cat_u, by=join_by(Type)) %>% distinct() -> MarVer3_cat_missing_holder
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% comb_MarVer3_cat_match_levels$row_ids) %>% 
+    filter(., !row_ids %in% MarVer3_cat_missing_holder$row_ids) %>%
+  filter(., !is.na(NCBI_identifier_species) | !is.na(NCBI_accepted_species)) %>% 
+  left_join(MarVer3_cat_u, by=join_by("NCBI_accepted_species"=="Species")) %>% 
+  mutate(., Type =if_else(is.na(Type), "No Reference Barcode", Type )) -> vert_DB_MarVer3_cat_accepted_fix
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% comb_MarVer3_cat_match_levels$row_ids) %>% 
+      filter(., !row_ids %in% MarVer3_cat_missing_holder$row_ids) %>%
+  filter(., is.na(NCBI_identifier_species) & is.na(NCBI_accepted_species)) %>% 
+   left_join(MarVer3_cat_u, by=join_by("NCBI_accepted_species"=="Species")) %>% 
+  mutate(., Type =if_else(is.na(Type), "No Reference Barcode", Type )) -> vert_DB_MarVer3_cat_accepted_fix_2
+
+
+bind_rows(comb_MarVer3_cat_match_levels,MarVer3_cat_missing_holder,vert_DB_MarVer3_cat_accepted_fix,vert_DB_MarVer3_cat_accepted_fix_2) -> comb_MarVer3_cat_levels
+
+dim(comb_MarVer3_cat_match_levels)
+dim(MarVer3_cat_missing_holder)
+dim(vert_DB_MarVer3_cat_accepted_fix)
+dim(vert_DB_MarVer3_cat_accepted_fix_2)
+
+dim(vert_DB_species)
+dim(comb_MarVer3_cat_levels)
+
+
+```
+
+### MiSebastes
+
+```{r, warning=FALSE}
+MiSebastes_separated <- readRDS(here("LCA","barcodes_unique","MiSebastes_vertebrates_only_merged_data_set.RDS"))
+
+MiSebastes_separated %>% 
+      filter(str_detect(lca_taxonomic_path, "Chordata")) %>% 
+  rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> MiSebastes_separated_2
+
+MiSebastes_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+        mutate(., Barcode= "MiSebastes") %>% 
+   mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD")) -> MiSebastes_cat
+
+MiSebastes_cat %>% 
+  ungroup() %>% 
+  dplyr::select(-cluster,-data,-Accesions, -Species_per_cluster) %>% distinct() ->MiSebastes_cat_u
+
+vert_DB_species %>% 
+  left_join(MiSebastes_cat_u, by=join_by("NCBI_identifier_species"=="Species")) -> vert_DB_MiSebastes_cat
+
+vert_DB_MiSebastes_cat %>% 
+  filter(Type=="Species Level ID") %>%
+  dplyr::rename(Species=NCBI_identifier_species) -> vert_DB_MiSebastes_cat_species_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_MiSebastes_cat_species_level$row_ids) %>% 
+    left_join(MiSebastes_cat_u, by=join_by("NCBI_identifier_genus"=="Genus")) -> vert_DB_MiSebastes_cat_g
+
+vert_DB_MiSebastes_cat_g %>% 
+  filter(Type=="Genus Level ID") %>%
+  dplyr::rename(Genus=NCBI_identifier_genus)-> vert_DB_MiSebastes_cat_genus_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_MiSebastes_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_MiSebastes_cat_genus_level$row_ids) %>% 
+    left_join(MiSebastes_cat_u, by=join_by("NCBI_identifier_family"=="Family")) -> vert_DB_MiSebastes_cat_f
+
+vert_DB_MiSebastes_cat_f %>% 
+  filter(Type=="Family Level ID") %>%
+  dplyr::rename(Family=NCBI_identifier_family)-> vert_DB_MiSebastes_cat_family_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_MiSebastes_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_MiSebastes_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_MiSebastes_cat_family_level$row_ids) %>% 
+    left_join(MiSebastes_cat_u, by=join_by("NCBI_identifier_order"=="Order")) -> vert_DB_MiSebastes_cat_o
+
+vert_DB_MiSebastes_cat_o %>% 
+  filter(Type=="Order Level ID") %>%
+  dplyr::rename(Order=NCBI_identifier_order)-> vert_DB_MiSebastes_cat_order_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_MiSebastes_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_MiSebastes_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_MiSebastes_cat_family_level$row_ids) %>% 
+        filter(., !row_ids %in% vert_DB_MiSebastes_cat_order_level$row_ids) %>% 
+    left_join(MiSebastes_cat_u, by=join_by("NCBI_identifier_class"=="Class")) -> vert_DB_MiSebastes_cat_c
+
+vert_DB_MiSebastes_cat_c %>% 
+  filter(Type=="Class Level ID") %>%
+  dplyr::rename(Class=NCBI_identifier_class)-> vert_DB_MiSebastes_cat_class_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_MiSebastes_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_MiSebastes_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_MiSebastes_cat_family_level$row_ids) %>% 
+        filter(., !row_ids %in% vert_DB_MiSebastes_cat_order_level$row_ids) %>% 
+          filter(., !row_ids %in% vert_DB_MiSebastes_cat_class_level$row_ids) %>% 
+    left_join(MiSebastes_cat_u, by=join_by("NCBI_identifier_phylum"=="Phylum")) -> vert_DB_MiSebastes_cat_p
+
+vert_DB_MiSebastes_cat_p %>% 
+  filter(Type=="Phylum Level ID") %>%
+  dplyr::rename(Phylum=NCBI_identifier_phylum)-> vert_DB_MiSebastes_cat_phylum_level
+
+bind_rows(vert_DB_MiSebastes_cat_species_level,vert_DB_MiSebastes_cat_genus_level,vert_DB_MiSebastes_cat_family_level,vert_DB_MiSebastes_cat_class_level,vert_DB_MiSebastes_cat_order_level, vert_DB_MiSebastes_cat_phylum_level) -> comb_MiSebastes_cat_match_levels
+
+vert_DB_species %>% 
+ mutate(., Type = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    NCBI_identifier_species %in% comb_MiSebastes_cat_match_levels$NCBI_identifier_species ~"Ford 16S Reference Exists",
+    NCBI_accepted_species %in% comb_MiSebastes_cat_match_levels$NCBI_accepted_species ~"Ford 16S Reference Exists",
+    TRUE ~"No Reference Barcode")) %>% filter(Type != "Ford 16S Reference Exists" ) %>% left_join(MiSebastes_cat_u, by=join_by(Type)) %>% distinct() -> MiSebastes_cat_missing_holder
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% comb_MiSebastes_cat_match_levels$row_ids) %>% 
+    filter(., !row_ids %in% MiSebastes_cat_missing_holder$row_ids) %>%
+  filter(., !is.na(NCBI_identifier_species) | !is.na(NCBI_accepted_species)) %>% 
+  left_join(MiSebastes_cat_u, by=join_by("NCBI_accepted_species"=="Species")) %>% 
+  mutate(., Type =if_else(is.na(Type), "No Reference Barcode", Type )) -> vert_DB_MiSebastes_cat_accepted_fix
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% comb_MiSebastes_cat_match_levels$row_ids) %>% 
+      filter(., !row_ids %in% MiSebastes_cat_missing_holder$row_ids) %>%
+  filter(., is.na(NCBI_identifier_species) & is.na(NCBI_accepted_species)) %>% 
+   left_join(MiSebastes_cat_u, by=join_by("NCBI_accepted_species"=="Species")) %>% 
+  mutate(., Type =if_else(is.na(Type), "No Reference Barcode", Type )) -> vert_DB_MiSebastes_cat_accepted_fix_2
+
+
+bind_rows(comb_MiSebastes_cat_match_levels,MiSebastes_cat_missing_holder,vert_DB_MiSebastes_cat_accepted_fix,vert_DB_MiSebastes_cat_accepted_fix_2) -> comb_MiSebastes_cat_levels
+
+dim(comb_MiSebastes_cat_match_levels)
+dim(MiSebastes_cat_missing_holder)
+dim(vert_DB_MiSebastes_cat_accepted_fix)
+dim(vert_DB_MiSebastes_cat_accepted_fix_2)
+
+dim(vert_DB_species)
+dim(comb_MiSebastes_cat_levels)
+
+
+```
+
+### teleo
+
+```{r, warning=FALSE}
+teleo_separated <- readRDS(here("LCA","barcodes_unique","teleo_vertebrates_only_merged_data_set.RDS"))
+
+teleo_separated %>% 
+      filter(str_detect(lca_taxonomic_path, "Chordata")) %>% 
+  rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> teleo_separated_2
+
+teleo_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+        mutate(., Barcode= "teleo") %>% 
+ mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD"))-> teleo_cat
+
+
+
+teleo_cat %>% 
+  ungroup() %>% 
+  dplyr::select(-cluster,-data,-Accesions, -Species_per_cluster) %>% distinct() ->teleo_cat_u
+
+vert_DB_species %>% 
+  left_join(teleo_cat_u, by=join_by("NCBI_identifier_species"=="Species")) -> vert_DB_teleo_cat
+
+vert_DB_teleo_cat %>% 
+  filter(Type=="Species Level ID") %>%
+  dplyr::rename(Species=NCBI_identifier_species) -> vert_DB_teleo_cat_species_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_teleo_cat_species_level$row_ids) %>% 
+    left_join(teleo_cat_u, by=join_by("NCBI_identifier_genus"=="Genus")) -> vert_DB_teleo_cat_g
+
+vert_DB_teleo_cat_g %>% 
+  filter(Type=="Genus Level ID") %>%
+  dplyr::rename(Genus=NCBI_identifier_genus)-> vert_DB_teleo_cat_genus_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_teleo_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_teleo_cat_genus_level$row_ids) %>% 
+    left_join(teleo_cat_u, by=join_by("NCBI_identifier_family"=="Family")) -> vert_DB_teleo_cat_f
+
+vert_DB_teleo_cat_f %>% 
+  filter(Type=="Family Level ID") %>%
+  dplyr::rename(Family=NCBI_identifier_family)-> vert_DB_teleo_cat_family_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_teleo_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_teleo_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_teleo_cat_family_level$row_ids) %>% 
+    left_join(teleo_cat_u, by=join_by("NCBI_identifier_order"=="Order")) -> vert_DB_teleo_cat_o
+
+vert_DB_teleo_cat_o %>% 
+  filter(Type=="Order Level ID") %>%
+  dplyr::rename(Order=NCBI_identifier_order)-> vert_DB_teleo_cat_order_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_teleo_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_teleo_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_teleo_cat_family_level$row_ids) %>% 
+        filter(., !row_ids %in% vert_DB_teleo_cat_order_level$row_ids) %>% 
+    left_join(teleo_cat_u, by=join_by("NCBI_identifier_class"=="Class")) -> vert_DB_teleo_cat_c
+
+vert_DB_teleo_cat_c %>% 
+  filter(Type=="Class Level ID") %>%
+  dplyr::rename(Class=NCBI_identifier_class)-> vert_DB_teleo_cat_class_level
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% vert_DB_teleo_cat_species_level$row_ids) %>% 
+    filter(., !row_ids %in% vert_DB_teleo_cat_genus_level$row_ids) %>% 
+      filter(., !row_ids %in% vert_DB_teleo_cat_family_level$row_ids) %>% 
+        filter(., !row_ids %in% vert_DB_teleo_cat_order_level$row_ids) %>% 
+          filter(., !row_ids %in% vert_DB_teleo_cat_class_level$row_ids) %>% 
+    left_join(teleo_cat_u, by=join_by("NCBI_identifier_phylum"=="Phylum")) -> vert_DB_teleo_cat_p
+
+vert_DB_teleo_cat_p %>% 
+  filter(Type=="Phylum Level ID") %>%
+  dplyr::rename(Phylum=NCBI_identifier_phylum)-> vert_DB_teleo_cat_phylum_level
+
+bind_rows(vert_DB_teleo_cat_species_level,vert_DB_teleo_cat_genus_level,vert_DB_teleo_cat_family_level,vert_DB_teleo_cat_class_level,vert_DB_teleo_cat_order_level, vert_DB_teleo_cat_phylum_level) -> comb_teleo_cat_match_levels
+
+vert_DB_species %>% 
+ mutate(., Type = case_when(is.na(identifier) & is.na(accepted_NCBI) ~"Not in NCBI",
+    NCBI_identifier_species %in% comb_teleo_cat_match_levels$NCBI_identifier_species ~"Ford 16S Reference Exists",
+    NCBI_accepted_species %in% comb_teleo_cat_match_levels$NCBI_accepted_species ~"Ford 16S Reference Exists",
+    TRUE ~"No Reference Barcode")) %>% filter(Type != "Ford 16S Reference Exists" ) %>% left_join(teleo_cat_u, by=join_by(Type)) %>% distinct() -> teleo_cat_missing_holder
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% comb_teleo_cat_match_levels$row_ids) %>% 
+    filter(., !row_ids %in% teleo_cat_missing_holder$row_ids) %>%
+  filter(., !is.na(NCBI_identifier_species) | !is.na(NCBI_accepted_species)) %>% 
+  left_join(teleo_cat_u, by=join_by("NCBI_accepted_species"=="Species")) %>% 
+  mutate(., Type =if_else(is.na(Type), "No Reference Barcode", Type )) -> vert_DB_teleo_cat_accepted_fix
+
+vert_DB_species %>% 
+  filter(., !row_ids %in% comb_teleo_cat_match_levels$row_ids) %>% 
+      filter(., !row_ids %in% teleo_cat_missing_holder$row_ids) %>%
+  filter(., is.na(NCBI_identifier_species) & is.na(NCBI_accepted_species)) %>% 
+   left_join(teleo_cat_u, by=join_by("NCBI_accepted_species"=="Species")) %>% 
+  mutate(., Type =if_else(is.na(Type), "No Reference Barcode", Type )) -> vert_DB_teleo_cat_accepted_fix_2
+
+
+bind_rows(comb_teleo_cat_match_levels,teleo_cat_missing_holder,vert_DB_teleo_cat_accepted_fix,vert_DB_teleo_cat_accepted_fix_2) -> comb_teleo_cat_levels
+
+dim(comb_teleo_cat_match_levels)
+dim(teleo_cat_missing_holder)
+dim(vert_DB_teleo_cat_accepted_fix)
+dim(vert_DB_teleo_cat_accepted_fix_2)
+
+dim(vert_DB_species)
+dim(comb_teleo_cat_levels)
+
+```
+
+
+
+```{r, warning=FALSE}
+#Colors for plots
+library(wesanderson)
+wes_palette("GrandBudapest1") -> moon1
+wes_palette("GrandBudapest2") -> moon2
+wes_palette("Moonrise3") -> moon3
+wes_palette("Zissou1") -> moon4
+```
+
+## Statistics Summary
+
+### MiFish
+```{r, warning=FALSE}
+
+comb_Mifish_cat_levels %>% 
+  group_by(Type) %>% 
+  count()-> Mifish_cat_sum
+
+Mifish_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> Mifish_cat_tot
+
+Mifish_cat_sum %>% 
+  mutate(tot= Mifish_cat_tot$tot,
+         Barcode = "MiFish 12S") %>% 
+   mutate(., perc=( n/ tot)) -> Mifish_cat_dat
+
+
+```
+
+```{r, warning=FALSE}
+
+comb_Mifish_cat_levels %>% 
+  filter(., Genus=="Sebastes") %>% 
+  group_by(Type) %>% 
+  count()-> Mifish_cat_sum_seb
+
+Mifish_cat_sum_seb %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> Mifish_cat_tot_seb
+
+Mifish_cat_sum_seb %>% 
+  mutate(tot= Mifish_cat_tot_seb$tot,
+         Barcode = "MiFish 12S") %>% 
+   mutate(., perc=( n/ tot)) -> Mifish_cat_dat_seb
+
+
+comb_Mifish_cat_levels %>% 
+  filter(., Genus=="Sebastes") %>% 
+  dplyr::select(Scientific.Name, NCBI_accepted_species, Species, Type)
+
+Mifish_cat %>% 
+  filter(., Species =="Sebastes mystinus") %>% 
+  unnest(Accesions)
+
+Mifish_cat %>% 
+  filter(., Genus=="Sebastes") %>% 
+  unnest(data) -> rockfish_un
+
+
+```
+
+
+
+```{r}
+NEP_list_FINAL_merge_records %>% 
+  filter(., str_detect(Project.Request,"National Park Service Channel Islands")) -> nps_species
+
+nps_species %>% 
+  filter(., phylum=="Chordata") -> nps_fishes
+
+```
+
+```{r, warning=FALSE}
+
+comb_Mifish_cat_levels %>% 
+  filter(., scientificName %in% nps_fishes$scientificName) %>% 
+  group_by(Type) %>% 
+  count()-> Mifish_cat_sum_nps
+
+Mifish_cat_sum_nps %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> Mifish_cat_tot_nps
+
+Mifish_cat_sum_nps %>% 
+  mutate(tot= Mifish_cat_tot_nps$tot,
+         Barcode = "MiFish 12S") %>% 
+   mutate(., perc=( n/ tot)) -> Mifish_cat_dat_nps
+
+```
+
+
+### Ford 16S
+
+```{r, warning=FALSE}
+comb_Ford_16S_cat_levels$Type %>%  unique()
+
+  comb_Ford_16S_cat_levels%>% 
+  group_by(Type) %>% count()-> Ford_16S_cat_sum
+
+Ford_16S_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> Ford_16S_cat_tot
+
+Ford_16S_cat_sum %>% 
+  mutate(tot= Ford_16S_cat_tot$tot,
+         Barcode = "Ford 16S") %>% 
+   mutate(., perc=( n/ tot)) -> Ford_16S_cat_dat
+  
+```
+
+```{r, warning=FALSE}
+
+comb_Ford_16S_cat_levels %>% 
+  filter(., Genus=="Sebastes") %>% 
+  group_by(Type) %>% 
+  count()-> Ford_16S_cat_sum_seb
+
+Ford_16S_cat_sum_seb %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> Ford_16S_cat_tot_seb
+
+Ford_16S_cat_sum_seb %>% 
+  mutate(tot= Ford_16S_cat_tot_seb$tot,
+         Barcode = "Ford 16S") %>% 
+   mutate(., perc=( n/ tot)) -> Ford_16S_cat_dat_seb
+
+
+```
+
+```{r, warning=FALSE}
+
+comb_Ford_16S_cat_levels %>% 
+  filter(., scientificName %in% nps_fishes$scientificName) %>% 
+  group_by(Type) %>% 
+  count()-> Ford_16S_cat_sum_nps
+
+Ford_16S_cat_sum_nps %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> Ford_16S_cat_tot_nps
+
+Ford_16S_cat_sum_nps %>% 
+  mutate(tot= Ford_16S_cat_tot_nps$tot,
+         Barcode = "Ford 16S") %>% 
+   mutate(., perc=( n/ tot)) -> Ford_16S_cat_dat_nps
+
+```
+
+### MarVer3
+
+```{r, warning=FALSE}
+comb_MarVer3_cat_levels  %>% 
+  group_by(Type) %>% count()-> MarVer3_cat_sum
+
+MarVer3_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> MarVer3_cat_tot
+
+MarVer3_cat_sum %>% 
+  mutate(tot= MarVer3_cat_tot$tot,
+         Barcode = "MarVer3") %>% 
+   mutate(., perc=( n/ tot)) -> MarVer3_cat_dat
+  
+```
+
+```{r, warning=FALSE}
+
+comb_MarVer3_cat_levels %>% 
+  filter(., Genus=="Sebastes") %>% 
+  group_by(Type) %>% 
+  count()-> MarVer3_cat_sum_seb
+
+MarVer3_cat_sum_seb %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> MarVer3_cat_tot_seb
+
+MarVer3_cat_sum_seb %>% 
+  mutate(tot= MarVer3_cat_tot_seb$tot,
+         Barcode = "MarVer3") %>% 
+   mutate(., perc=( n/ tot)) -> MarVer3_cat_dat_seb
+
+
+```
+
+```{r, warning=FALSE}
+
+comb_MarVer3_cat_levels %>% 
+  filter(., scientificName %in% nps_fishes$scientificName) %>% 
+  group_by(Type) %>% 
+  count()-> MarVer3_cat_sum_nps
+
+MarVer3_cat_sum_nps %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> MarVer3_cat_tot_nps
+
+MarVer3_cat_sum_nps %>% 
+  mutate(tot= MarVer3_cat_tot_nps$tot,
+         Barcode = "Marver3") %>% 
+   mutate(., perc=( n/ tot)) -> MarVer3_cat_dat_nps
+
+```
+
+### MiSebastes
+
+```{r, warning=FALSE}
+comb_MiSebastes_cat_levels  %>% 
+  group_by(Type) %>% count()-> MiSebastes_cat_sum
+
+MiSebastes_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> MiSebastes_cat_tot
+
+MiSebastes_cat_sum %>% 
+  mutate(tot= MiSebastes_cat_tot$tot,
+         Barcode = "MiSebastes") %>% 
+   mutate(., perc=( n/ tot)) -> MiSebastes_cat_dat
+  
+```
+
+```{r, warning=FALSE}
+
+comb_MiSebastes_cat_levels %>% 
+  filter(., Genus=="Sebastes") %>% 
+  group_by(Type) %>% 
+  count()-> MiSebastes_cat_sum_seb
+
+MiSebastes_cat_sum_seb %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> MiSebastes_cat_tot_seb
+
+MiSebastes_cat_sum_seb %>% 
+  mutate(tot= MiSebastes_cat_tot_seb$tot,
+         Barcode = "MiSebastes") %>% 
+   mutate(., perc=( n/ tot)) -> MiSebastes_cat_dat_seb
+
+
+```
+
+
+```{r, warning=FALSE}
+
+comb_MiSebastes_cat_levels %>% 
+  filter(., scientificName %in% nps_fishes$scientificName) %>% 
+  group_by(Type) %>% 
+  count()-> MiSebastes_cat_sum_nps
+
+MiSebastes_cat_sum_nps %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> MiSebastes_cat_tot_nps
+
+MiSebastes_cat_sum_nps %>% 
+  mutate(tot= MiSebastes_cat_tot_nps$tot,
+         Barcode = "MiSebastes") %>% 
+   mutate(., perc=( n/ tot)) -> MiSebastes_cat_dat_nps
+
+```
+
+### teleo
+
+```{r, warning=FALSE}
+comb_teleo_cat_levels  %>% 
+  group_by(Type) %>% count()-> teleo_cat_sum
+
+teleo_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> teleo_cat_tot
+
+teleo_cat_sum %>% 
+  mutate(tot= teleo_cat_tot$tot,
+         Barcode = "teleo") %>% 
+   mutate(., perc=( n/ tot)) -> teleo_cat_dat
+  
+```
+
+```{r, warning=FALSE}
+
+comb_teleo_cat_levels %>% 
+  filter(., Genus=="Sebastes") %>% 
+  group_by(Type) %>% 
+  count()-> teleo_cat_sum_seb
+
+teleo_cat_sum_seb %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> teleo_cat_tot_seb
+
+teleo_cat_sum_seb %>% 
+  mutate(tot= teleo_cat_tot_seb$tot,
+         Barcode = "teleo") %>% 
+   mutate(., perc=( n/ tot)) -> teleo_cat_dat_seb
+
+
+```
+
+```{r, warning=FALSE}
+
+comb_teleo_cat_levels %>% 
+  filter(., scientificName %in% nps_fishes$scientificName) %>% 
+  group_by(Type) %>% 
+  count()-> teleo_cat_sum_nps
+
+teleo_cat_sum_nps %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> teleo_cat_tot_nps
+
+teleo_cat_sum_nps %>% 
+  mutate(tot= teleo_cat_tot_nps$tot,
+         Barcode = "teleo") %>% 
+   mutate(., perc=( n/ tot)) -> teleo_cat_dat_nps
+
+```
+
+### Plotting
+```{r}
+
+rbind(Mifish_cat_dat,Ford_16S_cat_dat,MarVer3_cat_dat,teleo_cat_dat) -> combined_cat_dat
+
+combined_cat_dat$Type <- factor(combined_cat_dat$Type, levels=c("Not in NCBI","No Reference Barcode","Phylum Level ID", "Order Level ID", 'Class Level ID','Family Level ID','Genus Level ID','Species Level ID'))
+
+combined_cat_dat %>% 
+ggplot(., aes(y=n, color=Type, fill=Type, x=Barcode)) + geom_col() + ylab("Count") + 
+  theme_classic() +
+ scale_fill_manual(values=c(`Not in NCBI`="grey30",`No Reference Barcode`="grey80",`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) +
+  scale_color_manual(values=c(`Not in NCBI`="grey30",`No Reference Barcode`="grey80",`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) + 
+  guides(fill=guide_legend(title="Resolution of Taxonomic Identification"), color=guide_legend(title="Resolution of Taxonomic Identification"))+
+  geom_hline(yintercept = 1, linetype="dashed") -> b1
+
+b1
+
+```
+
+
+```{r}
+
+rbind(Mifish_cat_dat_nps,Ford_16S_cat_dat_nps,MarVer3_cat_dat_nps,teleo_cat_dat_nps) -> combined_cat_dat_nps
+
+combined_cat_dat_nps$Type <- factor(combined_cat_dat_nps$Type, levels=c("Not in NCBI","No Reference Barcode","Phylum Level ID", "Order Level ID", 'Class Level ID','Family Level ID','Genus Level ID','Species Level ID'))
+
+combined_cat_dat_nps %>% 
+ggplot(., aes(y=n, color=Type, fill=Type, x=Barcode)) + geom_col() + ylab("Count") + 
+  theme_classic() +
+ scale_fill_manual(values=c(`Not in NCBI`="grey30",`No Reference Barcode`="grey80",`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) +
+  scale_color_manual(values=c(`Not in NCBI`="grey30",`No Reference Barcode`="grey80",`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) + 
+  guides(fill=guide_legend(title="Resolution of Taxonomic Identification"), color=guide_legend(title="Resolution of Taxonomic Identification"))+
+  geom_hline(yintercept = 1, linetype="dashed") -> b2
+
+b2
+
+```
+
+
+```{r}
+
+rbind(Mifish_cat_dat_seb,Ford_16S_cat_dat_seb,MarVer3_cat_dat_seb,teleo_cat_dat_seb, MiSebastes_cat_dat_seb) -> combined_cat_dat_seb
+
+combined_cat_dat_seb$Type <- factor(combined_cat_dat_seb$Type, levels=c("Not in NCBI","No Reference Barcode","Phylum Level ID", "Order Level ID", 'Class Level ID','Family Level ID','Genus Level ID','Species Level ID'))
+
+combined_cat_dat_seb %>% 
+ggplot(., aes(y=n, color=Type, fill=Type, x=Barcode)) + geom_col() + ylab("Count") + 
+  theme_classic() +
+ scale_fill_manual(values=c(`Not in NCBI`="grey30",`No Reference Barcode`="grey80",`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) +
+  scale_color_manual(values=c(`Not in NCBI`="grey30",`No Reference Barcode`="grey80",`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) + 
+  guides(fill=guide_legend(title="Resolution of Taxonomic Identification"), color=guide_legend(title="Resolution of Taxonomic Identification"))+
+  geom_hline(yintercept = 1, linetype="dashed")+theme(legend.position = "none") -> b3
+
+b3
+
+```
+
+```{r}
+
+b1+b2+b3  + plot_layout(guides = "collect") + plot_annotation(tag_levels = 'A')
+
+ggsave(filename = here("zjg_NEP_species_visualizations","smm_2024_12_10","figures","Species_level_resolution_count.png"),
+       width=16,
+       height = 8,
+       dpi = 300,
+      units = c("in"))
+
+```

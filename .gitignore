@@ -1,4 +1,8 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
+
+.DS_Store
+LCA/barcodes_cluster/MiFish_12S_full_merged_data_set.RDS
+LCA/barcodes_cluster/MiFish_12S_vertebrates_only_merged_data_set.RDS
+LCA/barcodes_unique/MiFish_12S_vertebrates_only_merged_data_set.RDS
+LCA/barcodes_unique/MiFish_12S_full_merged_data_set.RDS
+/rCRUX_dbs
+zjg_NEP_species_visualizations/smm_2024_12_10/NEP_list_FINAL_merge_records.txt
