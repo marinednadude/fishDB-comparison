@@ -1,0 +1,266 @@
+---
+title: "NEP Species List Assemble"
+author: "Zack Gold"
+date: "2024-08-08"
+output: html_document
+---
+
+# Load in Libraries
+```{r}
+library(tidyverse)
+library(here)
+library(readxl)
+library(stringr)
+library(worrms)
+library(readr)
+```
+
+# Load in Data
+
+```{r}
+ACCESS <- read_xlsx(here("NEP_lists_20241014","ACCESS","species list for Zach Gold West Coast OBON 01242024 - Meredith Elliott_formatted.xlsx"))
+
+Bight_benthic <- read_xlsx(here("NEP_lists_20241014","Bight Folder","Bight_benthic_macroinverts_formatted.xlsx"))
+
+Bight_fish <- read_xlsx(here("NEP_lists_20241014","Bight Folder","Bight_fish_list_formatted.xlsx"))
+
+CalCOFI_marine_mammals <- read.csv(here("NEP_lists_20241014","CalCOFI","CalCOFI_marine_mammals_list_formatted.csv"), header=T)
+
+CalCOFI_ichtyoplankton <- read.csv(here("NEP_lists_20241014","CalCOFI","calcofi_monitored_spp - Ed Weber - NOAA Federal_formatted.csv"), header=T)
+
+CalCOFI_zooplankton <- read_xlsx(here("NEP_lists_20241014","CalCOFI","calcofi_zooplankton_formatted.xlsx"))
+
+CCFRP <- read_xlsx(here("NEP_lists_20241014","CCFRP","CCFRP Fish Species WCOBON_formatted.xlsx"))
+
+Dismap_west_coast_full <- read_xlsx(here("NEP_lists_20241014","DisMap_regional_summaries","west_coast_full_list_of_detections_formatted.xlsx"))
+
+Dismap_aleutian<- read.csv(here("NEP_lists_20241014","DisMap_regional_summaries","Aleutian_islands_regional-summary-table-data_formatted.csv"), header=T)
+
+Dismap_Eastern_and_northern_Bering_sea<- read.csv(here("NEP_lists_20241014","DisMap_regional_summaries","Eastern_and_northern_Bering_sea_regional-summary-table-data_formatted.csv"), header=T)
+
+Dismap_Eastern_bering<- read.csv(here("NEP_lists_20241014","DisMap_regional_summaries","Eastern_bering_regional-summary-table-data_formatted.csv"), header=T)
+
+Dismap_goa<- read.csv(here("NEP_lists_20241014","DisMap_regional_summaries","GOA_regional-summary-table-data_formatted.csv"), header=T)
+
+Dismap_northern_bering<- read.csv(here("NEP_lists_20241014","DisMap_regional_summaries","Northern_beiring_regional-summary-table-data_formatted.csv"), header=T)
+
+Dismap_west_coast<- read.csv(here("NEP_lists_20241014","DisMap_regional_summaries","West_coast_regional-summary-table-data_formatted.csv"), header=T)
+
+Dismap_west_coast_triennial<- read.csv(here("NEP_lists_20241014","DisMap_regional_summaries","West_coast_triennial_regional-summary-table-data_formatted.csv"), header=T)
+
+EcoFOCI_zooplankton <- read.csv(here("NEP_lists_20241014","EcoFOCI_zooplankton","EcoFOCI_ZoopTaxa - David Kimmel - NOAA Federal_formatted.csv"), header=T)
+
+Farralon_Institute_allspp <-  read_xlsx(here("NEP_lists_20241014","Farralon_Institute","ZackGold_at-sea_species_FarallonInstitute_allspp - Sarah Ann Thompson_formatted.xlsx"))
+
+Farralon_Institute_common <-  read_xlsx(here("NEP_lists_20241014","Farralon_Institute","ZackGold_at-sea_species_FarallonInstitute_commonspp - Sarah Ann Thompson_formatted.xlsx"))
+                                        
+Farralon_Institute_rare <-  read_xlsx(here("NEP_lists_20241014","Farralon_Institute","ZackGold_at-sea_species_FarallonInstitute_rarespp - Sarah Ann Thompson_formatted.xlsx"))
+
+iTrack <-  read_xlsx(here("NEP_lists_20241014","iTrack","iTrack_PacificSpeciesList - Neha Acharya-Patel_formatted.xlsx"))
+
+Jglass <-  read_xlsx(here("NEP_lists_20241014","Jessice Glass","Glass_eDNA_reference_species_request - Jessica Glass_formatted.xlsx"))
+
+RREAS<-  read_xlsx(here("NEP_lists_20241014","John_field_reponse","rreas_formatted.xlsx"))
+sakuma <-  read_xlsx(here("NEP_lists_20241014","John_field_reponse","sakuma_et_al._2016_species_list_formatted.xlsx"))
+santora <-  read_xlsx(here("NEP_lists_20241014","John_field_reponse","santora_et_al._2021_species_list_foprmatted.xlsx"))
+
+Kbay <-  read_xlsx(here("NEP_lists_20241014","Kachemak_Bay","KBay_formatted.xlsx"))
+
+WOAC_zoops <-  read_xlsx(here("NEP_lists_20241014","Keister_WOAC_zooplankton","Salish Sea Zooplankton Species List_Keister Lab_FINAL_formatted.xlsx"))
+
+KFM_CINPS <-  read.csv(here("NEP_lists_20241014","KFMP_CINPS","Gabara NPS CHIS Species List - Scott Gabara_formatted.csv"), header=T)
+
+limpets <-  read_xlsx(here("NEP_lists_20241014","Limpets","Limpets Data (transcribed from Website)_format.xlsx"))
+
+MARINe <-  read_xlsx(here("NEP_lists_20241014","MARINe","Marine_zachary_gold_cbs_species_list_20240111_formatted.xlsx"))
+
+
+NHL <-  read_xlsx(here("NEP_lists_20241014","NHL","nhl_formatted.xlsx"))
+
+SCB_Isopods <-  read_xlsx(here("NEP_lists_20241014","NHMLAC","SCB Isopods 2023_Species List_16May23 - Regina Wetzer_formatted.xlsx"))
+
+NHMLAC_collections <-  read_xlsx(here("NEP_lists_20241014","NHMLAC","NHMLAC_collections_formatted.xlsx"))
+
+CINMS_cva <-  read_xlsx(here("NEP_lists_20241014","NMS","CINMS CVA Species List - Grace Kumaishi - NOAA Affiliate_formatted.xlsx"))
+
+Cordell_Bank_Greater_Farallones_NMS <-  read_xlsx(here("NEP_lists_20241014","NMS","Cordell Bank National Marine Sanctuary and Greater Farallones National Marine Sanctuary based on condition reports and field survey reports_formatted.xlsx"))
+
+West_coast_sanctuary_inventory <-  read_xlsx(here("NEP_lists_20241014","NMS","MBNMS_inventory_sheets_formatted.xlsx"))
+
+MBNMS_cva <-  read_xlsx(here("NEP_lists_20241014","NMS","MBNMS_species_list_formatted.xlsx"))
+
+OCNMS_cva <-  read_xlsx(here("NEP_lists_20241014","NMS","OCNMS CVA Species_formatted.xlsx"))
+
+PISCO <-  read_xlsx(here("NEP_lists_20241014","PISCO","PISCO species list_formatted.xlsx"))
+
+Reefcheck <-  read_xlsx(here("NEP_lists_20241014","Reef Check","Reef Check Species List -2024_formatted.xlsx"))
+
+THL <-  read.csv(here("NEP_lists_20241014","THL","TrinidadHeadLine_PlanktonSpeciesList_20240827_formatted.csv"), header=T)
+
+
+colnames(ACCESS)
+```
+
+# Format to only select key categories and drop all other ancillary information
+
+```{r}
+ACCESS_2_merge <- ACCESS %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+
+Bight_benthic_2_merge <- Bight_benthic %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+Bight_fish_2_merge <- Bight_fish %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+CalCOFI_marine_mammals_2_merge <- CalCOFI_marine_mammals %>% dplyr::select(`Project.Request`,`Scientific.Name`,`Point.of.Contact.for.Submission`=`Point.of.contact`,`Email`,`Common.Name`, `Survey.Type`)
+
+CalCOFI_ichtyoplankton_2_merge <- CalCOFI_ichtyoplankton %>% dplyr::select(`Project.Request`,`Scientific.Name`,`Point.of.Contact.for.Submission`,`Email`,`Common.Name`, `Survey.Type`)
+
+CalCOFI_zooplankton_2_merge <- CalCOFI_zooplankton %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+CCFRP_2_merge <-CCFRP %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+Dismap_west_coast_full_2_merge <- Dismap_west_coast_full %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+Dismap_aleutian_2_merge<- Dismap_aleutian %>% dplyr::select(`Project.Request`,`Scientific.Name`,`Point.of.Contact.for.Submission`,`Email`,`Common.Name`, `Survey.Type`)
+
+Dismap_Eastern_and_northern_Bering_sea_2_merge<- Dismap_Eastern_and_northern_Bering_sea %>% dplyr::select(`Project.Request`,`Scientific.Name`,`Point.of.Contact.for.Submission`,`Email`,`Common.Name`, `Survey.Type`)
+
+Dismap_Eastern_bering_2_merge<- Dismap_Eastern_bering %>% dplyr::select(`Project.Request`,`Scientific.Name`,`Point.of.Contact.for.Submission`,`Email`,`Common.Name`, `Survey.Type`)
+
+Dismap_goa_2_merge<- Dismap_goa %>% dplyr::select(`Project.Request`,`Scientific.Name`,`Point.of.Contact.for.Submission`,`Email`,`Common.Name`, `Survey.Type`)
+
+Dismap_northern_bering_2_merge<-Dismap_northern_bering %>% dplyr::select(`Project.Request`,`Scientific.Name`,`Point.of.Contact.for.Submission`,`Email`,`Common.Name`, `Survey.Type`)
+
+Dismap_west_coast_2_merge<- Dismap_west_coast %>% dplyr::select(`Project.Request`,`Scientific.Name`,`Point.of.Contact.for.Submission`,`Email`,`Common.Name`, `Survey.Type`)
+
+Dismap_west_coast_triennial_2_merge<- Dismap_west_coast_triennial %>% dplyr::select(`Project.Request`,`Scientific.Name`,`Point.of.Contact.for.Submission`,`Email`,`Common.Name`, `Survey.Type`)
+
+EcoFOCI_zooplankton_2_merge <-EcoFOCI_zooplankton %>% dplyr::select(`Project.Request`,`Scientific.Name`=`Scientific.name`,`Point.of.Contact.for.Submission`,`Email`,`Common.Name`, `Survey.Type`)
+
+Farralon_Institute_allspp_2_merge <- Farralon_Institute_allspp %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+Farralon_Institute_common_2_merge <- Farralon_Institute_common %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+                                        
+Farralon_Institute_rare_2_merge <- Farralon_Institute_rare %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+iTrack_2_merge <- iTrack %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+Jglass_2_merge <- Jglass %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+RREAS_2_merge<- RREAS %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+sakuma_2_merge <- sakuma %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+santora_2_merge <- santora %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+Kbay_2_merge <- Kbay %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+WOAC_zoops_2_merge <- WOAC_zoops %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+KFM_CINPS_2_merge <-  KFM_CINPS %>% dplyr::select(`Project.Request`,`Scientific.Name`=`Scientific.name`,`Point.of.Contact.for.Submission`,`Email`,`Common.Name`, `Survey.Type`)
+
+limpets_2_merge <- limpets %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+MARINe_2_merge <- MARINe %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+
+NHL_2_merge <- NHL %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+SCB_Isopods_2_merge <- SCB_Isopods %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+NHMLAC_collections_2_merge <- NHMLAC_collections %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+CINMS_cva_2_merge <- CINMS_cva %>% dplyr::select(`Project.Request`=`Project request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+Cordell_Bank_Greater_Farallones_NMS_2_merge <- Cordell_Bank_Greater_Farallones_NMS %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+West_coast_sanctuary_inventory_2_merge <- West_coast_sanctuary_inventory %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+MBNMS_cva_2_merge <- MBNMS_cva %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+OCNMS_cva_2_merge <- OCNMS_cva %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific Name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+PISCO_2_merge <- PISCO %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+Reefcheck_2_merge  <- Reefcheck %>% dplyr::select(`Project.Request`=`Project Request`,`Scientific.Name` =`Scientific name`,`Point.of.Contact.for.Submission`=`Point of Contact for Submission`,`Email`,`Common.Name`=`Common Name`, `Survey.Type`=`Survey Type`)
+
+THL  <- THL %>% dplyr::select(`Project.Request`=`Project.Request`,`Scientific.Name` =`Scientific.name`,`Point.of.Contact.for.Submission`=`Point.of.Contact.for.Submission`,`Email`,`Common.Name`=`Common.Name`, `Survey.Type`=`Survey.Type`)
+
+```
+
+# Merge all the data
+
+```{r}
+rbind(ACCESS_2_merge ,
+Bight_benthic_2_merge ,
+Bight_fish_2_merge,
+CalCOFI_marine_mammals_2_merge,
+CalCOFI_ichtyoplankton_2_merge,
+CalCOFI_zooplankton_2_merge,
+CCFRP_2_merge ,
+Dismap_west_coast_full_2_merge,
+Dismap_aleutian_2_merge,
+Dismap_Eastern_and_northern_Bering_sea_2_merge,
+Dismap_Eastern_bering_2_merge,
+Dismap_goa_2_merge,
+Dismap_northern_bering_2_merge,
+Dismap_west_coast_2_merge,
+Dismap_west_coast_triennial_2_merge,
+EcoFOCI_zooplankton_2_merge,
+Farralon_Institute_allspp_2_merge ,
+Farralon_Institute_common_2_merge ,
+Farralon_Institute_rare_2_merge ,
+iTrack_2_merge ,
+Jglass_2_merge ,
+RREAS_2_merge,
+sakuma_2_merge ,
+santora_2_merge,
+Kbay_2_merge ,
+WOAC_zoops_2_merge ,
+KFM_CINPS_2_merge,
+limpets_2_merge ,
+MARINe_2_merge ,
+NHL_2_merge ,
+SCB_Isopods_2_merge ,
+NHMLAC_collections_2_merge ,
+CINMS_cva_2_merge ,
+Cordell_Bank_Greater_Farallones_NMS_2_merge ,
+West_coast_sanctuary_inventory_2_merge,
+MBNMS_cva_2_merge ,
+OCNMS_cva_2_merge ,
+PISCO_2_merge,
+Reefcheck_2_merge, THL) -> NEP_list_assembled_raw
+
+```
+
+# Cleanup the data to remove EOL, uppercase, and remove whitespace
+```{r}
+NEP_list_assembled_raw <- NEP_list_assembled_raw %>%
+  mutate(across(everything(), ~ str_replace_all(.x, "[\r\n]", "")))
+
+NEP_list_assembled_raw <- NEP_list_assembled_raw %>%
+  mutate(Scientific.Name = str_to_upper(Scientific.Name))
+
+NEP_list_assembled_raw <- NEP_list_assembled_raw %>%
+  mutate(Scientific.Name = str_trim(Scientific.Name))
+```
+
+# Check for EOL characters
+```{r}
+NEP_list_assembled_raw %>% 
+  filter(., str_detect(Scientific.Name, "\\r")) -> check_EOL
+
+check_EOL
+```
+
+# Number of unique entries within Scientific Name
+```{r}
+NEP_list_assembled_raw$Scientific.Name %>% unique() %>%  length()
+
+```
+
+# Export raw list
+```{r}
+write.table(NEP_list_assembled_raw, file='NEP_list_assembled_raw.txt', sep='\t', quote=FALSE, row.names=FALSE, col.names = TRUE)
+
+```

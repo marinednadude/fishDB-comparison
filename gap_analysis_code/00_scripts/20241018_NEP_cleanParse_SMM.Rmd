@@ -1,0 +1,109 @@
+---
+title: "Species List Clean and Parse"
+author: "Sean McAllister"
+date: "2024-10-18"
+output: html_document
+---
+
+# Load in Libraries
+```{r}
+library(tidyverse)
+library(here)
+library(readxl)
+library(stringr)
+library(worrms)
+library(readr)
+```
+
+# Load in Data #Raw from NEP merge.Rmd
+```{r}
+NEP_list_assembled_raw <- read_delim(here("NEP_list_assembled_raw.txt"), col_types = "c", na = c("","NA"))
+
+NEP_list_assembled_raw$Scientific.Name %>% unique() %>%  length()
+```
+
+# CLEAN PROCESS
+## Remove empty scientific.name
+```{r}
+NEP_list_assembled_clean <- NEP_list_assembled_raw %>%
+  filter(!(is.na(Scientific.Name) | Scientific.Name == "NA"))
+```
+
+## Manually Fix instances of a presumed identical genus name in list
+```{r}
+# Identify entries with abbreviated genus names
+NEP_list_assembled_clean %>%
+  filter(str_detect(Scientific.Name, "\\b\\w\\.\\s\\w+")) -> genus_combos
+```
+
+## Manually Fix instances of parentheses
+```{r}
+NEP_list_assembled_clean %>%
+  filter(str_detect(Scientific.Name, "\\(|\\)|\\[|\\]")) -> paren_combos
+```
+
+## Check for ";" delimited nested list
+```{r}
+NEP_list_assembled_clean %>% 
+  filter(., str_detect(Scientific.Name, ";")) -> semicolon_combos
+
+semicolon_combos %>% 
+  filter(., str_detect(Scientific.Name, "AND")) -> semi_and
+
+NEP_list_assembled_clean <- NEP_list_assembled_clean %>%
+  separate_rows(Scientific.Name, sep = ";") %>%
+  mutate(Scientific.Name = str_trim(Scientific.Name))  #Trim any extra whitespace
+
+NEP_list_assembled_clean %>%
+ filter(., str_detect(Scientific.Name, ";")) -> semicolon_combos
+
+semicolon_combos
+```
+
+## Check for "AND"
+```{r}
+NEP_list_assembled_clean %>% 
+  filter(., str_detect(Scientific.Name, " AND ")) -> AND_combos
+
+AND_combos
+
+NEP_list_assembled_clean <- NEP_list_assembled_clean %>%
+  mutate(Scientific.Name = str_replace(Scientific.Name, " AND ", ""))
+
+NEP_list_assembled_clean %>% 
+  filter(., str_detect(Scientific.Name, " AND ")) -> AND_combos
+
+AND_combos
+```
+
+## Check for Splits
+
+```{r}
+NEP_list_assembled_clean %>% 
+  filter(., str_detect(Scientific.Name, ",")) -> funky_combos
+
+NEP_list_assembled_clean <- NEP_list_assembled_clean %>%
+  separate_rows(Scientific.Name, sep = ",") %>%
+  mutate(Scientific.Name = str_trim(Scientific.Name))  #Trim any extra whitespace
+
+NEP_list_assembled_clean %>% 
+  filter(., str_detect(Scientific.Name, ",")) -> funky_combos
+```
+
+## Remove trailing sp, spp, sp., spp.
+```{r}
+NEP_list_assembled_clean <- NEP_list_assembled_clean %>%
+  mutate(Scientific.Name = str_replace(Scientific.Name, "\\s*\\b(SP|SPP|SP\\.|SPP\\.)\\s*$", ""))
+```
+
+## Manually identify all weird entries
+```{r}
+NEP_list_assembled_clean %>%
+  filter(str_detect(Scientific.Name, "[^a-zA-Z0-9\\s]")) -> non_alphanumeric_combos
+```
+
+# Export cleaned list
+```{r}
+write.table(NEP_list_assembled_clean, file='NEP_list_assembled_clean.txt', sep='\t', quote=FALSE, row.names=FALSE, col.names = TRUE)
+
+```
