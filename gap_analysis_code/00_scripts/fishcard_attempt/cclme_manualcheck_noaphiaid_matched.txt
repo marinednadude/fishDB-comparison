@@ -1,0 +1,33 @@
+Scientific.Name	row_ids	AphiaID	Match type	ScientificName	AphiaID_accepted	ScientificName_accepted
+Acanthomus armatus	R000007	
+Albula pacificus	R000018	1014668	near_2	Albula pacifica	1014668	Albula pacifica
+Anotopterus pharao	R000049	126334	exact	Anotopterus pharao	126334	Anotopterus pharao
+Beringraja inornate	R000135	1461134	near_1	Beringraja inornata	1461134	Beringraja inornata
+Careproctus gilberti	R000176	367288	exact	Careproctus gilberti	367288	Careproctus gilberti
+Caulolatilus affinis	R000185	367211	exact	Caulolatilus affinis	367211	Caulolatilus affinis
+Gigantactis micordontis	R000383	272567	near_1	Gigantactis microdontis	272567	Gigantactis microdontis
+Halichoeres californica	R000408	240728	near_2	Halichoeres californicus	240727	Oxyjulis californica
+Halichoeres nicholsii	R000412	275780	phonetic	Halichoeres nicholsi	275780	Halichoeres nicholsi
+Hyocritichthys analis	R000455	
+Jordania zonope	R000496	398459	exact	Jordania zonope	398459	Jordania zonope
+Leptochilichtys agassizi	R000540	126722	phonetic	Leptochilichthys agassizii	126722	Leptochilichthys agassizii
+Lestidiops phyranopsis	R000544	
+Linophryne coronate	R000551	126549	near_1	Linophryne coronata	126549	Linophryne coronata
+Malacocephalus laevis	R000613	272392	exact	Malacocephalus laevis	272392	Malacocephalus laevis
+Maurolicus muellari	R000624	127312	near_1	Maurolicus muelleri	127312	Maurolicus muelleri
+Melamphaes macrocephlus	R000632	274933	near_1	Melamphaes macrocephalus	274933	Melamphaes macrocephalus
+Opisthopterus soleatus	R000740	
+Pachystomius microdon	R000754	
+Paraclinus asper	R000758	
+Paraliparis melobranchus	R000774	274596	near_2	Paraliparis melanobranchus	274596	Paraliparis melanobranchus
+Polydactylus opercularis	R000822	367295	exact	Polydactylus opercularis	367295	Polydactylus opercularis
+Prosoopium cylandraceum	R000840	282373	near_2	Prosopium cylindraceum	282373	Prosopium cylindraceum
+Pseudobatos leucorhychus	R000852	1043484	near_1	Pseudobatos leucorhynchus	1043484	Pseudobatos leucorhynchus
+Pseudonezumia occidentalis	R000854	
+Scopelarchoides nicholsii	R000915	275617	phonetic	Scopelarchoides nicholsi	275617	Scopelarchoides nicholsi
+Scorpaenichthys marmoratus	R000926	282726	exact	Scorpaenichthys marmoratus	282726	Scorpaenichthys marmoratus
+Sebastes polyspinus	R000977	274837	phonetic	Sebastes polyspinis	274837	Sebastes polyspinis
+Thunnus alalunga	R001079	127026	exact	Thunnus alalunga	127026	Thunnus alalunga
+Venefica ocelli	R001108	271921	near_1	Venefica ocella	271921	Venefica ocella
+Venefica procera	R001109	158593	exact	Venefica procera	158593	Venefica procera
+		

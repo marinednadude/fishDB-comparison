@@ -1,0 +1,8 @@
+Scientific.Name	row_ids
+Acanthomus armatus	R000007
+Hyocritichthys analis	R000455
+Lestidiops phyranopsis	R000544
+Opisthopterus soleatus	R000740
+Pachystomius microdon	R000754
+Paraclinus asper	R000758
+Pseudonezumia occidentalis	R000854

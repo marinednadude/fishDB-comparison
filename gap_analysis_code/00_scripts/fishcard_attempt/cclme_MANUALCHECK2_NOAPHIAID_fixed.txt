@@ -1,0 +1,8 @@
+Scientific.Name	row_ids
+Acanthonus armatus	R000007
+Hyperprosopon anale	R000455
+Lestidiops sphyraenopsis	R000544
+Opisthoproctus soleatus	R000740
+Pachystomias microdon	R000754
+Exerpes asper	R000758
+Echinomacrurus occidentalis	R000854
