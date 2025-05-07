@@ -1,0 +1,8 @@
+3362755	0	active	species	Deckertichthys aureolus	Deckertichthys	aureolus	2024/10/03 00:00
+3242789	0	active	species	Urotrygon munda	Urotrygon	munda	2024/08/29 00:00
+3000940	0	active	species	Lampanyctus steinbecki	Lampanyctus	steinbecki	2024/08/29 00:00
+2910463	0	active	species	Polydactylus opercularis	Polydactylus	opercularis	2022/02/18 00:00
+1154595	0	active	species	Careproctus gilberti	Careproctus	gilberti	2017/06/14 00:00
+319436	0	active	species	Caulolatilus affinis	Caulolatilus	affinis	2017/06/14 00:00
+52273	0	active	species	Scorpaenichthys marmoratus	Scorpaenichthys	marmoratus	2018/11/23 00:00
+8235	0	active	species	Thunnus alalunga	Thunnus	alalunga	2020/07/28 00:00

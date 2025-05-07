@@ -1,0 +1,7 @@
+
+Unable to locate xtract executable. Please execute the following:
+
+  nquire -dwn ftp.ncbi.nlm.nih.gov entrez/entrezdirect xtract.Silicon.gz
+  gunzip -f xtract.Silicon.gz
+  chmod +x xtract.Silicon
+

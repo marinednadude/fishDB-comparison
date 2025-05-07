@@ -1,7 +1,6 @@
 Scientific.Name	row_ids
 Acanthomus armatus	R000007
 Albula pacificus	R000018
-Anotopterus pharao	R000049
 Beringraja inornate	R000135
 Careproctus gilberti	R000176
 Caulolatilus affinis	R000185
@@ -9,11 +8,9 @@ Gigantactis micordontis	R000383
 Halichoeres californica	R000408
 Halichoeres nicholsii	R000412
 Hyocritichthys analis	R000455
-Jordania zonope	R000496
 Leptochilichtys agassizi	R000540
 Lestidiops phyranopsis	R000544
 Linophryne coronate	R000551
-Malacocephalus laevis	R000613
 Maurolicus muellari	R000624
 Melamphaes macrocephlus	R000632
 Opisthopterus soleatus	R000740
@@ -29,4 +26,3 @@ Scorpaenichthys marmoratus	R000926
 Sebastes polyspinus	R000977
 Thunnus alalunga	R001079
 Venefica ocelli	R001108
-Venefica procera	R001109
