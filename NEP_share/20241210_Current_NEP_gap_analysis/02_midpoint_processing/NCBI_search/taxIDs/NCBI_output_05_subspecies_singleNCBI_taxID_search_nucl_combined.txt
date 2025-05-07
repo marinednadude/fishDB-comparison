@@ -1,0 +1,5 @@
+CM093651.1	Enhydra lutris nereis isolate 714-15_Ruby mitochondrion, complete sequence, whole genome shotgun sequence	2024/10/28	Enhydra lutris nereis	1049777	dna	mitochondrion	complete	circular	16510	isolate|sub_species|sex|tissue_type|dev_stage|country|collection_date	714-15_Ruby|nereis|female|blood|adult|USA: California|2023-08-22
+OR582701.1	Scopelogadus bispinosus mitochondrion, partial genome	2023/09/26	Scopelogadus bispinosus	319445	dna	mitochondrion	-	linear	18325	specimen_voucher	UW:153485
+NC_008069.1	Branchiostoma japonicum mitochondrion, complete genome	2006/06/06	Branchiostoma japonicum	373177	dna	mitochondrion	complete	circular	15075	strain|common	Xiamen|lancelet
+LC707921.1	Abarenicola claparedi oceanica RTMANL001 mitochondrial DNA, complete genome	2023/01/11	Abarenicola claparedi oceanica	2936611	dna	mitochondrion	complete	circular	15524	isolate|sub_species|country|collection_date	RTMANL001|oceanica|Japan:Hokkaido, Rishiri|2017-08-04
+DQ407722.1	Branchiostoma japonicum strain Xiamen mitochondrial DNA, complete genome	2006/05/28	Branchiostoma japonicum	373177	dna	mitochondrion	complete	circular	15075	strain	Xiamen

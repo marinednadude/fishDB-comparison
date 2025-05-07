@@ -1,0 +1,48 @@
+OR935916.1	Prionospio multibranchiata isolate VIR20592 mitochondrion, complete genome	2024/07/11	Prionospio multibranchiata	3050093	dna	mitochondrion	complete	circular	16598	isolate|country	VIR20592|Canada
+OR935913.1	Prionospio multibranchiata isolate VIR18041 mitochondrion, complete genome	2024/07/11	Prionospio multibranchiata	3050093	dna	mitochondrion	complete	circular	16468	isolate|country	VIR18041|Russia
+OZ035851.1	Oikopleura dioica (Bergen isolate) partial mitochondrial genome	2024/05/10	Oikopleura dioica	34765	dna	mitochondrion	-	linear	18389	isolate|tissue_type|dev_stage|country|isolation_source|collection_date|identified_by	O.dioica extract 05Aug2019|Several whole animals|Adults|Norway:Bergen, North Sea|laboratory culture of animals provided by the Sars International Centre for Marine Molecular Biology (SICMMB) (Bergen, Norway)|2019-03|Thomas Stach
+OR416184.1	Donax semistriatus mitochondrion, complete genome	2023/09/27	Donax semistriatus	3074273	dna	mitochondrion	complete	circular	19088	old_name|note	Donax semiestriatus|M-type
+OR582694.1	Lumpenus fabricii mitochondrion, partial genome	2023/09/26	Lumpenus fabricii	980336	dna	mitochondrion	-	linear	15148	specimen_voucher	UW:151255
+OP985910.1	UNVERIFIED: Nymphon gracile voucher MNHN-IU-2014-10214 mitochondrion sequence	2023/04/11	Nymphon gracile	136195	dna	mitochondrion	-	not-set	14647	specimen_voucher|country	MNHN-IU-2014-10214|France
+NC_068078.1	Nerita costata mitochondrion, complete genome	2022/11/12	Nerita costata	55015	dna	mitochondrion	complete	circular	15604	country	China
+NC_060781.1	Pinna rudis mitochondrion, complete genome	2022/02/11	Pinna rudis	1380992	dna	mitochondrion	complete	circular	18264	country	Spain
+NC_021974.2	Mesoplodon densirostris isolate SWFSC ID z0004010 mitochondrion, complete genome	2013/08/06	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16347	isolate	SWFSC ID z0004010
+NC_036997.1	Mesoplodon stejnegeri voucher CRI000090 mitochondrion, complete genome	2018/02/22	Mesoplodon stejnegeri	52114	dna	mitochondrion	complete	circular	16349	common|specimen_voucher|country	Stejneger's beaked whale|CRI000090|South Korea: Pohang
+NC_035984.1	Donax semiestriatus mitochondrion, complete genome	2017/10/06	Donax semistriatus	3074273	dna	mitochondrion	complete	circular	17044	old_name	Donax semiestriatus
+NC_030595.1	Littorina saxatilis mitochondrion, complete genome	2016/07/12	Littorina saxatilis	31220	dna	mitochondrion	complete	circular	16887	-	-
+NC_018380.1	Stylatula elongata mitochondrion, complete genome	2012/08/10	Stylatula elongata	1214922	dna	mitochondrion	complete	circular	18733	-	-
+NC_012889.1	Lineus viridis mitochondrion, complete genome	2009/07/01	Lineus viridis	56195	dna	mitochondrion	complete	circular	15388	common	ribbon worm
+NC_008572.1	Nymphon gracile mitochondrion, complete genome	2006/11/09	Nymphon gracile	136195	dna	mitochondrion	complete	circular	14681	common	sea spider
+OM048761.1	Nerita costata mitochondrion, complete genome	2022/10/23	Nerita costata	55015	dna	mitochondrion	complete	circular	15604	country	China
+OV277875.2	Gari tellinella genome assembly, organelle: mitochondrion	2021/12/18	Gari tellinella	2589376	dna	mitochondrion	-	linear	18464	-	-
+OK244976.1	UNVERIFIED: Pomocellaria californica isolate BLEED1912 mitochondrion sequence	2022/03/14	Pomocellaria californica	2172752	dna	mitochondrion	-	linear	15733	isolate	BLEED1912
+OK244975.1	UNVERIFIED: Pomocellaria californica isolate BLEED1901 mitochondrion sequence	2022/03/14	Pomocellaria californica	2172752	dna	mitochondrion	-	linear	15733	isolate	BLEED1901
+OK244974.1	UNVERIFIED: Pomocellaria californica isolate BLEED1246 mitochondrion sequence	2022/03/14	Pomocellaria californica	2172752	dna	mitochondrion	-	linear	15733	isolate	BLEED1246
+LC634517.1	Pinna rudis mitochondrial DNA, complete genome	2022/02/04	Pinna rudis	1380992	dna	mitochondrion	complete	circular	18264	country	Spain
+OU015571.1	Oikopleura dioica genome assembly, organelle: mitochondrion	2021/05/10	Oikopleura dioica	34765	dna	mitochondrion	complete	circular	9225	isolation_source	on-going laboratory culture maintained at OIST
+KY780363.1	Donax semistriatus mitochondrion, complete genome	2017/09/14	Donax semistriatus	3074273	dna	mitochondrion	complete	circular	17044	old_name	Donax semiestriatus
+MG000980.1	Mesoplodon stejnegeri voucher CRI000090 mitochondrion, complete genome	2018/02/05	Mesoplodon stejnegeri	52114	dna	mitochondrion	complete	circular	16349	common|specimen_voucher|country	Stejneger's beaked whale|CRI000090|South Korea: Pohang
+KF032878.2	Mesoplodon densirostris isolate SWFSC ID z0094563 mitochondrion, complete genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16343	isolate	SWFSC ID z0094563
+KF032877.2	Mesoplodon densirostris isolate SWFSC ID z0079840 mitochondrion, partial genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	-	linear	16340	isolate	SWFSC ID z0079840
+KF032876.2	Mesoplodon densirostris isolate SWFSC ID z0079839 mitochondrion, complete genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16343	isolate	SWFSC ID z0079839
+KF032875.2	Mesoplodon densirostris isolate SWFSC ID z0079838 mitochondrion, partial genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	-	linear	16346	isolate	SWFSC ID z0079838
+KF032874.2	Mesoplodon densirostris isolate SWFSC ID z0079837 mitochondrion, partial genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	-	linear	16320	isolate	SWFSC ID z0079837
+KF032872.2	Mesoplodon densirostris isolate SWFSC ID z0079824 mitochondrion, partial genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	-	linear	16339	isolate	SWFSC ID z0079824
+KF032871.2	Mesoplodon densirostris isolate SWFSC ID z0008681 mitochondrion, complete genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16336	isolate	SWFSC ID z0008681
+KF032870.2	Mesoplodon densirostris isolate SWFSC ID z0074264 mitochondrion, complete genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16330	isolate	SWFSC ID z0074264
+KF032869.2	Mesoplodon densirostris isolate SWFSC ID z0074263 mitochondrion, partial genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	-	linear	16333	isolate	SWFSC ID z0074263
+KF032868.2	Mesoplodon densirostris isolate SWFSC ID z0074425 mitochondrion, complete genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16346	isolate	SWFSC ID z0074425
+KF032867.2	Mesoplodon densirostris isolate SWFSC ID z0074424 mitochondrion, complete genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16346	isolate	SWFSC ID z0074424
+KF032866.2	Mesoplodon densirostris isolate SWFSC ID z0098730 mitochondrion, complete genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16347	isolate	SWFSC ID z0098730
+KF032864.2	Mesoplodon densirostris isolate SWFSC ID z0050723 mitochondrion, partial genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	-	linear	16347	isolate	SWFSC ID z0050723
+KF032863.2	Mesoplodon densirostris isolate SWFSC ID z0033737 mitochondrion, complete genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16347	isolate	SWFSC ID z0033737
+KF032862.2	Mesoplodon densirostris isolate SWFSC ID z0033736 mitochondrion, partial genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	-	not-set	16347	isolate	SWFSC ID z0033736
+KF032861.2	Mesoplodon densirostris isolate SWFSC ID z0009110 mitochondrion, complete genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16347	isolate	SWFSC ID z0009110
+KF032860.2	Mesoplodon densirostris isolate SWFSC ID z0004010 mitochondrion, complete genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16347	isolate	SWFSC ID z0004010
+KF032873.1	Mesoplodon densirostris isolate SWFSC ID z0079835 mitochondrion, complete genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	complete	circular	16346	isolate	SWFSC ID z0079835
+KF032865.1	Mesoplodon densirostris isolate SWFSC ID z0094785 mitochondrion, partial genome	2013/08/05	Mesoplodon densirostris	48708	dna	mitochondrion	-	linear	16296	isolate	SWFSC ID z0094785
+DQ666063.1	Nymphon gracile mitochondrion, complete genome	2006/11/06	Nymphon gracile	136195	dna	mitochondrion	complete	circular	14681	-	-
+KU952094.1	Littorina saxatilis mitochondrion, complete genome	2016/06/20	Littorina saxatilis	31220	dna	mitochondrion	complete	circular	16887	-	-
+FJ839919.1	Lineus viridis mitochondrion, complete genome	2009/06/30	Lineus viridis	56195	dna	mitochondrion	complete	circular	15388	-	-
+JX023275.1	Stylatula elongata mitochondrion, complete genome	2012/08/04	Stylatula elongata	1214922	dna	mitochondrion	complete	circular	18733	-	-
+AJ132137.1	Littorina saxatilis mitochondrial DNA, partial	1999/01/20	Littorina saxatilis	31220	dna	mitochondrion	-	linear	8022	-	-

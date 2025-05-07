@@ -1,0 +1,75 @@
+3351539	0	active	species	Neocrangon communis	Neocrangon	communis	2024/11/06 00:00
+3280091	0	active	species	Anthoptilum lithophilum	Anthoptilum	lithophilum	2024/10/18 00:00
+3170683	0	active	species	Anomalocardia puella	Anomalocardia	puella	2024/07/30 00:00
+3158704	0	active	species	Ceratonereis singularis	Ceratonereis	singularis	2024/10/18 00:00
+3158702	0	active	subspecies	Ceratonereis singularis australis	Ceratonereis	singularis	2024/09/17 00:00
+3154174	0	active	species	Cirolana cranchii	Cirolana	cranchii	2024/06/29 00:00
+3108807	0	active	species	Zemysina orbella	Zemysina	orbella	2024/11/06 00:00
+3108004	0	active	subspecies	Balaenoptera musculus brevicauda	Balaenoptera	musculus	2024/02/21 00:00
+3103259	0	active	species	Periphyllopsis braueri	Periphyllopsis	braueri	2024/11/06 00:00
+3082510	0	active	species	Arabella protomutans	Arabella	protomutans	2024/08/29 00:00
+3073994	0	active	species	Carinoma armandi	Carinoma	armandi	2024/10/18 00:00
+3021989	0	active	species	Amphioplus japonicus	Amphioplus	japonicus	2023/08/24 00:00
+2941322	0	active	subspecies	Balaenoptera musculus musculus	Balaenoptera	musculus	2022/05/12 00:00
+2841598	0	active	species	Boreomysis californica	Boreomysis	californica	2021/06/14 00:00
+2783889	0	active	species	Lepidactylus dytiscus	Lepidactylus	dytiscus	2020/11/05 00:00
+2760887	0	active	species	Scolelepis cirratulus	Scolelepis	cirratulus	2020/10/20 00:00
+2749699	0	active	species	Caecum cooperi	Caecum	cooperi	2020/08/18 00:00
+2268707	0	active	species	Lembos websteri	Lembos	websteri	2019/02/15 00:00
+2056977	0	active	species	Oikopleura vanhoeffeni	Oikopleura	vanhoeffeni	2019/01/03 00:00
+1931184	0	active	species	Aricidea belgicae	Aricidea	belgicae	2017/01/10 00:00
+1758758	0	active	species	Aeolidia sp. 2 LC-2015	Aeolidia	sp. 2 LC-2015	2017/07/25 00:00
+1735340	0	active	species	Cymadusa filosa	Cymadusa	filosa	2016/04/15 00:00
+1732143	0	active	species	Cheirocratus sundevalli	Cheirocratus	sundevalli	2015/10/13 00:00
+1502574	0	active	species	Aclis minor	Aclis	minor	2020/06/05 00:00
+1421107	0	active	species	Calliostoma canaliculatum	Calliostoma	canaliculatum	2014/08/27 00:00
+1305615	0	active	species	Protohyale frequens	Protohyale	frequens	2013/03/23 00:00
+1305609	0	active	species	Aoroides columbiae	Aoroides	columbiae	2013/03/23 00:00
+1305604	0	active	species	Ampithoe sectimanus	Ampithoe	sectimanus	2018/11/23 00:00
+1305602	0	active	species	Allorchestes angusta	Allorchestes	angusta	2013/03/23 00:00
+1190602	0	active	species	Clathria prolifera	Clathria	prolifera	2018/10/29 00:00
+1129270	0	active	species	Anomia simplex	Anomia	simplex	2014/02/16 00:00
+1109194	0	active	species	Clausidium vancouverense	Clausidium	vancouverense	2018/11/23 00:00
+1037269	0	active	species	Nearchaster aciculosus	Nearchaster	aciculosus	2011/06/02 00:00
+1030151	0	active	species	Apseudes talpa	Apseudes	talpa	2011/06/14 00:00
+989233	0	active	species	Anadara diluvii	Anadara	diluvii	2011/05/05 00:00
+740993	0	active	species	Cuspidaria rostrata	Cuspidaria	rostrata	2010/07/01 00:00
+723193	0	active	species	Creseis conica	Creseis	conica	2021/01/18 00:00
+714613	0	active	species	Aglaophamus pulchra	Aglaophamus	pulchra	2018/10/29 00:00
+686336	0	active	species	Cyamus ceti	Cyamus	ceti	2010/03/01 00:00
+569439	0	active	species	Oikopleura labradoriensis	Oikopleura	labradoriensis	2018/11/23 00:00
+563622	0	active	subspecies	Astropecten armatus erinaceus	Astropecten	armatus	2020/09/14 00:00
+563618	0	active	species	Astropecten armatus	Astropecten	armatus	2010/03/12 00:00
+561447	0	active	subspecies	Cerastoderma glaucum lamarcki	Cerastoderma	glaucum	2009/05/31 00:00
+556794	0	active	species	Cheiraster dawsoni	Cheiraster	dawsoni	2011/04/26 00:00
+515451	0	active	species	Cauloramphus spinifer	Cauloramphus	spinifer	2018/11/23 00:00
+478652	0	active	species	Eubranchipus vernalis	Eubranchipus	vernalis	2017/06/14 00:00
+429036	0	active	species	Gammaropsis utinomii	Gammaropsis	utinomii	2008/03/06 00:00
+398848	0	active	species	Anonyx nugax	Anonyx	nugax	2007/08/03 00:00
+371484	0	active	species	Atylus swammerdami	Atylus	swammerdami	2008/01/31 00:00
+363722	0	active	species	Pectinaria belgica	Pectinaria	belgica	2005/12/29 00:00
+357004	0	active	species	Protolaeospira eximia	Protolaeospira	eximia	2006/10/31 00:00
+257370	0	active	species	Caligus elongatus	Caligus	elongatus	2023/12/19 00:00
+251532	0	active	species	Solen marginatus	Solen	marginatus	2020/04/03 00:00
+222015	0	active	species	Phyllodoce maculata	Phyllodoce	maculata	2005/05/05 00:00
+216205	0	active	species	Phascolion cryptum	Phascolion	cryptum	2005/01/19 00:00
+211756	0	active	species	Crepidula incurva	Crepidula	incurva	2020/12/20 00:00
+210783	0	active	species	Apionsoma misakianum	Apionsoma	misakianum	2005/01/19 00:00
+187795	0	active	species	Cerebratulus marginatus	Cerebratulus	marginatus	2005/01/19 00:00
+187721	0	active	species	Nipponnemertes bimaculata	Nipponnemertes	bimaculata	2018/11/23 00:00
+176095	0	active	species	Adamsia palliata	Adamsia	palliata	2020/06/23 00:00
+171532	0	active	species	Crepidula convexa	Crepidula	convexa	2005/01/19 00:00
+142080	0	active	species	Ligia exotica	Ligia	exotica	2005/01/19 00:00
+136493	0	active	species	Crepidula plana	Crepidula	plana	2017/06/14 00:00
+117992	0	active	species	Conus ventricosus	Conus	ventricosus	2018/10/30 00:00
+107032	0	active	species	Oikopleura longicauda	Oikopleura	longicauda	2005/01/19 00:00
+103584	0	active	species	Delphinus capensis	Delphinus	capensis	2017/06/14 00:00
+94722	0	active	species	Cerastoderma glaucum	Cerastoderma	glaucum	2005/01/19 00:00
+88017	0	active	species	Heteromysis formosa	Heteromysis	formosa	2018/11/26 00:00
+72675	0	active	species	Henricia sanguinolenta	Henricia	sanguinolenta	2005/01/19 00:00
+34650	0	active	species	Cancer antennarius	Cancer	antennarius	2017/06/14 00:00
+31336	0	active	species	Ralfsia fungiformis	Ralfsia	fungiformis	2005/01/19 00:00
+31167	0	active	species	Beroe cucumis	Beroe	cucumis	2024/08/12 00:00
+27403	0	active	species	Bosmina longirostris	Bosmina	longirostris	2005/01/19 00:00
+9771	0	active	species	Balaenoptera musculus	Balaenoptera	musculus	2023/12/13 00:00
+6756	0	active	species	Cancer irroratus	Cancer	irroratus	2017/06/14 00:00

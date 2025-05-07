@@ -1,0 +1,45 @@
+---
+title: "Organize Species Lists"
+author: "Zack Gold"
+date: "2025-05-07"
+output: html_document
+---
+
+```{r}
+library(here)
+library(tidyverse)
+library(readxl)
+```
+
+# CA Seaweed
+
+```{r}
+read_xlsx(here("CA_seaweeds","CA_seaweeds.xlsx"), col_names = F) -> CA_seaweeds
+
+CA_seaweeds %>% 
+  dplyr::rename(Native=`...1`,LOADED=`...2`) -> CA_seaweeds
+
+str_match(CA_seaweeds$LOADED, "(?s)^(\\S+(?:\\s+\\S+)?)?(?:\\s+(.+))?")[,-1] %>% 
+  as_tibble() -> splitted
+
+cbind(CA_seaweeds,splitted) %>% 
+  dplyr::select(`Scientific Name`=V1, Native) %>% 
+  write_excel_csv(., here("CA_seaweeds","CA_seaweeds_names_fixed.csv"))
+
+```
+
+# GOM
+
+```{r}
+
+read_delim(here("GOM","biogomx_20160822.csv"), delim="|") -> GOM
+
+GOM %>% 
+  write_excel_csv(., here("GOM","biogomx_20160822_excel.csv"))
+
+
+GOM %>% 
+  dplyr::select(scientific_name, locality) %>% 
+    write_excel_csv(., here("GOM","biogomx_20160822_excel_selected.csv"))
+
+```

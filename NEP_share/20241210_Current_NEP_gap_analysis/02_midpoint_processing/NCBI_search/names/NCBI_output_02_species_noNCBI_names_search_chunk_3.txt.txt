@@ -1,0 +1,47 @@
+PQ164718.1	Yoldia hyperborea mitochondrion, complete genome	2024/08/17	Yoldia hyperborea	1421154	dna	mitochondrion	complete	circular	25329	sex	female
+PP541907.1	Yoldia hyperborea mitochondrion, complete genome	2024/05/19	Yoldia hyperborea	1421154	dna	mitochondrion	complete	circular	20771	sex|tissue_type	male|gonads
+NC_026988.1	Tritonia diomedea mitochondrion, complete genome	2015/05/05	Tritonia tetraquetra	2780533	dna	mitochondrion	complete	circular	14540	old_name|country|isolation_source	Tritonia diomedea|Canada: Vancouver, Tofino|Yellow Bank
+NC_005317.1	Thunnus alalunga mitochondrion, complete genome	2004/01/13	Thunnus alalunga	8235	dna	mitochondrion	complete	circular	16527	-	-
+MF415918.1	UNVERIFIED: Thunnus alalunga isolate ALA_TYR016 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5113	isolate	ALA_TYR016
+MF415917.1	UNVERIFIED: Thunnus alalunga isolate ALA_TYR015 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5113	isolate	ALA_TYR015
+MF415916.1	UNVERIFIED: Thunnus alalunga isolate ALA_TYR014 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_TYR014
+MF415915.1	UNVERIFIED: Thunnus alalunga isolate ALA_TYR008 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_TYR008
+MF415914.1	UNVERIFIED: Thunnus alalunga isolate ALA_TYR006 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_TYR006
+MF415913.1	UNVERIFIED: Thunnus alalunga isolate ALA_TYR003 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5113	isolate	ALA_TYR003
+MF415912.1	UNVERIFIED: Thunnus alalunga isolate ALA_PS005 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5113	isolate	ALA_PS005
+MF415911.1	UNVERIFIED: Thunnus alalunga isolate ALA_PS004 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5113	isolate	ALA_PS004
+MF415910.1	UNVERIFIED: Thunnus alalunga isolate ALA_PS003 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_PS003
+MF415909.1	UNVERIFIED: Thunnus alalunga isolate ALA_PS002 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_PS002
+MF415908.1	UNVERIFIED: Thunnus alalunga isolate ALA_PS001 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_PS001
+MF415907.1	UNVERIFIED: Thunnus alalunga isolate ALA_PN049 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_PN049
+MF415906.1	UNVERIFIED: Thunnus alalunga isolate ALA_PN048 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_PN048
+MF415905.1	UNVERIFIED: Thunnus alalunga isolate ALA_PN046 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_PN046
+MF415904.1	UNVERIFIED: Thunnus alalunga isolate ALA_IN006 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5113	isolate	ALA_IN006
+MF415903.1	UNVERIFIED: Thunnus alalunga isolate ALA_IN005 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_IN005
+MF415902.1	UNVERIFIED: Thunnus alalunga isolate ALA_IN004 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_IN004
+MF415901.1	UNVERIFIED: Thunnus alalunga isolate ALA_IN003 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_IN003
+MF415900.1	UNVERIFIED: Thunnus alalunga isolate ALA_IN002 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5113	isolate	ALA_IN002
+MF415899.1	UNVERIFIED: Thunnus alalunga isolate ALA_IN001 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_IN001
+MF415898.1	UNVERIFIED: Thunnus alalunga isolate ALA_AS010 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5113	isolate	ALA_AS010
+MF415897.1	UNVERIFIED: Thunnus alalunga isolate ALA_AS009 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5113	isolate	ALA_AS009
+MF415896.1	UNVERIFIED: Thunnus alalunga isolate ALA_AS008 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5111	isolate	ALA_AS008
+MF415895.1	UNVERIFIED: Thunnus alalunga isolate ALA_AS007 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AS007
+MF415894.1	UNVERIFIED: Thunnus alalunga isolate ALA_AS006 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AS006
+MF415893.1	UNVERIFIED: Thunnus alalunga isolate ALA_AS003 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5111	isolate	ALA_AS003
+MF415892.1	UNVERIFIED: Thunnus alalunga isolate ALA_AS002 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AS002
+MF415891.1	UNVERIFIED: Thunnus alalunga isolate ALA_AN026 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AN026
+MF415890.1	UNVERIFIED: Thunnus alalunga isolate ALA_AN012 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AN012
+MF415889.1	UNVERIFIED: Thunnus alalunga isolate ALA_AN011 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AN011
+MF415888.1	UNVERIFIED: Thunnus alalunga isolate ALA_AN010 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AN010
+MF415887.1	UNVERIFIED: Thunnus alalunga isolate ALA_AN008 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AN008
+MF415886.1	UNVERIFIED: Thunnus alalunga isolate ALA_AN007 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5113	isolate	ALA_AN007
+MF415885.1	UNVERIFIED: Thunnus alalunga isolate ALA_AN006 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AN006
+MF415884.1	UNVERIFIED: Thunnus alalunga isolate ALA_AN005 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AN005
+MF415883.1	UNVERIFIED: Thunnus alalunga isolate ALA_AN004 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AN004
+MF415882.1	UNVERIFIED: Thunnus alalunga isolate ALA_AN003 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AN003
+MF415881.1	UNVERIFIED: Thunnus alalunga isolate ALA_AN002 mitochondrion sequence	2018/09/10	Thunnus alalunga	8235	dna	mitochondrion	-	linear	5112	isolate	ALA_AN002
+KP259549.1	Thunnus alalunga voucher ECSFRI-CQJQY01 mitochondrion, complete genome	2016/12/30	Thunnus alalunga	8235	dna	mitochondrion	complete	circular	16527	specimen_voucher	ECSFRI-CQJQY01
+GU256526.1	Thunnus alalunga mitochondrion, complete genome	2010/04/20	Thunnus alalunga	8235	dna	mitochondrion	complete	circular	16527	-	-
+JN086151.1	Thunnus alalunga voucher TA02-2314 mitochondrion, complete genome	2011/08/30	Thunnus alalunga	8235	dna	mitochondrion	complete	circular	16527	specimen_voucher	TA02-2314
+KP764765.1	Tritonia diomedea mitochondrion, complete genome	2015/04/26	Tritonia tetraquetra	2780533	dna	mitochondrion	complete	circular	14540	old_name|country|isolation_source	Tritonia diomedea|Canada: Vancouver, Tofino|Yellow Bank
+AB101291.1	Thunnus alalunga mitochondrial DNA, complete genome	2004/01/06	Thunnus alalunga	8235	dna	mitochondrion	-	circular	16527	-	-
