@@ -1,0 +1,76 @@
+INFO [2025-04-28 16:48:19] {"msg":"Using a local rCRUX installation: /home/poseidon/mcallister/software/rCRUX/","fn":"rCRUX"}
+INFO [2025-04-28 16:48:19] {"msg":"Starting rCRUX pipeline","fn":"rCRUX"}
+INFO [2025-04-28 16:48:19] {"msg":"Getting seeds","fn":"run_basic_pipeline"}
+INFO [2025-04-28 16:48:21] {"msg":"Examining primers for degenerate bases.","fn":"get_seeds_local"}
+INFO [2025-04-28 16:48:22] {"msg":"Calling blastn for primers. This may take a long time.","fn":"run_primer_blastn"}
+INFO [2025-04-28 17:28:11] {"msg":"Blasting complete.  Wrangling results.","fn":"get_seeds_local"}
+INFO [2025-04-28 17:29:54] {"msg":"Attaching taxonomies.","fn":"get_seeds_local"}
+INFO [2025-04-28 17:30:21] {"msg":"Blasting seeds","fn":"run_basic_pipeline"}
+INFO [2025-04-28 17:30:21] {"msg":"Blasting seeds","fn":"blast_seeds"}
+INFO [2025-04-28 17:30:27] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 17:37:16] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 18:05:46] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 18:12:41] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 18:34:59] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 18:42:08] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 19:08:22] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 19:15:25] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 19:41:38] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 19:48:38] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 20:12:06] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 20:19:09] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 20:41:27] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 20:48:16] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 21:02:12] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 21:09:26] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 21:31:46] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 21:38:36] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 22:00:38] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 22:07:30] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 22:32:36] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 22:39:32] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 23:00:41] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 23:07:35] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-28 23:31:49] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-28 23:38:50] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 00:06:16] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 00:13:18] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 00:32:18] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 00:39:17] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 01:01:08] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 01:08:13] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 01:29:25] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 01:36:25] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 01:54:14] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 02:01:17] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 02:22:17] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 02:29:14] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 02:48:48] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 02:55:44] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 03:16:39] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 03:23:39] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 03:43:28] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 03:50:23] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 04:11:19] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 04:18:31] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 04:41:44] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 04:50:43] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 06:02:04] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 06:11:13] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 07:06:35] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 07:15:39] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 08:07:12] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 08:14:20] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 08:37:21] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 08:44:22] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 09:09:58] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 09:17:02] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 09:36:36] {"msg":"Running blastdbcmd on 763 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 09:41:59] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-29 09:59:48] {"msg":"Running blastdbcmd on 167 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-29 10:01:00] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+Expanding multi taxids.
+INFO [2025-04-29 10:07:27] {"msg":"Blasting complete.  Wrangling results.","fn":"blast_seeds"}
+INFO [2025-04-29 10:07:33] {"msg":"Derepping and cleaning DB","fn":"run_basic_pipeline"}
+INFO [2025-04-29 10:08:13] {"msg":"rCRUX pipeline done","fn":"rCRUX","details":{"output_directory":"/home/poseidon/mcallister/rcrux/moore_test/02_smalldb/20250428_Ford_vertebrate_mt16S_singleDB_rankSpecies"}}
+Ran 1/1 deferred expressions

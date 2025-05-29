@@ -1,0 +1,2 @@
+"superkingdom"	"phylum"	"class"	"order"	"family"	"genus"	"species"
+1	19	68	370	2959	24086	81357

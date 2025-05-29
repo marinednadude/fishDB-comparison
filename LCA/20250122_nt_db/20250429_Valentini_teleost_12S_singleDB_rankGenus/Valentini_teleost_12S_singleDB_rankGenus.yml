@@ -1,0 +1,40 @@
+#Marker parameters:
+forward_primer_seq: ACACCGCCCGTCACTCT
+reverse_primer_seq: CTTCCGGTACACTTACCATG
+metabarcode_name: Valentini_teleost_12S
+output_directory_path: /home/poseidon/mcallister/rcrux/moore_test/02_smalldb/20250429_Valentini_teleost_12S_singleDB_rankGenus
+
+#Run parameters:
+accession_taxa_sql_path: /data/blastdb/2025_dbs/20250425_accessionSQL/accessionTaxa.sql
+blast_db_path: '"/data/blastdb/2025_dbs/20250122_nt_db/nt /data/blastdb/2025_dbs/20250409_mito_db/mito"'
+
+#rCRUX parameters:
+args_get_seeds_local:
+  minimum_length: 70
+  maximum_length: 130
+  num_threads: 10
+  align: 1000000
+  evalue: 3e+06
+  perID: 70
+  coverage: 70
+  max_to_blast: 1000
+#  num_fprimers_to_blast: 50
+#  num_rprimers_to_blast: 50
+#  mismatch: 6
+#  word_size: 7
+#  reward: 2
+
+args_blast_seeds:
+  expand_vectors: true
+  minimum_length: 40
+  maximum_length: 100
+  num_threads: 10
+  align: 1000000
+  evalue: 3.00E+07
+  perID: 70
+  coverage: 70
+  max_to_blast: 1000
+  rank: genus
+  random_seed: 23
+#  wildcards: NNNN
+#  sample_size: 1

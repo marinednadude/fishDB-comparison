@@ -1,0 +1,28 @@
+INFO [2025-04-26 07:52:07] {"msg":"Using a local rCRUX installation: /home/poseidon/mcallister/software/rCRUX/","fn":"rCRUX"}
+INFO [2025-04-26 07:52:07] {"msg":"Starting rCRUX pipeline","fn":"rCRUX"}
+INFO [2025-04-26 07:52:07] {"msg":"Getting seeds","fn":"run_basic_pipeline"}
+INFO [2025-04-26 07:52:13] {"msg":"Examining primers for degenerate bases.","fn":"get_seeds_local"}
+INFO [2025-04-26 07:52:14] {"msg":"Calling blastn for primers. This may take a long time.","fn":"run_primer_blastn"}
+INFO [2025-04-26 08:48:48] {"msg":"Blasting complete.  Wrangling results.","fn":"get_seeds_local"}
+INFO [2025-04-26 08:49:57] {"msg":"Attaching taxonomies.","fn":"get_seeds_local"}
+INFO [2025-04-26 08:50:01] {"msg":"Blasting seeds","fn":"run_basic_pipeline"}
+INFO [2025-04-26 08:50:01] {"msg":"Blasting seeds","fn":"blast_seeds"}
+INFO [2025-04-26 08:50:04] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-26 08:57:25] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-26 09:06:44] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-26 09:14:03] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-26 09:24:11] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-26 09:31:43] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-26 09:39:30] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-26 09:48:17] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-26 09:57:02] {"msg":"Running blastdbcmd on 1000 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-26 10:05:22] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-26 10:12:40] {"msg":"Running blastdbcmd on 510 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-26 10:16:10] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+INFO [2025-04-26 10:19:50] {"msg":"Running blastdbcmd on 2131 samples.","fn":"run_blastdbcmd_blastn_and_aggregate_resuts"}
+INFO [2025-04-26 10:34:49] {"msg":"Calling blastn. This may take a long time.","fn":"run_blastn"}
+Expanding multi taxids.
+INFO [2025-04-26 10:38:05] {"msg":"Blasting complete.  Wrangling results.","fn":"blast_seeds"}
+INFO [2025-04-26 10:38:07] {"msg":"Derepping and cleaning DB","fn":"run_basic_pipeline"}
+INFO [2025-04-26 10:38:16] {"msg":"rCRUX pipeline done","fn":"rCRUX","details":{"output_directory":"/home/poseidon/mcallister/rcrux/moore_test/02_smalldb/20250425_MiFish_12S_singleDB_rankGenus_updateSQL"}}
+Ran 1/1 deferred expressions

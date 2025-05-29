@@ -1,0 +1,2 @@
+"superkingdom"	"phylum"	"class"	"order"	"family"	"genus"	"species"
+1	39	94	402	1300	5340	18124

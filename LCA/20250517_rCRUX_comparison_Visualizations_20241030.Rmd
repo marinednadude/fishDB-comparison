@@ -1,0 +1,3411 @@
+---
+title: "MiFish Visualizations"
+author: "Zack Gold"
+date: "2024-10-20"
+output: pdf_document
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r, warning=FALSE, echo=FALSE}
+library(tidyverse)
+library(DECIPHER)
+library(here)
+library(patchwork)
+```
+
+# Load Data
+
+### MiFish Genus 
+
+
+
+```{r, warning=FALSE}
+Mifish_genus_separated <- readRDS(here("LCA","20250122_nt_db","20250515_lca_exact_out","20250515_lca_exact_outMifish_genus_full_merged_data_set.RDS")) %>% separate(lca_taxonomic_path, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F)
+
+Mifish_genus_separated %>% 
+  filter(str_detect(lca_taxonomic_path, "Actinopteri|Chondrichthyes|Hyperoartia|Cladistia|Ceratodontiformes")) %>% 
+  dplyr::rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> Mifish_genus_separated_2
+
+Mifish_genus_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+  mutate(., Barcode= "MiFish Genus 12S") %>% 
+  mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD")) -> Mifish_genus_cat
+
+
+```
+
+### MiFish All 
+
+```{r, warning=FALSE}
+Mifish_all_separated <- readRDS(here("LCA","20250122_nt_db","20250515_lca_exact_out","20250515_lca_exact_outMiFish_genus_full_merged_data_set.RDS")) %>% separate(lca_taxonomic_path, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F)
+
+Mifish_all_separated %>% 
+  filter(str_detect(lca_taxonomic_path,"Actinopteri|Chondrichthyes|Hyperoartia|Cladistia|Ceratodontiformes")) %>% 
+  dplyr::rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> Mifish_all_separated_2
+
+Mifish_all_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+  mutate(., Barcode= "MiFish all") %>% 
+  mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD")) -> Mifish_all_cat
+
+
+```
+
+## Ford 16S
+
+```{r, warning=FALSE}
+Ford_16S_separated <- readRDS(here("LCA","20250122_nt_db","20250515_lca_exact_out","20250515_lca_exact_outFord_full_merged_data_set.RDS")) %>% separate(lca_taxonomic_path, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F)
+
+Ford_16S_separated %>% 
+    filter(str_detect(lca_taxonomic_path, "Actinopteri|Chondrichthyes|Hyperoartia|Cladistia|Ceratodontiformes")) %>% 
+  rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> Ford_16S_separated_2
+
+Ford_16S_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+    mutate(., Barcode= "Ford 16S") %>% 
+  mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD")) -> Ford_16S_cat
+
+```
+
+## MarVer3
+
+```{r, warning=FALSE}
+MarVer3_separated <- readRDS(here("LCA","20250122_nt_db","20250515_lca_exact_out","20250515_lca_exact_outMarver3_full_merged_data_set.RDS")) %>% separate(lca_taxonomic_path, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F)
+
+MarVer3_separated %>% 
+    filter(str_detect(lca_taxonomic_path, "Actinopteri|Chondrichthyes|Hyperoartia|Cladistia|Ceratodontiformes")) %>% 
+  rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> MarVer3_separated_2
+
+MarVer3_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+      mutate(., Barcode= "MarVer3") %>% 
+   mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD")) -> MarVer3_cat
+
+```
+
+## MiSebastes
+
+```{r, warning=FALSE}
+MiSebastes_separated <- readRDS(here("LCA","20250122_nt_db","20250515_lca_exact_out","20250515_lca_exact_outMiSebastes_full_merged_data_set.RDS")) %>% separate(lca_taxonomic_path, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F)
+
+MiSebastes_separated %>% 
+    filter(str_detect(lca_taxonomic_path, "Actinopteri|Chondrichthyes|Hyperoartia|Cladistia|Ceratodontiformes")) %>% 
+  rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> MiSebastes_separated_2
+
+MiSebastes_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+        mutate(., Barcode= "MiSebastes") %>% 
+   mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD")) -> MiSebastes_cat
+
+```
+
+## teleo
+
+```{r, warning=FALSE}
+teleo_separated <- readRDS(here("LCA","20250122_nt_db","20250515_lca_exact_out","20250515_lca_exact_outTeleo_full_merged_data_set.RDS")) %>% separate(lca_taxonomic_path, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F)
+
+teleo_separated %>% 
+    filter(str_detect(lca_taxonomic_path, "Actinopteri|Chondrichthyes|Hyperoartia|Cladistia|Ceratodontiformes")) %>% 
+  rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> teleo_separated_2
+
+teleo_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+        mutate(., Barcode= "teleo") %>% 
+ mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD"))-> teleo_cat
+
+```
+
+## Berry
+
+```{r, warning=FALSE}
+Berry_separated <- readRDS(here("LCA","20250122_nt_db","20250515_lca_exact_out","20250515_lca_exact_outBerry_full_merged_data_set.RDS")) %>% separate(lca_taxonomic_path, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F)
+
+Berry_separated %>% 
+    filter(str_detect(lca_taxonomic_path, "Actinopteri|Chondrichthyes|Hyperoartia|Cladistia|Ceratodontiformes")) %>% 
+  rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> Berry_separated_2
+
+Berry_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+        mutate(., Barcode= "Berry") %>% 
+ mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD"))-> Berry_cat
+
+```
+
+## Riaz
+
+```{r, warning=FALSE}
+Riaz_separated <- readRDS(here("LCA","20250122_nt_db","20250515_lca_exact_out","20250515_lca_exact_outRiaz_full_merged_data_set.RDS")) %>% separate(lca_taxonomic_path, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F)
+
+Riaz_separated %>% 
+    filter(str_detect(lca_taxonomic_path, "Actinopteri|Chondrichthyes|Hyperoartia|Cladistia|Ceratodontiformes")) %>% 
+  rowwise() %>%
+  mutate(Species_per_cluster = n_distinct(Accesions$Name)) -> Riaz_separated_2
+
+Riaz_separated_2 %>% 
+  replace(is.na(.), "") %>% 
+        mutate(., Barcode= "Riaz") %>% 
+ mutate(., Type = case_when(Species != "" ~ "Species Level ID",
+                             Genus != "" ~ "Genus Level ID",
+                             Family != "" ~ "Family Level ID",
+                             Order != "" ~ "Order Level ID",
+                             Class != "" ~ "Class Level ID",
+                             Phylum != "" ~ "Phylum Level ID",
+                             Domain != "" ~ "Domain Level ID",
+                           TRUE  ~ "WEIRD"))-> Riaz_cat
+
+```
+
+```{r, warning=FALSE}
+#Colors for plots
+library(wesanderson)
+wes_palette("GrandBudapest1") -> moon1
+wes_palette("GrandBudapest2") -> moon2
+wes_palette("Moonrise3") -> moon3
+wes_palette("Zissou1") -> moon4
+```
+
+# Overall Stats
+
+## MiFish All
+```{r, warning=FALSE}
+Mifish_all_cat  %>% 
+  group_by(Type) %>% 
+  dplyr::summarise(n= sum(Species_per_cluster))-> Mifish_all_cat_sum
+
+Mifish_all_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> Mifish_all_cat_tot
+
+Mifish_all_cat_sum %>% 
+  mutate(tot= Mifish_all_cat_tot$tot,
+         Barcode = "Mifish_all 12S") %>% 
+   mutate(., perc=( n/ tot)) -> Mifish_all_cat_dat
+  
+```
+
+## MiFish Genus
+```{r, warning=FALSE}
+Mifish_genus_cat  %>% 
+  group_by(Type) %>% 
+  dplyr::summarise(n= sum(Species_per_cluster))-> Mifish_genus_cat_sum
+
+Mifish_genus_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> Mifish_genus_cat_tot
+
+Mifish_genus_cat_sum %>% 
+  mutate(tot= Mifish_genus_cat_tot$tot,
+         Barcode = "Mifish_genus 12S") %>% 
+   mutate(., perc=( n/ tot)) -> Mifish_genus_cat_dat
+  
+```
+
+## Ford 16S
+
+```{r, warning=FALSE}
+Ford_16S_cat  %>% 
+  group_by(Type) %>% 
+  dplyr::summarise(n= sum(Species_per_cluster))-> Ford_16S_cat_sum
+
+Ford_16S_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> Ford_16S_cat_tot
+
+Ford_16S_cat_sum %>% 
+  mutate(tot= Ford_16S_cat_tot$tot,
+         Barcode = "Ford 16S") %>% 
+   mutate(., perc=( n/ tot)) -> Ford_16S_cat_dat
+  
+```
+
+## MarVer3
+
+```{r, warning=FALSE}
+MarVer3_cat  %>% 
+  group_by(Type) %>% 
+  dplyr::summarise(n= sum(Species_per_cluster))-> MarVer3_cat_sum
+
+MarVer3_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> MarVer3_cat_tot
+
+MarVer3_cat_sum %>% 
+  mutate(tot= MarVer3_cat_tot$tot,
+         Barcode = "MarVer3") %>% 
+   mutate(., perc=( n/ tot)) -> MarVer3_cat_dat
+  
+```
+
+## MiSebastes
+
+```{r, warning=FALSE}
+MiSebastes_cat  %>% 
+  group_by(Type) %>% 
+  dplyr::summarise(n= sum(Species_per_cluster))-> MiSebastes_cat_sum
+
+MiSebastes_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> MiSebastes_cat_tot
+
+MiSebastes_cat_sum %>% 
+  mutate(tot= MiSebastes_cat_tot$tot,
+         Barcode = "MiSebastes") %>% 
+   mutate(., perc=( n/ tot)) -> MiSebastes_cat_dat
+  
+```
+
+## teleo
+
+```{r, warning=FALSE}
+teleo_cat  %>% 
+  group_by(Type) %>% 
+  dplyr::summarise(n= sum(Species_per_cluster))-> teleo_cat_sum
+
+teleo_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> teleo_cat_tot
+
+teleo_cat_sum %>% 
+  mutate(tot= teleo_cat_tot$tot,
+         Barcode = "teleo") %>% 
+   mutate(., perc=( n/ tot)) -> teleo_cat_dat
+  
+```
+
+## Berry
+
+```{r, warning=FALSE}
+Berry_cat  %>% 
+  group_by(Type) %>% 
+  dplyr::summarise(n= sum(Species_per_cluster))-> Berry_cat_sum
+
+Berry_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> Berry_cat_tot
+
+Berry_cat_sum %>% 
+  mutate(tot= Berry_cat_tot$tot,
+         Barcode = "Berry") %>% 
+   mutate(., perc=( n/ tot)) -> Berry_cat_dat
+  
+```
+
+## Riaz
+
+```{r, warning=FALSE}
+Riaz_cat  %>% 
+  group_by(Type) %>% 
+  dplyr::summarise(n= sum(Species_per_cluster))-> Riaz_cat_sum
+
+Riaz_cat_sum %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=sum(n)) -> Riaz_cat_tot
+
+Riaz_cat_sum %>% 
+  mutate(tot= Riaz_cat_tot$tot,
+         Barcode = "Riaz") %>% 
+   mutate(., perc=( n/ tot)) -> Riaz_cat_dat
+  
+```
+
+
+
+## Combined Plots
+
+```{r}
+rbind(Mifish_all_cat_dat,Mifish_genus_cat_dat,Ford_16S_cat_dat,MarVer3_cat_dat,MiSebastes_cat_dat,teleo_cat_dat, Berry_cat_dat,Riaz_cat_dat) -> combined_cat_dat
+
+saveRDS(combined_cat_dat, here("LCA","Figures","Fish_ref_dbs_combined_cat_dat_20250517.RDS"))
+
+combined_cat_dat$Type <- factor(combined_cat_dat$Type, levels=c("Phylum Level ID", "Order Level ID", 'Class Level ID','Family Level ID','Genus Level ID','Species Level ID'))
+
+combined_cat_dat %>% 
+ggplot(., aes(y=perc, color=Type, fill=Type, x=Barcode)) + geom_col() + ylab("Percent") + 
+  theme_classic() +
+  scale_fill_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) +
+  scale_color_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) + 
+  guides(fill=guide_legend(title="Resolution of Taxonomic Identification"), color=guide_legend(title="Resolution of Taxonomic Identification"))+
+  scale_y_continuous(labels = scales::percent) +
+  geom_hline(yintercept = 1, linetype="dashed")+ theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust=1)) -> a1
+
+a1
+
+ggsave(here("LCA","Figures","Combined_plots_figure_percent.png"), width = 8, height = 6)
+```
+
+
+```{r}
+
+combined_cat_dat %>% 
+ggplot(., aes(y=n, color=Type, fill=Type, x=Barcode)) + geom_col() + ylab("Count") + 
+  theme_classic() +
+scale_fill_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4]))+  scale_colour_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) + 
+  guides(fill=guide_legend(title="Resolution of Taxonomic Identification"), color=guide_legend(title="Resolution of Taxonomic Identification"))+
+  geom_hline(yintercept = 1, linetype="dashed")+ theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust=1)) -> b1
+
+b1
+
+ggsave(here("LCA","Figures","Combined_plots_figure_counts.png"), width = 8, height = 6)
+
+```
+
+
+
+## Function to Focus
+
+
+```{r}
+
+rbind(Mifish_all_cat,Mifish_genus_cat,Ford_16S_cat,MarVer3_cat,MiSebastes_cat,teleo_cat,Berry_cat,Riaz_cat) %>% ungroup() -> barcode_cat
+
+```
+
+### Bar Graph
+```{r, warning=FALSE}
+
+bar_graph_for_taxa_of_interest <- function(Rank, Taxonomy, barcode_cat) {
+
+ranks = c("Domain","Phylum","Class","Order","Family","Genus","Species")
+
+ranks %>% as.tibble() %>% 
+  rownames_to_column() %>% 
+  mutate(., rowname=as.numeric(rowname))-> ranks
+
+ranks %>% 
+  filter(., value == Rank) -> ranks_f
+
+ranks %>% 
+  filter(., rowname == (ranks_f$rowname+1)) -> rank_one_down_to_select
+
+barcode_cat %>%   
+      ungroup() %>% 
+  filter(., eval(rlang::parse_expr(Rank)) == Taxonomy ) -> barcode_cat_filter
+
+barcode_cat  %>% 
+  ungroup() %>% 
+  filter(., eval(rlang::parse_expr(Rank)) == Taxonomy ) %>% 
+  group_by(across(all_of(c(rank_one_down_to_select$value, "Type","Barcode")))) %>% 
+  dplyr::summarise(n= sum(Species_per_cluster)) %>% 
+  filter(., eval(rlang::parse_expr(rank_one_down_to_select$value)) !="") %>% 
+  arrange(desc(n))-> cat_sum_rank_type_filter
+
+cat_sum_rank_type_filter %>% 
+ggplot(., aes(y=n, color=Type, fill=Type, x=reorder(eval(rlang::parse_expr(rank_one_down_to_select$value)), -n))) + 
+  geom_col() +
+  ylab("Count") + 
+  xlab(rank_one_down_to_select$value) +
+  theme_classic() +
+scale_fill_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4]))+  scale_colour_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) + 
+  guides(fill=guide_legend(title="Correct Taxonomic Path To:"), color=guide_legend(title="Correct Taxonomic Path To:"))+
+    theme(axis.text.x = element_text(angle = 45,hjust = 1)) +facet_wrap(.~ Barcode)-> plot1
+
+plot1
+
+}
+```
+
+```{r}
+bar_graph_for_taxa_of_interest("Family","Sebastidae",barcode_cat )
+bar_graph_for_taxa_of_interest("Family","Labridae",barcode_cat )
+bar_graph_for_taxa_of_interest("Family","Carcharhinidae",barcode_cat )
+bar_graph_for_taxa_of_interest("Class","Chondrichthyes",barcode_cat )
+
+ggsave(here("LCA","Figures","Chondrichthyes_bar_graph_for_taxa_of_interest.png"), width = 8, height = 6)
+
+
+```
+### Tile Plot
+
+```{r, fig.height=14, fig.width=8, warning=FALSE}
+
+tile_plot_for_taxa_of_interest <- function(Rank, Taxonomy, barcode_cat) {
+  
+ranks = c("Domain","Phylum","Class","Order","Family","Genus","Species")
+
+ranks %>% as.tibble() %>% 
+  rownames_to_column() %>% 
+  mutate(., rowname=as.numeric(rowname))-> ranks
+
+ranks %>% 
+  filter(., value == Rank) -> ranks_f
+
+ranks %>% 
+  filter(., rowname == (ranks_f$rowname+1)) -> rank_one_down_to_select
+
+barcode_cat %>%   
+    ungroup() %>% 
+  filter(., eval(rlang::parse_expr(Rank)) == Taxonomy ) -> barcode_cat_filter
+
+barcode_cat_filter %>% 
+  filter(., Species != "") %>% 
+  ungroup() %>% 
+  dplyr::select(Barcode,Class, Order, Family, Genus, Species, Type) %>% 
+  unite(., `Barcode:Species`, c("Barcode","Species"), sep = ":", remove=F)-> ranks_of_species
+
+barcode_cat_filter %>% 
+  filter(., Species =="") %>% 
+  unnest(Accesions) %>% 
+  ungroup() %>% 
+  dplyr::select(Barcode,Name, Type) %>% 
+  separate(Name, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F) %>% 
+  dplyr::select(Barcode,Class, Order, Family, Genus, Species, Type) %>% 
+  unique() %>% unite(., `Barcode:Species`, c("Barcode","Species"), sep = ":", remove=F)-> ranks_of_higher_tax
+
+ranks_of_higher_tax %>% 
+  filter(., !`Barcode:Species` %in% ranks_of_species$`Barcode:Species`) -> ranks_of_higher_tax_clean
+
+rbind(ranks_of_species,ranks_of_higher_tax_clean) %>% 
+  mutate(., LCA = case_when(Species !="" ~ Species,
+                             Genus !="" ~ Genus,
+                             Family !="" ~ Family,
+                            Order !="" ~ Order,
+                            Class !="" ~ Class,
+                             TRUE ~"WEIRD")) %>% 
+  ggplot(., aes( y= LCA, x= Barcode, fill =Type)) +geom_tile() +
+  theme_classic() + theme(axis.text.x = element_text(angle =30, hjust = 1)) +
+ scale_fill_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4]))+  scale_colour_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) +  guides(fill=guide_legend(title="Resolution of Taxonomic Identification"), color=guide_legend(title="Resolution of Taxonomic Identification"))  -> plot2
+
+plot2
+
+}
+```
+
+```{r}
+tile_plot_for_taxa_of_interest("Genus","Sebastes",barcode_cat )
+tile_plot_for_taxa_of_interest("Order","Lamniformes",barcode_cat )
+tile_plot_for_taxa_of_interest("Family","Carcharhinidae",barcode_cat )
+tile_plot_for_taxa_of_interest("Family","Embiotocidae",barcode_cat )
+tile_plot_for_taxa_of_interest("Family","Gadidae",barcode_cat )
+
+ggsave(here("LCA","Figures","tile_plot_for_taxa_of_interest_surfperch_figure.png"), width = 8, height = 6)
+
+tile_plot_for_taxa_of_interest("Class","Chondrichthyes",barcode_cat )
+tile_plot_for_taxa_of_interest("Class","Hyperoartia",barcode_cat )
+
+```
+
+
+# Rank accumulation curves to identify which barcode performs the best
+
+## Species
+```{r}
+
+barcode_cat %>% 
+  filter(., Species != "") %>% 
+  ungroup() %>% 
+  dplyr::select(Barcode,Class, Order, Family, Genus, Species, Type) %>% 
+  unite(., `Barcode:Species`, c("Barcode","Species"), sep = ":", remove=F)-> ranks_of_species
+
+ranks_of_species %>% 
+  group_by(Barcode) %>% 
+  dplyr::summarise(Total_species = n_distinct(Species)) -> tot_species
+
+ranks_of_species %>% 
+  group_by(Barcode) %>% 
+  dplyr::summarise(Species = list(unique(Species))) -> nested_species
+
+rrapply(nested_species, how = "unmelt") -> species_for_venn
+
+
+
+# Initialize variables to track the maximum
+max_unique <- 0
+best_pair <- tibble(
+  Barcode = character(),
+  level_2_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(species_for_venn)) {
+  for (j in (i + 1):length(species_for_venn)-1) {
+    # Get the two lists
+    list1 <- species_for_venn[[i]]
+    list2 <- species_for_venn[[j]]
+    names1 <- names(species_for_venn[i])
+    names2 <- names(species_for_venn[j])
+    # Find the union of the two lists
+    combined_list <- union(list1, list2)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_pair %>%  add_row(Barcode = paste0(names1,":",names2), level_2_unique_tot = num_unique) -> best_pair
+    }
+}
+
+best_pair %>% 
+  arrange(desc(level_2_unique_tot)) -> level_2_clean
+
+
+```
+
+```{r}
+
+
+# Initialize variables to track the maximum
+best_tri <- tibble(
+  Barcode = character(),
+  level_3_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(species_for_venn)) {
+  for (j in (i + 1):length(species_for_venn)-1) {
+    for (k in (i + 1):length(species_for_venn)-1) {
+    # Get the two lists
+    list1 <- species_for_venn[[i]]
+    list2 <- species_for_venn[[j]]
+    list3 <- species_for_venn[[k]]
+    names1 <- names(species_for_venn[i])
+    names2 <- names(species_for_venn[j])
+    names3 <- names(species_for_venn[k])
+    # Find the union of the two lists
+    combined_list <- union(union(list1, list2),list3)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_tri %>%  add_row(Barcode = paste0(names1,":",names2,":",names3), level_3_unique_tot = num_unique) -> best_tri
+    }
+  }
+}
+
+best_tri %>% 
+  arrange(desc(level_3_unique_tot)) -> level_3_clean
+
+
+```
+
+```{r}
+tot_species %>% 
+  arrange(desc(Total_species)) %>% 
+  dplyr::slice(1) -> intersection_1_clean
+
+level_2_clean %>% 
+  arrange(desc(level_2_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_2_clean
+
+level_3_clean %>% 
+  arrange(desc(level_3_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_3_clean
+  
+tibble(
+total_species = c(intersection_1_clean$Total_species[[1]], 
+                   intersection_2_clean$level_2_unique_tot[[1]],
+                   intersection_3_clean$level_3_unique_tot[[1]]),
+Barcode = c(intersection_1_clean$Barcode[[1]], 
+           intersection_2_clean$Barcode[[1]],
+               intersection_3_clean$Barcode[[1]]     ),
+Level="Species"
+) -> tibble_for_plotting
+
+```
+## Genus
+
+```{r}
+
+barcode_cat %>% 
+  filter(., Genus != "") %>% 
+  ungroup() %>% 
+  dplyr::select(Barcode,Class, Order, Family, Genus, Species, Type) %>% 
+  unite(., `Barcode:Genus`, c("Barcode","Genus"), sep = ":", remove=F)-> ranks_of_Genus
+
+ranks_of_Genus %>% 
+  group_by(Barcode) %>% 
+  dplyr::summarise(Total_genera = n_distinct(Genus)) -> tot_Genus
+
+ranks_of_Genus %>% 
+  group_by(Barcode) %>% 
+  dplyr::summarise(Genus = list(unique(Genus))) -> nested_Genus
+
+nested_Genus %>% 
+  filter(., !Barcode %in% c("MiFish Genus 12S","MiSebastes","teleo")) -> nested_Genus
+
+rrapply(nested_Genus, how = "unmelt") -> genus_for_venn
+
+# Initialize variables to track the maximum
+max_unique <- 0
+best_pair <- tibble(
+  Barcode = character(),
+  level_2_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(genus_for_venn)) {
+  for (j in (i + 1):length(genus_for_venn)-1) {
+    # Get the two lists
+    list1 <- genus_for_venn[[i]]
+    list2 <- genus_for_venn[[j]]
+    names1 <- names(genus_for_venn[i])
+    names2 <- names(genus_for_venn[j])
+    # Find the union of the two lists
+    combined_list <- union(list1, list2)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_pair %>%  add_row(Barcode = paste0(names1,":",names2), level_2_unique_tot = num_unique) -> best_pair
+    }
+}
+
+best_pair %>% 
+  arrange(desc(level_2_unique_tot)) -> level_2_clean
+
+```
+
+```{r}
+
+# Initialize variables to track the maximum
+best_tri <- tibble(
+  Barcode = character(),
+  level_3_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(genus_for_venn)) {
+  for (j in (i + 1):length(genus_for_venn)-1) {
+    for (k in (i + 1):length(genus_for_venn)-1) {
+    # Get the two lists
+    list1 <- genus_for_venn[[i]]
+    list2 <- genus_for_venn[[j]]
+    list3 <- genus_for_venn[[k]]
+    names1 <- names(genus_for_venn[i])
+    names2 <- names(genus_for_venn[j])
+    names3 <- names(genus_for_venn[k])
+    # Find the union of the two lists
+    combined_list <- union(union(list1, list2),list3)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_tri %>%  add_row(Barcode = paste0(names1,":",names2,":",names3), level_3_unique_tot = num_unique) -> best_tri
+    }
+  }
+}
+
+best_tri %>% 
+  arrange(desc(level_3_unique_tot)) -> level_3_clean
+
+
+```
+
+```{r}
+tot_Genus %>% 
+  arrange(desc(Total_genera)) %>% 
+  dplyr::slice(1) -> intersection_1_clean
+
+level_2_clean %>% 
+  arrange(desc(level_2_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_2_clean
+
+level_3_clean %>% 
+  arrange(desc(level_3_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_3_clean
+  
+tibble(
+total_species = c(intersection_1_clean$Total_genera[[1]], 
+                   intersection_2_clean$level_2_unique_tot[[1]],
+                   intersection_3_clean$level_3_unique_tot[[1]]),
+Barcode = c(intersection_1_clean$Barcode[[1]], 
+           intersection_2_clean$Barcode[[1]],
+               intersection_3_clean$Barcode[[1]]     ),
+Level="Genus"
+) -> tibble_for_plotting_genus
+
+```
+
+## Family
+
+```{r}
+
+barcode_cat %>% 
+  filter(., Family != "") %>% 
+  ungroup() %>% 
+  dplyr::select(Barcode,Class, Order, Family, Genus, Species, Type) %>% 
+  unite(., `Barcode:Family`, c("Barcode","Family"), sep = ":", remove=F)-> ranks_of_Family
+
+ranks_of_Family %>% 
+  group_by(Barcode) %>% 
+  dplyr::summarise(Total_family = n_distinct(Family)) -> tot_Family
+
+ranks_of_Family %>% 
+  group_by(Barcode) %>% 
+  dplyr::summarise(Family = list(unique(Family))) -> nested_Family
+
+rrapply(nested_Family, how = "unmelt") -> family_for_venn
+
+
+# Initialize variables to track the maximum
+max_unique <- 0
+best_pair <- tibble(
+  Barcode = character(),
+  level_2_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(family_for_venn)) {
+  for (j in (i + 1):length(family_for_venn)-1) {
+    # Get the two lists
+    list1 <- family_for_venn[[i]]
+    list2 <- family_for_venn[[j]]
+    names1 <- names(family_for_venn[i])
+    names2 <- names(family_for_venn[j])
+    # Find the union of the two lists
+    combined_list <- union(list1, list2)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_pair %>%  add_row(Barcode = paste0(names1,":",names2), level_2_unique_tot = num_unique) -> best_pair
+    }
+}
+
+best_pair %>% 
+  arrange(desc(level_2_unique_tot)) -> level_2_clean
+
+```
+
+```{r}
+
+# Initialize variables to track the maximum
+best_tri <- tibble(
+  Barcode = character(),
+  level_3_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(family_for_venn)) {
+  for (j in (i + 1):length(family_for_venn)-1) {
+    for (k in (i + 1):length(family_for_venn)-1) {
+    # Get the two lists
+    list1 <- family_for_venn[[i]]
+    list2 <- family_for_venn[[j]]
+    list3 <- family_for_venn[[k]]
+    names1 <- names(family_for_venn[i])
+    names2 <- names(family_for_venn[j])
+    names3 <- names(family_for_venn[k])
+    # Find the union of the two lists
+    combined_list <- union(union(list1, list2),list3)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_tri %>%  add_row(Barcode = paste0(names1,":",names2,":",names3), level_3_unique_tot = num_unique) -> best_tri
+    }
+  }
+}
+
+best_tri %>% 
+  arrange(desc(level_3_unique_tot)) -> level_3_clean
+
+
+```
+
+
+```{r}
+tot_Family %>% 
+  arrange(desc(Total_family)) %>% 
+  dplyr::slice(1) -> intersection_1_clean
+
+level_2_clean %>% 
+  arrange(desc(level_2_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_2_clean
+
+level_3_clean %>% 
+  arrange(desc(level_3_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_3_clean
+  
+tibble(
+total_species = c(intersection_1_clean$Total_family[[1]], 
+                   intersection_2_clean$level_2_unique_tot[[1]],
+                   intersection_3_clean$level_3_unique_tot[[1]]),
+Barcode = c(intersection_1_clean$Barcode[[1]], 
+           intersection_2_clean$Barcode[[1]],
+               intersection_3_clean$Barcode[[1]]     ),
+Level="Family"
+) -> tibble_for_plotting_Family
+
+```
+
+## Plot 
+
+```{r plot-accumulation-curve-taxa}
+
+# set colors
+my_pal <- c("steelblue", "darkcyan", "darkseagreen3")
+
+
+
+rbind(tibble_for_plotting) %>% 
+  mutate(., counts_level = str_count(Barcode, pattern = ":")) %>% 
+  ggplot() +
+  theme_bw() +
+  expand_limits(y = 0) +
+  xlab("Loci") + 
+  ylab("Reference \n species") +
+  labs(color = "Taxonomic rank") +
+    labs(linetype = "Taxonomic rank") +
+  scale_color_manual(values = my_pal) +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 0.95, size=24),
+    axis.text.y = element_text(size=24),
+    #axis.text.x = element_blank(),
+    axis.title.x = element_text(size = 28),
+    axis.title.y = element_text(size = 28),
+    legend.text = element_text(size = 24),
+    #legend.title = element_text(size = 12),
+    legend.position="none",
+    legend.title = element_blank()
+  )  +
+  geom_point(aes(x = reorder(Barcode, counts_level), y = total_species, color = Level), size=8) +
+  geom_line(aes(x = reorder(Barcode, counts_level), y = total_species, color = Level, group = Level, linetype = Level), size=3)-> plot3
+
+plot3
+
+ggsave(here("LCA","Figures","rank_accumulation_curve.png"), width = 6, height = 10)
+
+```
+# Load Raw DBs
+
+```{r}
+# MiSebastes
+MiSebastes_raw_tax <- read.table("/Users/zgold/Documents/GitHub/fishDB-comparison/LCA/20250122_nt_db/20250429_Min_MiSebastes_cytB_singleDB_rankGenus/blast_seeds_output/Min_MiSebastes_cytB_taxonomy.txt", sep="\t") %>% dplyr::rename(Accessions = V1, sum.taxonomy=V2) %>% 
+        separate(sum.taxonomy, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F) 
+
+# MiFish All
+
+MiFish_all_raw_tax <- read.table("/Users/zgold/Documents/GitHub/fishDB-comparison/LCA/20250122_nt_db/20250425_MiFish_12S_singleDB_rankAll_updateSQL/blast_seeds_output/MiFish_UniversalTeleost_12S_taxonomy.txt", sep="\t") %>% dplyr::rename(Accessions = V1, sum.taxonomy=V2) %>% 
+        separate(sum.taxonomy, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F) 
+
+# Riaz Genus
+Riaz_raw_tax <- read.table("/Users/zgold/Documents/GitHub/fishDB-comparison/LCA/20250122_nt_db/20250425_Riaz_fish_12Sv5_singleDB_rankGenus_updateSQL/blast_seeds_output/Riaz_fish_12Sv5_taxonomy.txt", sep="\t") %>% dplyr::rename(Accessions = V1, sum.taxonomy=V2) %>% 
+        separate(sum.taxonomy, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F) 
+
+
+# Ford Species
+
+Ford_16S_raw_tax <- read.table("/Users/zgold/Documents/GitHub/fishDB-comparison/LCA/20250122_nt_db/20250428_Ford_vertebrate_mt16S_singleDB_rankSpecies/blast_seeds_output/Ford_vertebrate_mt16S_taxonomy.txt", sep="\t") %>% dplyr::rename(Accessions = V1, sum.taxonomy=V2) %>% 
+        separate(sum.taxonomy, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F) 
+
+
+# Marver3 Species
+
+MarVer3_raw_tax <- read.table("/Users/zgold/Documents/GitHub/fishDB-comparison/LCA/20250122_nt_db/20250428_Valsecchi_Marver3_mt16S_singleDB_rankSpecies/blast_seeds_output/Valsecchi_Marver3_mt16S_taxonomy.txt", sep="\t") %>% dplyr::rename(Accessions = V1, sum.taxonomy=V2) %>% 
+        separate(sum.taxonomy, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F) 
+
+
+# Teleo Species
+
+teleo_raw_tax <- read.table("/Users/zgold/Documents/GitHub/fishDB-comparison/LCA/20250122_nt_db/20250429_Valentini_teleost_12S_singleDB_rankGenus/blast_seeds_output/Valentini_teleost_12S_taxonomy.txt", sep="\t") %>% dplyr::rename(Accessions = V1, sum.taxonomy=V2) %>% 
+        separate(sum.taxonomy, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F) 
+
+# Berry Species
+
+
+berry_raw_tax <- read.table("/Users/zgold/Documents/GitHub/fishDB-comparison/LCA/20250122_nt_db/20250507_Berry_Fish_mt16S_singleDB_rankGenus_250bp/blast_seeds_output/Berry_Fish_mt16S_taxonomy.txt", sep="\t") %>% dplyr::rename(Accessions = V1, sum.taxonomy=V2) %>% 
+        separate(sum.taxonomy, into=c("Domain","Phylum","Class","Order","Family","Genus","Species"), sep=";", remove=F) 
+
+
+```
+
+
+# cclme
+
+## Load cclme List
+
+```{r}
+
+cclme_fishes <- read.table(here("NEP_share/20241210_Current_NEP_gap_analysis/01_inputs/NEP_lists_20241014/FishCard/cclme_list_assembled_clean_formatted.txt"), sep = "\t", header=T) %>% 
+  dplyr::rename(Species = scientific_name) %>% 
+  separate(Species, into =c("Genus","Species_epithet"), sep="\ ", remove=F)
+
+
+```
+## MiFish All
+
+```{r, warning=FALSE}
+
+cclme_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% MiFish_all_raw_tax$Species,"Present","Absent")) -> cclme_fishes_MiFish_all_db
+
+cclme_fishes_MiFish_all_db %>% 
+  left_join(Mifish_all_cat, by="Species") -> cclme_fishes_MiFish_all_db
+
+cclme_fishes_MiFish_all_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_MiFish_all_db_mini
+```
+
+```{r}
+ cclme_fishes_MiFish_all_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> MiFish_all_species_in_db_higher_tax
+
+Mifish_all_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:38`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% MiFish_all_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_MiFish_all_higher_level
+
+MiFish_all_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_MiFish_all_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_MiFish_all_db_higher_level
+
+cclme_fishes_MiFish_all_db_higher_level%>% 
+  ungroup() %>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> MiFish_all_dup
+
+cclme_fishes_MiFish_all_db_higher_level %>% 
+  ungroup() %>% 
+  filter(., !Species %in% MiFish_all_dup$Species) -> cclme_fishes_MiFish_all_db_higher_level_no_dup
+
+MiFish_all_dup %>% 
+  filter(., Type=="Family Level ID")-> MiFish_all_duplicated_species
+
+
+MiFish_all_dup %>% 
+  filter(., Type=="Order Level ID")-> MiFish_all_duplicated_species_order
+
+rbind(MiFish_all_duplicated_species,MiFish_all_duplicated_species_order) -> MiFish_all_duplicated_species
+
+```
+
+```{r}
+
+cclme_fishes_MiFish_all_db_mini %>% 
+  filter(., !is.na(Type)) -> cclme_fishes_MiFish_all_db_mini_species
+
+cclme_fishes_MiFish_all_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="MiFish all")-> cclme_fishes_MiFish_all_db_mini_absent
+
+rbind(cclme_fishes_MiFish_all_db_mini_species, cclme_fishes_MiFish_all_db_mini_absent,cclme_fishes_MiFish_all_db_higher_level_no_dup, MiFish_all_duplicated_species) %>% distinct() %>% 
+  mutate(., Barcode= "MiFish all")-> cclme_MiFish_all_cat_db
+
+setdiff(cclme_fishes$Species, cclme_MiFish_all_cat_db$Species)
+setdiff(cclme_MiFish_all_cat_db$Species, cclme_fishes$Species)
+
+intersect(cclme_MiFish_all_cat_db$Species, cclme_fishes$Species) %>% length()
+
+length(cclme_MiFish_all_cat_db$Species)
+
+cclme_MiFish_all_cat_db %>% 
+  group_by(Species) %>% 
+  count() %>% 
+  filter(., n>1)
+```
+
+```{r}
+
+cclme_MiFish_all_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> MiFish_all_cat_sum_cclme
+
+cclme_MiFish_all_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(cclme_MiFish_all_cat_db$Species)) -> MiFish_all_cat_tot_cclme
+
+MiFish_all_cat_sum_cclme %>% 
+  mutate(tot= MiFish_all_cat_tot_cclme$tot,
+         Barcode = "Mifish_all 12S") %>% 
+   mutate(., perc=( n/ tot)) -> MiFish_all_cat_dat_cclme
+  
+```
+
+
+## Ford 16S
+
+```{r, warning=FALSE}
+
+cclme_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% Ford_16S_raw_tax$Species,"Present","Absent")) -> cclme_fishes_Ford_16S_db
+
+cclme_fishes_Ford_16S_db %>% 
+  left_join(Ford_16S_cat, by="Species") -> cclme_fishes_Ford_16S_db
+
+cclme_fishes_Ford_16S_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_Ford_16S_db_mini
+
+```
+
+```{r}
+ cclme_fishes_Ford_16S_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> Ford_16S_species_in_db_higher_tax
+
+Ford_16S_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:94`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% Ford_16S_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_Ford_16S_higher_level
+
+Ford_16S_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_Ford_16S_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_Ford_16S_db_higher_level
+  
+cclme_fishes_Ford_16S_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> Ford_16S_dup
+
+cclme_fishes_Ford_16S_db_higher_level %>% 
+  filter(., !Species %in% Ford_16S_dup$Species) -> cclme_fishes_Ford_16S_db_higher_level_no_dup
+
+Ford_16S_dup %>% 
+  filter(., Type=="Family Level ID")-> Ford_16S_duplicated_species
+
+```
+
+```{r}
+
+cclme_fishes_Ford_16S_db_mini %>% 
+  filter(., !is.na(Type)) -> cclme_fishes_Ford_16S_db_mini_species
+
+cclme_fishes_Ford_16S_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="Ford 16S") -> cclme_fishes_Ford_16S_db_mini_absent
+
+
+rbind(cclme_fishes_Ford_16S_db_mini_species, cclme_fishes_Ford_16S_db_mini_absent,cclme_fishes_Ford_16S_db_higher_level_no_dup, Ford_16S_duplicated_species) %>% distinct() %>% 
+  mutate(., Barcode= "Ford 16S")-> cclme_Ford_16S_cat_db
+
+setdiff(cclme_fishes$Species, cclme_Ford_16S_cat_db$Species)
+setdiff(cclme_Ford_16S_cat_db$Species, cclme_fishes$Species)
+
+intersect(cclme_Ford_16S_cat_db$Species, cclme_fishes$Species) %>% length()
+
+length(cclme_Ford_16S_cat_db$Species)
+
+cclme_Ford_16S_cat_db %>% 
+  filter(., is.na(Type))
+```
+
+```{r}
+
+cclme_Ford_16S_cat_db  %>% 
+  group_by(Type) %>% 
+  mutate(., Type=if_else(is.na(Type), "Family Level ID", Type)) %>% 
+  count()-> Ford_16S_cat_sum_cclme
+
+cclme_Ford_16S_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(cclme_Ford_16S_cat_db$Species)) -> Ford_16S_cat_tot_cclme
+
+Ford_16S_cat_sum_cclme %>% 
+  mutate(tot= Ford_16S_cat_tot_cclme$tot,
+         Barcode = "Ford_16S") %>% 
+   mutate(., perc=( n/ tot)) -> Ford_16S_cat_dat_cclme
+  
+```
+
+## MiSebastes
+
+
+```{r, warning=FALSE}
+
+cclme_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% MiSebastes_raw_tax$Species,"Present","Absent")) -> cclme_fishes_MiSebastes_db
+
+cclme_fishes_MiSebastes_db %>% 
+  left_join(MiSebastes_cat, by="Species") -> cclme_fishes_MiSebastes_db
+
+cclme_fishes_MiSebastes_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_MiSebastes_db_mini
+```
+
+```{r}
+ cclme_fishes_MiSebastes_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> MiSebastes_species_in_db_higher_tax
+
+MiSebastes_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:23`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% MiSebastes_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_MiSebastes_higher_level
+
+MiSebastes_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_MiSebastes_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_MiSebastes_db_higher_level
+
+cclme_fishes_MiSebastes_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> MiSebastes_dup
+
+cclme_fishes_MiSebastes_db_higher_level %>% 
+  filter(., !Species %in% MiSebastes_dup$Species) -> cclme_fishes_MiSebastes_db_higher_level_no_dup
+
+MiSebastes_dup %>% 
+  filter(., Type=="Family Level ID")-> MiSebastes_duplicated_species
+
+```
+
+```{r}
+
+cclme_fishes_MiSebastes_db_mini %>% 
+  filter(., !is.na(Type)) -> cclme_fishes_MiSebastes_db_mini_species
+
+cclme_fishes_MiSebastes_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="MiSebastes") -> cclme_fishes_MiSebastes_db_mini_absent
+
+
+rbind(cclme_fishes_MiSebastes_db_mini_species, cclme_fishes_MiSebastes_db_mini_absent,cclme_fishes_MiSebastes_db_higher_level_no_dup, MiSebastes_duplicated_species) %>% distinct() %>% 
+  mutate(., Barcode= "MiSebastes")-> cclme_MiSebastes_cat_db
+
+setdiff(cclme_fishes$Species, cclme_MiSebastes_cat_db$Species)
+setdiff(cclme_MiSebastes_cat_db$Species, cclme_fishes$Species)
+
+intersect(cclme_MiSebastes_cat_db$Species, cclme_fishes$Species) %>% length()
+
+length(cclme_MiSebastes_cat_db$Species)
+```
+
+```{r}
+
+cclme_MiSebastes_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> MiSebastes_cat_sum_cclme
+
+cclme_MiSebastes_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(cclme_MiSebastes_cat_db$Species)) -> MiSebastes_cat_tot_cclme
+
+MiSebastes_cat_sum_cclme %>% 
+  mutate(tot= MiSebastes_cat_tot_cclme$tot,
+         Barcode = "MiSebastes") %>% 
+   mutate(., perc=( n/ tot)) -> MiSebastes_cat_dat_cclme
+  
+```
+
+## MarVer3
+
+
+```{r, warning=FALSE}
+
+cclme_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% MarVer3_raw_tax$Species,"Present","Absent")) -> cclme_fishes_MarVer3_db
+
+cclme_fishes_MarVer3_db %>% 
+  left_join(MarVer3_cat, by="Species") -> cclme_fishes_MarVer3_db
+
+cclme_fishes_MarVer3_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_MarVer3_db_mini
+```
+
+```{r}
+ cclme_fishes_MarVer3_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> MarVer3_species_in_db_higher_tax
+
+MarVer3_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:173`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% MarVer3_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_MarVer3_higher_level
+
+MarVer3_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_MarVer3_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_MarVer3_db_higher_level
+
+cclme_fishes_MarVer3_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> MarVer3_dup
+
+cclme_fishes_MarVer3_db_higher_level %>% 
+  filter(., !Species %in% MarVer3_dup$Species) -> cclme_fishes_MarVer3_db_higher_level_no_dup
+
+MarVer3_dup %>% 
+  filter(., Type=="Family Level ID")-> MarVer3_duplicated_species
+
+```
+
+```{r}
+
+cclme_fishes_MarVer3_db_mini %>% 
+  filter(., !is.na(Type)) -> cclme_fishes_MarVer3_db_mini_species
+
+cclme_fishes_MarVer3_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="MarVer3") -> cclme_fishes_MarVer3_db_mini_absent
+
+
+rbind(cclme_fishes_MarVer3_db_mini_species, cclme_fishes_MarVer3_db_mini_absent,cclme_fishes_MarVer3_db_higher_level_no_dup, MarVer3_duplicated_species) %>% distinct() %>% 
+  mutate(., Barcode= "MarVer3")-> cclme_MarVer3_cat_db
+
+setdiff(cclme_fishes$Species, cclme_MarVer3_cat_db$Species)
+setdiff(cclme_MarVer3_cat_db$Species, cclme_fishes$Species)
+
+intersect(cclme_MarVer3_cat_db$Species, cclme_fishes$Species) %>% length()
+
+length(cclme_MarVer3_cat_db$Species)
+```
+
+```{r}
+
+cclme_MarVer3_cat_db  %>% 
+  group_by(Type) %>% 
+    mutate(., Type=if_else(is.na(Type), "Family Level ID", Type)) %>% 
+  count()-> MarVer3_cat_sum_cclme
+
+cclme_MarVer3_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(cclme_MarVer3_cat_db$Species)) -> MarVer3_cat_tot_cclme
+
+MarVer3_cat_sum_cclme %>% 
+  mutate(tot= MarVer3_cat_tot_cclme$tot,
+         Barcode = "MarVer3") %>% 
+   mutate(., perc=( n/ tot)) -> MarVer3_cat_dat_cclme
+  
+```
+
+## teleo
+
+```{r, warning=FALSE}
+
+cclme_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% teleo_raw_tax$Species,"Present","Absent")) -> cclme_fishes_teleo_db
+
+cclme_fishes_teleo_db %>% 
+  left_join(teleo_cat, by="Species") -> cclme_fishes_teleo_db
+
+cclme_fishes_teleo_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_teleo_db_mini
+```
+
+```{r}
+ cclme_fishes_teleo_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> teleo_species_in_db_higher_tax
+
+teleo_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:9258`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% teleo_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_teleo_higher_level
+
+teleo_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_teleo_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_teleo_db_higher_level
+
+cclme_fishes_teleo_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> teleo_dup
+
+cclme_fishes_teleo_db_higher_level %>% 
+  filter(., !Species %in% teleo_dup$Species) -> cclme_fishes_teleo_db_higher_level_no_dup
+
+teleo_dup %>% 
+  filter(., Type=="Family Level ID")-> teleo_duplicated_species
+
+```
+
+```{r}
+
+cclme_fishes_teleo_db_mini %>% 
+  filter(., !is.na(Type)) -> cclme_fishes_teleo_db_mini_species
+
+cclme_fishes_teleo_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="teleo") -> cclme_fishes_teleo_db_mini_absent
+
+
+rbind(cclme_fishes_teleo_db_mini_species, cclme_fishes_teleo_db_mini_absent,cclme_fishes_teleo_db_higher_level_no_dup, teleo_duplicated_species) %>% distinct() %>% 
+  mutate(., Barcode= "teleo")-> cclme_teleo_cat_db
+
+setdiff(cclme_fishes$Species, cclme_teleo_cat_db$Species)
+setdiff(cclme_teleo_cat_db$Species, cclme_fishes$Species)
+
+intersect(cclme_teleo_cat_db$Species, cclme_fishes$Species) %>% length()
+
+length(cclme_teleo_cat_db$Species)
+```
+
+```{r}
+
+cclme_teleo_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> teleo_cat_sum_cclme
+
+cclme_teleo_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(cclme_teleo_cat_db$Species)) -> teleo_cat_tot_cclme
+
+teleo_cat_sum_cclme %>% 
+  mutate(tot= teleo_cat_tot_cclme$tot,
+         Barcode = "teleo 12S") %>% 
+   mutate(., perc=( n/ tot)) -> teleo_cat_dat_cclme
+  
+```
+
+## Berry
+
+
+```{r, warning=FALSE}
+
+cclme_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% berry_raw_tax$Species,"Present","Absent")) -> cclme_fishes_Berry_db
+
+cclme_fishes_Berry_db %>% 
+  left_join(Berry_cat, by="Species") -> cclme_fishes_Berry_db
+
+cclme_fishes_Berry_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_Berry_db_mini
+```
+
+```{r}
+ cclme_fishes_Berry_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> Berry_species_in_db_higher_tax
+
+Berry_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:191`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% Berry_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_Berry_higher_level
+
+Berry_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_Berry_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_Berry_db_higher_level
+
+cclme_fishes_Berry_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> Berry_dup
+
+cclme_fishes_Berry_db_higher_level %>% 
+  filter(., !Species %in% Berry_dup$Species) -> cclme_fishes_Berry_db_higher_level_no_dup
+
+Berry_dup %>% 
+  filter(., Type=="Family Level ID")-> Berry_duplicated_species
+
+```
+
+```{r}
+
+cclme_fishes_Berry_db_mini %>% 
+  filter(., !is.na(Type)) -> cclme_fishes_Berry_db_mini_species
+
+cclme_fishes_Berry_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="Berry") -> cclme_fishes_Berry_db_mini_absent
+
+
+rbind(cclme_fishes_Berry_db_mini_species, cclme_fishes_Berry_db_mini_absent,cclme_fishes_Berry_db_higher_level_no_dup, Berry_duplicated_species) %>% distinct() %>% 
+  mutate(., Barcode= "Berry")-> cclme_Berry_cat_db
+
+setdiff(cclme_fishes$Species, cclme_Berry_cat_db$Species)
+setdiff(cclme_Berry_cat_db$Species, cclme_fishes$Species)
+
+intersect(cclme_Berry_cat_db$Species, cclme_fishes$Species) %>% length()
+
+length(cclme_Berry_cat_db$Species)
+```
+
+```{r}
+
+cclme_Berry_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> Berry_cat_sum_cclme
+
+cclme_Berry_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(cclme_Berry_cat_db$Species)) -> Berry_cat_tot_cclme
+
+Berry_cat_sum_cclme %>% 
+  mutate(tot= Berry_cat_tot_cclme$tot,
+         Barcode = "Berry 12S") %>% 
+   mutate(., perc=( n/ tot)) -> Berry_cat_dat_cclme
+  
+```
+
+## Riaz
+
+
+```{r, warning=FALSE}
+
+cclme_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% Riaz_raw_tax$Species,"Present","Absent")) -> cclme_fishes_Riaz_db
+
+cclme_fishes_Riaz_db %>% 
+  left_join(Riaz_cat, by="Species") -> cclme_fishes_Riaz_db
+
+cclme_fishes_Riaz_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_Riaz_db_mini
+```
+
+```{r}
+ cclme_fishes_Riaz_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> Riaz_species_in_db_higher_tax
+
+Riaz_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:56`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% Riaz_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_Riaz_higher_level
+
+Riaz_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_Riaz_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> cclme_fishes_Riaz_db_higher_level
+
+cclme_fishes_Riaz_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> Riaz_dup
+
+cclme_fishes_Riaz_db_higher_level %>% 
+  filter(., !Species %in% Riaz_dup$Species) -> cclme_fishes_Riaz_db_higher_level_no_dup
+
+Riaz_dup %>% 
+  filter(., Type=="Family Level ID")-> Riaz_duplicated_species
+
+```
+
+```{r}
+
+cclme_fishes_Riaz_db_mini %>% 
+  filter(., !is.na(Type)) -> cclme_fishes_Riaz_db_mini_species
+
+cclme_fishes_Riaz_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="Riaz") -> cclme_fishes_Riaz_db_mini_absent
+
+
+rbind(cclme_fishes_Riaz_db_mini_species, cclme_fishes_Riaz_db_mini_absent,cclme_fishes_Riaz_db_higher_level_no_dup, Riaz_duplicated_species) %>% distinct() %>% 
+  mutate(., Barcode= "Riaz")-> cclme_Riaz_cat_db
+
+setdiff(cclme_fishes$Species, cclme_Riaz_cat_db$Species)
+setdiff(cclme_Riaz_cat_db$Species, cclme_fishes$Species)
+
+intersect(cclme_Riaz_cat_db$Species, cclme_fishes$Species) %>% length()
+
+length(cclme_Riaz_cat_db$Species)
+```
+
+```{r}
+
+cclme_Riaz_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> Riaz_cat_sum_cclme
+
+cclme_Riaz_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(cclme_Riaz_cat_db$Species)) -> Riaz_cat_tot_cclme
+
+Riaz_cat_sum_cclme %>% 
+  mutate(tot= Riaz_cat_tot_cclme$tot,
+         Barcode = "Riaz 12S") %>% 
+   mutate(., perc=( n/ tot)) -> Riaz_cat_dat_cclme
+  
+```
+
+
+
+## Combined Plots
+
+```{r}
+rbind(MiFish_all_cat_dat_cclme,Ford_16S_cat_dat_cclme,MarVer3_cat_dat_cclme,MiSebastes_cat_dat_cclme,teleo_cat_dat_cclme, Berry_cat_dat_cclme,Riaz_cat_dat_cclme) -> combined_cat_dat_cclme
+
+saveRDS(combined_cat_dat_cclme, here("LCA","Figures","Fish_ref_dbs_combined_cat_dat_cclme_20250517.RDS"))
+
+combined_cat_dat_cclme$Type <- factor(combined_cat_dat_cclme$Type, levels=c("Not in Reference Database","Phylum Level ID", "Order Level ID", 'Class Level ID','Family Level ID','Genus Level ID','Species Level ID'))
+
+combined_cat_dat_cclme %>% 
+ggplot(., aes(y=perc, color=Type, fill=Type, x=Barcode)) + geom_col() + ylab("Percent") + 
+  theme_classic() +
+  scale_fill_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) +
+  scale_color_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) + 
+  guides(fill=guide_legend(title="Resolution of Taxonomic Identification"), color=guide_legend(title="Resolution of Taxonomic Identification"))+
+  scale_y_continuous(labels = scales::percent) +
+  geom_hline(yintercept = 1, linetype="dashed") + theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust=1)) -> a1_cclme
+
+a1_cclme
+
+ggsave(here("LCA","Figures","Combined_plots_figure_percent_cclme.png"), width = 8, height = 6)
+
+```
+
+
+## Rank accumulation curves to identify which barcode performs the best
+
+## Species
+```{r}
+
+
+rbind(cclme_MiFish_all_cat_db, cclme_Ford_16S_cat_db,cclme_MarVer3_cat_db,cclme_MiSebastes_cat_db,cclme_teleo_cat_db,cclme_Berry_cat_db,cclme_Riaz_cat_db) ->  barcode_cat_cclme
+
+barcode_cat_cclme %>% 
+  filter(., Species != "") %>% 
+  ungroup() %>% 
+  dplyr::select(Barcode, Species, Type) %>% 
+  unite(., `Barcode:Species`, c("Barcode","Species"), sep = ":", remove=F)-> ranks_of_species
+
+
+ranks_of_species %>% 
+  group_by(Barcode) %>%   filter(., Type =="Species Level ID") %>% 
+  dplyr::summarise(Total_species = n_distinct(Species)) -> tot_species
+
+ranks_of_species %>%
+  filter(., Type =="Species Level ID") %>% 
+  group_by(Barcode) %>% 
+  dplyr::summarise(Species = list(unique(Species))) -> nested_species
+
+rrapply(nested_species, how = "unmelt") -> species_for_venn
+
+
+# Initialize variables to track the maximum
+max_unique <- 0
+best_pair <- tibble(
+  Barcode = character(),
+  level_2_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(species_for_venn)) {
+  for (j in (i + 1):length(species_for_venn)-1) {
+    # Get the two lists
+    list1 <- species_for_venn[[i]]
+    list2 <- species_for_venn[[j]]
+    names1 <- names(species_for_venn[i])
+    names2 <- names(species_for_venn[j])
+    # Find the union of the two lists
+    combined_list <- union(list1, list2)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_pair %>%  add_row(Barcode = paste0(names1,":",names2), level_2_unique_tot = num_unique) -> best_pair
+    }
+}
+
+best_pair %>% 
+  arrange(desc(level_2_unique_tot)) -> level_2_clean
+
+
+```
+
+```{r}
+
+
+# Initialize variables to track the maximum
+best_tri <- tibble(
+  Barcode = character(),
+  level_3_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(species_for_venn)) {
+  for (j in (i + 1):length(species_for_venn)-1) {
+    for (k in (i + 1):length(species_for_venn)-1) {
+    # Get the two lists
+    list1 <- species_for_venn[[i]]
+    list2 <- species_for_venn[[j]]
+    list3 <- species_for_venn[[k]]
+    names1 <- names(species_for_venn[i])
+    names2 <- names(species_for_venn[j])
+    names3 <- names(species_for_venn[k])
+    # Find the union of the two lists
+    combined_list <- union(union(list1, list2),list3)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_tri %>%  add_row(Barcode = paste0(names1,":",names2,":",names3), level_3_unique_tot = num_unique) -> best_tri
+    }
+  }
+}
+
+best_tri %>% 
+  arrange(desc(level_3_unique_tot)) -> level_3_clean
+
+
+```
+
+```{r}
+tot_species %>% 
+  arrange(desc(Total_species)) %>% 
+  dplyr::slice(1) -> intersection_1_clean
+
+level_2_clean %>% 
+  arrange(desc(level_2_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_2_clean
+
+level_3_clean %>% 
+  arrange(desc(level_3_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_3_clean
+  
+tibble(
+total_species = c(intersection_1_clean$Total_species[[1]], 
+                   intersection_2_clean$level_2_unique_tot[[1]],
+                   intersection_3_clean$level_3_unique_tot[[1]]),
+Barcode = c(intersection_1_clean$Barcode[[1]], 
+           intersection_2_clean$Barcode[[1]],
+               intersection_3_clean$Barcode[[1]]     ),
+Level="Species"
+) -> tibble_for_plotting
+
+```
+
+## Plot 
+
+```{r plot-accumulation-curve-taxa}
+
+# set colors
+my_pal <- c("steelblue", "darkcyan", "darkseagreen3")
+
+
+
+rbind(tibble_for_plotting) %>% 
+  mutate(., counts_level = str_count(Barcode, pattern = ":")) %>% 
+  ggplot() +
+  theme_bw() +
+  expand_limits(y = 0) +
+  xlab("Loci") + 
+  ylab("Reference \n species") +
+  labs(color = "Taxonomic rank") +
+    labs(linetype = "Taxonomic rank") +
+  scale_color_manual(values = my_pal) +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 0.95, size=24),
+    axis.text.y = element_text(size=24),
+    #axis.text.x = element_blank(),
+    axis.title.x = element_text(size = 28),
+    axis.title.y = element_text(size = 28),
+    legend.text = element_text(size = 24),
+    #legend.title = element_text(size = 12),
+    legend.position="none",
+    legend.title = element_blank()
+  )  +
+  geom_point(aes(x = reorder(Barcode, counts_level), y = total_species, color = Level), size=8) +
+  geom_line(aes(x = reorder(Barcode, counts_level), y = total_species, color = Level, group = Level, linetype = Level), size=3)-> plot3_cclme
+
+plot3_cclme
+
+ 
+ggsave(here("LCA","Figures","rank_accumulation_curve_cclme.png"), width = 6, height = 10)
+
+```
+
+
+# GOM
+
+## Load GOM List
+
+
+```{r}
+
+GOM_fishes <- read.table(here("NEP_share/20241210_Current_NEP_gap_analysis/01_inputs/NEP_lists_20241014/GOM/biogomx_20160822_excel.csv"), sep = ",", header=T) %>% 
+  dplyr::rename(Species = scientific_name) %>% 
+  filter(., taxa_phylum=="Chordata") %>% 
+  separate(Species, into =c("Genus","Species_epithet"), sep="\ ", remove=F) %>% dplyr::select(Species, Genus, Species_epithet) %>% distinct() %>% filter(., !str_detect(Species, "Unidentified"))
+
+
+```
+
+## MiFish All
+
+```{r, warning=FALSE}
+
+GOM_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% MiFish_all_raw_tax$Species,"Present","Absent")) -> GOM_fishes_MiFish_all_db
+
+GOM_fishes_MiFish_all_db %>% 
+  left_join(Mifish_all_cat, by="Species") -> GOM_fishes_MiFish_all_db
+
+GOM_fishes_MiFish_all_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_MiFish_all_db_mini
+```
+
+```{r}
+ GOM_fishes_MiFish_all_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> MiFish_all_species_in_db_higher_tax
+
+Mifish_all_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:38`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% MiFish_all_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_MiFish_all_higher_level
+
+MiFish_all_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_MiFish_all_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_MiFish_all_db_higher_level
+
+GOM_fishes_MiFish_all_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> MiFish_all_dup
+
+GOM_fishes_MiFish_all_db_higher_level %>% 
+  filter(., !Species %in% MiFish_all_dup$Species) -> GOM_fishes_MiFish_all_db_higher_level_no_dup
+
+MiFish_all_dup %>% 
+  filter(., Type=="Family Level ID")-> MiFish_all_duplicated_species
+
+```
+
+```{r}
+
+GOM_fishes_MiFish_all_db_mini %>% 
+  filter(., !is.na(Type)) -> GOM_fishes_MiFish_all_db_mini_species
+
+GOM_fishes_MiFish_all_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="MiFish all") -> GOM_fishes_MiFish_all_db_mini_absent
+
+
+rbind(GOM_fishes_MiFish_all_db_mini_species, GOM_fishes_MiFish_all_db_mini_absent,GOM_fishes_MiFish_all_db_higher_level_no_dup, MiFish_all_duplicated_species) %>% distinct() -> GOM_MiFish_all_cat_db
+
+setdiff(GOM_fishes$Species, GOM_MiFish_all_cat_db$Species)
+setdiff(GOM_MiFish_all_cat_db$Species, GOM_fishes$Species)
+
+intersect(GOM_MiFish_all_cat_db$Species, GOM_fishes$Species) %>% length()
+
+length(GOM_MiFish_all_cat_db$Species)
+
+```
+
+```{r}
+GOM_MiFish_all_cat_db %>% 
+    filter(., !is.na(Type)) ->GOM_MiFish_all_cat_db
+  
+GOM_MiFish_all_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> MiFish_all_cat_sum_GOM
+
+GOM_MiFish_all_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(GOM_MiFish_all_cat_db$Species)) -> MiFish_all_cat_tot_GOM
+
+MiFish_all_cat_sum_GOM %>% 
+  mutate(tot= MiFish_all_cat_tot_GOM$tot,
+         Barcode = "Mifish_all 12S") %>% 
+   mutate(., perc=( n/ tot)) -> MiFish_all_cat_dat_GOM
+  
+```
+
+
+## Ford 16S
+
+```{r, warning=FALSE}
+
+GOM_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% Ford_16S_raw_tax$Species,"Present","Absent")) -> GOM_fishes_Ford_16S_db
+
+GOM_fishes_Ford_16S_db %>% 
+  left_join(Ford_16S_cat, by="Species") -> GOM_fishes_Ford_16S_db
+
+GOM_fishes_Ford_16S_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_Ford_16S_db_mini
+
+```
+
+```{r}
+ GOM_fishes_Ford_16S_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> Ford_16S_species_in_db_higher_tax
+
+Ford_16S_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:94`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% Ford_16S_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_Ford_16S_higher_level
+
+Ford_16S_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_Ford_16S_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_Ford_16S_db_higher_level
+  
+GOM_fishes_Ford_16S_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> Ford_16S_dup
+
+GOM_fishes_Ford_16S_db_higher_level %>% 
+  filter(., !Species %in% Ford_16S_dup$Species) -> GOM_fishes_Ford_16S_db_higher_level_no_dup
+
+Ford_16S_dup %>% 
+  filter(., Type=="Family Level ID")-> Ford_16S_duplicated_species
+
+```
+
+```{r}
+
+GOM_fishes_Ford_16S_db_mini %>% 
+  filter(., !is.na(Type)) -> GOM_fishes_Ford_16S_db_mini_species
+
+GOM_fishes_Ford_16S_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="Ford 16S") -> GOM_fishes_Ford_16S_db_mini_absent
+
+
+rbind(GOM_fishes_Ford_16S_db_mini_species, GOM_fishes_Ford_16S_db_mini_absent,GOM_fishes_Ford_16S_db_higher_level_no_dup, Ford_16S_duplicated_species) %>% distinct() -> GOM_Ford_16S_cat_db
+
+setdiff(GOM_fishes$Species, GOM_Ford_16S_cat_db$Species)
+setdiff(GOM_Ford_16S_cat_db$Species, GOM_fishes$Species)
+
+intersect(GOM_Ford_16S_cat_db$Species, GOM_fishes$Species) %>% length()
+
+length(GOM_Ford_16S_cat_db$Species)
+
+GOM_Ford_16S_cat_db %>% 
+  filter(., is.na(Type))
+```
+
+```{r}
+GOM_Ford_16S_cat_db %>% 
+    filter(., !is.na(Type)) -> GOM_Ford_16S_cat_db
+
+GOM_Ford_16S_cat_db  %>% 
+  group_by(Type) %>% 
+  mutate(., Type=if_else(is.na(Type), "Family Level ID", Type)) %>% 
+  count()-> Ford_16S_cat_sum_GOM
+
+GOM_Ford_16S_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(GOM_Ford_16S_cat_db$Species)) -> Ford_16S_cat_tot_GOM
+
+Ford_16S_cat_sum_GOM %>% 
+  mutate(tot= Ford_16S_cat_tot_GOM$tot,
+         Barcode = "Ford_16S") %>% 
+   mutate(., perc=( n/ tot)) -> Ford_16S_cat_dat_GOM
+  
+```
+
+## MiSebastes
+
+
+```{r, warning=FALSE}
+
+GOM_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% MiSebastes_raw_tax$Species,"Present","Absent")) -> GOM_fishes_MiSebastes_db
+
+GOM_fishes_MiSebastes_db %>% 
+  left_join(MiSebastes_cat, by="Species") -> GOM_fishes_MiSebastes_db
+
+GOM_fishes_MiSebastes_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_MiSebastes_db_mini
+```
+
+```{r}
+ GOM_fishes_MiSebastes_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> MiSebastes_species_in_db_higher_tax
+
+MiSebastes_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:23`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% MiSebastes_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_MiSebastes_higher_level
+
+MiSebastes_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_MiSebastes_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_MiSebastes_db_higher_level
+
+GOM_fishes_MiSebastes_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> MiSebastes_dup
+
+GOM_fishes_MiSebastes_db_higher_level %>% 
+  filter(., !Species %in% MiSebastes_dup$Species) -> GOM_fishes_MiSebastes_db_higher_level_no_dup
+
+MiSebastes_dup %>% 
+  filter(., Type=="Family Level ID")-> MiSebastes_duplicated_species
+
+```
+
+```{r}
+
+GOM_fishes_MiSebastes_db_mini %>% 
+  filter(., !is.na(Type)) -> GOM_fishes_MiSebastes_db_mini_species
+
+GOM_fishes_MiSebastes_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="MiSebastes") -> GOM_fishes_MiSebastes_db_mini_absent
+
+
+rbind(GOM_fishes_MiSebastes_db_mini_species, GOM_fishes_MiSebastes_db_mini_absent,GOM_fishes_MiSebastes_db_higher_level_no_dup, MiSebastes_duplicated_species) %>% distinct() -> GOM_MiSebastes_cat_db
+
+setdiff(GOM_fishes$Species, GOM_MiSebastes_cat_db$Species)
+setdiff(GOM_MiSebastes_cat_db$Species, GOM_fishes$Species)
+
+intersect(GOM_MiSebastes_cat_db$Species, GOM_fishes$Species) %>% length()
+
+length(GOM_MiSebastes_cat_db$Species)
+```
+
+```{r}
+GOM_MiSebastes_cat_db %>% 
+    filter(., !is.na(Type)) -> GOM_MiSebastes_cat_db
+
+GOM_MiSebastes_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> MiSebastes_cat_sum_GOM
+
+GOM_MiSebastes_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(GOM_MiSebastes_cat_db$Species)) -> MiSebastes_cat_tot_GOM
+
+MiSebastes_cat_sum_GOM %>% 
+  mutate(tot= MiSebastes_cat_tot_GOM$tot,
+         Barcode = "MiSebastes") %>% 
+   mutate(., perc=( n/ tot)) -> MiSebastes_cat_dat_GOM
+  
+```
+
+## MarVer3
+
+
+```{r, warning=FALSE}
+
+GOM_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% MarVer3_raw_tax$Species,"Present","Absent")) -> GOM_fishes_MarVer3_db
+
+GOM_fishes_MarVer3_db %>% 
+  left_join(MarVer3_cat, by="Species") -> GOM_fishes_MarVer3_db
+
+GOM_fishes_MarVer3_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_MarVer3_db_mini
+```
+
+```{r}
+ GOM_fishes_MarVer3_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> MarVer3_species_in_db_higher_tax
+
+MarVer3_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:173`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% MarVer3_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_MarVer3_higher_level
+
+MarVer3_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_MarVer3_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_MarVer3_db_higher_level
+
+GOM_fishes_MarVer3_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> MarVer3_dup
+
+GOM_fishes_MarVer3_db_higher_level %>% 
+  filter(., !Species %in% MarVer3_dup$Species) -> GOM_fishes_MarVer3_db_higher_level_no_dup
+
+MarVer3_dup %>% 
+  filter(., Type=="Family Level ID")-> MarVer3_duplicated_species
+
+```
+
+```{r}
+
+GOM_fishes_MarVer3_db_mini %>% 
+  filter(., !is.na(Type)) -> GOM_fishes_MarVer3_db_mini_species
+
+GOM_fishes_MarVer3_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="MarVer3") -> GOM_fishes_MarVer3_db_mini_absent
+
+
+rbind(GOM_fishes_MarVer3_db_mini_species, GOM_fishes_MarVer3_db_mini_absent,GOM_fishes_MarVer3_db_higher_level_no_dup, MarVer3_duplicated_species) %>% distinct() -> GOM_MarVer3_cat_db
+
+setdiff(GOM_fishes$Species, GOM_MarVer3_cat_db$Species)
+setdiff(GOM_MarVer3_cat_db$Species, GOM_fishes$Species)
+
+intersect(GOM_MarVer3_cat_db$Species, GOM_fishes$Species) %>% length()
+
+length(GOM_MarVer3_cat_db$Species)
+```
+
+```{r}
+GOM_MarVer3_cat_db  %>% 
+    filter(., !is.na(Type)) ->GOM_MarVer3_cat_db
+
+GOM_MarVer3_cat_db  %>% 
+  group_by(Type) %>% 
+    mutate(., Type=if_else(is.na(Type), "Family Level ID", Type)) %>% 
+  count()-> MarVer3_cat_sum_GOM
+
+GOM_MarVer3_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(GOM_MarVer3_cat_db$Species)) -> MarVer3_cat_tot_GOM
+
+MarVer3_cat_sum_GOM %>% 
+  mutate(tot= MarVer3_cat_tot_GOM$tot,
+         Barcode = "MarVer3") %>% 
+   mutate(., perc=( n/ tot)) -> MarVer3_cat_dat_GOM
+  
+```
+
+## teleo
+
+```{r, warning=FALSE}
+
+GOM_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% teleo_raw_tax$Species,"Present","Absent")) -> GOM_fishes_teleo_db
+
+GOM_fishes_teleo_db %>% 
+  left_join(teleo_cat, by="Species") -> GOM_fishes_teleo_db
+
+GOM_fishes_teleo_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_teleo_db_mini
+```
+
+```{r}
+ GOM_fishes_teleo_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> teleo_species_in_db_higher_tax
+
+teleo_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:9258`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% teleo_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_teleo_higher_level
+
+teleo_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_teleo_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_teleo_db_higher_level
+
+GOM_fishes_teleo_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> teleo_dup
+
+GOM_fishes_teleo_db_higher_level %>% 
+  filter(., !Species %in% teleo_dup$Species) -> GOM_fishes_teleo_db_higher_level_no_dup
+
+teleo_dup %>% 
+  filter(., Type=="Family Level ID")-> teleo_duplicated_species
+
+```
+
+```{r}
+
+GOM_fishes_teleo_db_mini %>% 
+  filter(., !is.na(Type)) -> GOM_fishes_teleo_db_mini_species
+
+GOM_fishes_teleo_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="teleo") -> GOM_fishes_teleo_db_mini_absent
+
+
+rbind(GOM_fishes_teleo_db_mini_species, GOM_fishes_teleo_db_mini_absent,GOM_fishes_teleo_db_higher_level_no_dup, teleo_duplicated_species) %>% distinct() -> GOM_teleo_cat_db
+
+setdiff(GOM_fishes$Species, GOM_teleo_cat_db$Species)
+setdiff(GOM_teleo_cat_db$Species, GOM_fishes$Species)
+
+intersect(GOM_teleo_cat_db$Species, GOM_fishes$Species) %>% length()
+
+length(GOM_teleo_cat_db$Species)
+```
+
+```{r}
+GOM_teleo_cat_db %>% 
+    filter(., !is.na(Type)) -> GOM_teleo_cat_db
+
+GOM_teleo_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> teleo_cat_sum_GOM
+
+GOM_teleo_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(GOM_teleo_cat_db$Species)) -> teleo_cat_tot_GOM
+
+teleo_cat_sum_GOM %>% 
+  mutate(tot= teleo_cat_tot_GOM$tot,
+         Barcode = "teleo 12S") %>% 
+   mutate(., perc=( n/ tot)) -> teleo_cat_dat_GOM
+  
+```
+
+## Berry
+
+
+```{r, warning=FALSE}
+
+GOM_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% berry_raw_tax$Species,"Present","Absent")) -> GOM_fishes_Berry_db
+
+GOM_fishes_Berry_db %>% 
+  left_join(Berry_cat, by="Species") -> GOM_fishes_Berry_db
+
+GOM_fishes_Berry_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_Berry_db_mini
+```
+
+```{r}
+ GOM_fishes_Berry_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> Berry_species_in_db_higher_tax
+
+Berry_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:191`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% Berry_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_Berry_higher_level
+
+Berry_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_Berry_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_Berry_db_higher_level
+
+GOM_fishes_Berry_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> Berry_dup
+
+GOM_fishes_Berry_db_higher_level %>% 
+  filter(., !Species %in% Berry_dup$Species) -> GOM_fishes_Berry_db_higher_level_no_dup
+
+Berry_dup %>% 
+  filter(., Type=="Family Level ID")-> Berry_duplicated_species
+
+```
+
+```{r}
+
+GOM_fishes_Berry_db_mini %>% 
+  filter(., !is.na(Type)) -> GOM_fishes_Berry_db_mini_species
+
+GOM_fishes_Berry_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="Berry") -> GOM_fishes_Berry_db_mini_absent
+
+
+rbind(GOM_fishes_Berry_db_mini_species, GOM_fishes_Berry_db_mini_absent,GOM_fishes_Berry_db_higher_level_no_dup, Berry_duplicated_species) %>% distinct() -> GOM_Berry_cat_db
+
+setdiff(GOM_fishes$Species, GOM_Berry_cat_db$Species)
+setdiff(GOM_Berry_cat_db$Species, GOM_fishes$Species)
+
+intersect(GOM_Berry_cat_db$Species, GOM_fishes$Species) %>% length()
+
+length(GOM_Berry_cat_db$Species)
+```
+
+```{r}
+GOM_Berry_cat_db %>% 
+    filter(., !is.na(Type)) -> GOM_Berry_cat_db
+
+GOM_Berry_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> Berry_cat_sum_GOM
+
+GOM_Berry_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(GOM_Berry_cat_db$Species)) -> Berry_cat_tot_GOM
+
+Berry_cat_sum_GOM %>% 
+  mutate(tot= Berry_cat_tot_GOM$tot,
+         Barcode = "Berry 12S") %>% 
+   mutate(., perc=( n/ tot)) -> Berry_cat_dat_GOM
+  
+```
+
+## Riaz
+
+
+```{r, warning=FALSE}
+
+GOM_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% Riaz_raw_tax$Species,"Present","Absent")) -> GOM_fishes_Riaz_db
+
+GOM_fishes_Riaz_db %>% 
+  left_join(Riaz_cat, by="Species") -> GOM_fishes_Riaz_db
+
+GOM_fishes_Riaz_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_Riaz_db_mini
+```
+
+```{r}
+ GOM_fishes_Riaz_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> Riaz_species_in_db_higher_tax
+
+Riaz_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:56`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% Riaz_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_Riaz_higher_level
+
+Riaz_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_Riaz_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> GOM_fishes_Riaz_db_higher_level
+
+GOM_fishes_Riaz_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> Riaz_dup
+
+GOM_fishes_Riaz_db_higher_level %>% 
+  filter(., !Species %in% Riaz_dup$Species) -> GOM_fishes_Riaz_db_higher_level_no_dup
+
+Riaz_dup %>% 
+  filter(., Type=="Family Level ID")-> Riaz_duplicated_species
+
+```
+
+```{r}
+
+GOM_fishes_Riaz_db_mini %>% 
+  filter(., !is.na(Type)) -> GOM_fishes_Riaz_db_mini_species
+
+GOM_fishes_Riaz_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="Riaz") -> GOM_fishes_Riaz_db_mini_absent
+
+
+rbind(GOM_fishes_Riaz_db_mini_species, GOM_fishes_Riaz_db_mini_absent,GOM_fishes_Riaz_db_higher_level_no_dup, Riaz_duplicated_species) %>% distinct() -> GOM_Riaz_cat_db
+
+setdiff(GOM_fishes$Species, GOM_Riaz_cat_db$Species)
+setdiff(GOM_Riaz_cat_db$Species, GOM_fishes$Species)
+
+intersect(GOM_Riaz_cat_db$Species, GOM_fishes$Species) %>% length()
+
+length(GOM_Riaz_cat_db$Species)
+```
+
+```{r}
+GOM_Riaz_cat_db %>% 
+    filter(., !is.na(Type)) -> GOM_Riaz_cat_db
+
+GOM_Riaz_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> Riaz_cat_sum_GOM
+
+GOM_Riaz_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(GOM_Riaz_cat_db$Species)) -> Riaz_cat_tot_GOM
+
+Riaz_cat_sum_GOM %>% 
+  mutate(tot= Riaz_cat_tot_GOM$tot,
+         Barcode = "Riaz 12S") %>% 
+   mutate(., perc=( n/ tot)) -> Riaz_cat_dat_GOM
+  
+```
+
+
+
+## Combined Plots
+
+```{r}
+rbind(MiFish_all_cat_dat_GOM,Ford_16S_cat_dat_GOM,MarVer3_cat_dat_GOM,MiSebastes_cat_dat_GOM,teleo_cat_dat_GOM, Berry_cat_dat_GOM,Riaz_cat_dat_GOM) -> combined_cat_dat_GOM
+
+saveRDS(combined_cat_dat_GOM, here("LCA","Figures","Fish_ref_dbs_combined_cat_dat_GOM_20250517.RDS"))
+
+combined_cat_dat_GOM$Type <- factor(combined_cat_dat_GOM$Type, levels=c("Not in Reference Database","Phylum Level ID", "Order Level ID", 'Class Level ID','Family Level ID','Genus Level ID','Species Level ID'))
+
+combined_cat_dat_GOM %>% 
+ggplot(., aes(y=perc, color=Type, fill=Type, x=Barcode)) + geom_col() + ylab("Percent") + 
+  theme_classic() +
+  scale_fill_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) +
+  scale_color_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) + 
+  guides(fill=guide_legend(title="Resolution of Taxonomic Identification"), color=guide_legend(title="Resolution of Taxonomic Identification"))+
+  scale_y_continuous(labels = scales::percent) +
+  geom_hline(yintercept = 1, linetype="dashed")+ theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust=1)) -> a1_GOM
+
+a1_GOM
+
+ggsave(here("LCA","Figures","Combined_plots_figure_percent_GOM.png"), width = 8, height = 6)
+```
+
+## Rank accumulation curves to identify which barcode performs the best
+
+## Species
+```{r}
+
+
+rbind(GOM_MiFish_all_cat_db, GOM_Ford_16S_cat_db,GOM_MarVer3_cat_db,GOM_MiSebastes_cat_db,GOM_teleo_cat_db,GOM_Berry_cat_db,GOM_Riaz_cat_db) ->  barcode_cat_GOM
+
+barcode_cat_GOM %>% 
+  filter(., Species != "") %>% 
+  ungroup() %>% 
+  dplyr::select(Barcode, Species, Type) %>% 
+  unite(., `Barcode:Species`, c("Barcode","Species"), sep = ":", remove=F)-> ranks_of_species
+
+
+ranks_of_species %>% 
+  group_by(Barcode) %>%   filter(., Type =="Species Level ID") %>% 
+  dplyr::summarise(Total_species = n_distinct(Species)) -> tot_species
+
+ranks_of_species %>%
+  filter(., Type =="Species Level ID") %>% 
+  group_by(Barcode) %>% 
+  dplyr::summarise(Species = list(unique(Species))) -> nested_species
+
+rrapply(nested_species, how = "unmelt") -> species_for_venn
+
+
+# Initialize variables to track the maximum
+max_unique <- 0
+best_pair <- tibble(
+  Barcode = character(),
+  level_2_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(species_for_venn)) {
+  for (j in (i + 1):length(species_for_venn)-1) {
+    # Get the two lists
+    list1 <- species_for_venn[[i]]
+    list2 <- species_for_venn[[j]]
+    names1 <- names(species_for_venn[i])
+    names2 <- names(species_for_venn[j])
+    # Find the union of the two lists
+    combined_list <- union(list1, list2)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_pair %>%  add_row(Barcode = paste0(names1,":",names2), level_2_unique_tot = num_unique) -> best_pair
+    }
+}
+
+best_pair %>% 
+  arrange(desc(level_2_unique_tot)) -> level_2_clean
+
+
+```
+
+```{r}
+
+
+# Initialize variables to track the maximum
+best_tri <- tibble(
+  Barcode = character(),
+  level_3_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(species_for_venn)) {
+  for (j in (i + 1):length(species_for_venn)-1) {
+    for (k in (i + 1):length(species_for_venn)-1) {
+    # Get the two lists
+    list1 <- species_for_venn[[i]]
+    list2 <- species_for_venn[[j]]
+    list3 <- species_for_venn[[k]]
+    names1 <- names(species_for_venn[i])
+    names2 <- names(species_for_venn[j])
+    names3 <- names(species_for_venn[k])
+    # Find the union of the two lists
+    combined_list <- union(union(list1, list2),list3)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_tri %>%  add_row(Barcode = paste0(names1,":",names2,":",names3), level_3_unique_tot = num_unique) -> best_tri
+    }
+  }
+}
+
+best_tri %>% 
+  arrange(desc(level_3_unique_tot)) -> level_3_clean
+
+
+```
+
+```{r}
+tot_species %>% 
+  arrange(desc(Total_species)) %>% 
+  dplyr::slice(1) -> intersection_1_clean
+
+level_2_clean %>% 
+  arrange(desc(level_2_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_2_clean
+
+level_3_clean %>% 
+  arrange(desc(level_3_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_3_clean
+  
+tibble(
+total_species = c(intersection_1_clean$Total_species[[1]], 
+                   intersection_2_clean$level_2_unique_tot[[1]],
+                   intersection_3_clean$level_3_unique_tot[[1]]),
+Barcode = c(intersection_1_clean$Barcode[[1]], 
+           intersection_2_clean$Barcode[[1]],
+               intersection_3_clean$Barcode[[1]]     ),
+Level="Species"
+) -> tibble_for_plotting
+
+```
+
+## Plot 
+
+```{r plot-accumulation-curve-taxa}
+
+# set colors
+my_pal <- c("steelblue", "darkcyan", "darkseagreen3")
+
+
+
+
+rbind(tibble_for_plotting) %>% 
+  mutate(., counts_level = str_count(Barcode, pattern = ":")) %>% 
+  ggplot() +
+  theme_bw() +
+  expand_limits(y = 0) +
+  xlab("Loci") + 
+  ylab("Reference \n species") +
+  labs(color = "Taxonomic rank") +
+    labs(linetype = "Taxonomic rank") +
+  scale_color_manual(values = my_pal) +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 0.95, size=24),
+    axis.text.y = element_text(size=24),
+    #axis.text.x = element_blank(),
+    axis.title.x = element_text(size = 28),
+    axis.title.y = element_text(size = 28),
+    legend.text = element_text(size = 24),
+    #legend.title = element_text(size = 12),
+    legend.position="none",
+    legend.title = element_blank()
+  )  +
+  geom_point(aes(x = reorder(Barcode, counts_level), y = total_species, color = Level), size=8) +
+  geom_line(aes(x = reorder(Barcode, counts_level), y = total_species, color = Level, group = Level, linetype = Level), size=3) -> plot3_gom
+
+plot3_gom
+
+ggsave(here("LCA","Figures","rank_accumulation_curve_gom.png"), width = 6, height = 10)
+
+```
+
+# NAS
+
+## Load NAS List
+
+
+```{r}
+
+NAS_fishes <- read.table(here("NEP_share/20241210_Current_NEP_gap_analysis/01_inputs/NEP_lists_20241014/Ann_holmes_NAS/NAS species list formatted.csv"), sep = ",", header=T) %>% 
+  dplyr::rename(Species = Scientific.Name) %>% 
+  separate(Species, into =c("Genus","Species_epithet"), sep="\ ", remove=F) %>% dplyr::select(Species, Genus, Species_epithet) %>% distinct() %>% filter(., !str_detect(Species, "Unidentified"))
+
+
+```
+
+## MiFish All
+
+```{r, warning=FALSE}
+
+NAS_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% MiFish_all_raw_tax$Species,"Present","Absent")) -> NAS_fishes_MiFish_all_db
+
+NAS_fishes_MiFish_all_db %>% 
+  left_join(Mifish_all_cat, by="Species") -> NAS_fishes_MiFish_all_db
+
+NAS_fishes_MiFish_all_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_MiFish_all_db_mini
+```
+
+```{r}
+ NAS_fishes_MiFish_all_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> MiFish_all_species_in_db_higher_tax
+
+Mifish_all_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:38`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% MiFish_all_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_MiFish_all_higher_level
+
+MiFish_all_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_MiFish_all_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_MiFish_all_db_higher_level
+
+NAS_fishes_MiFish_all_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> MiFish_all_dup
+
+NAS_fishes_MiFish_all_db_higher_level %>% 
+  filter(., !Species %in% MiFish_all_dup$Species) -> NAS_fishes_MiFish_all_db_higher_level_no_dup
+
+MiFish_all_dup %>% 
+  filter(., Type=="Family Level ID")-> MiFish_all_duplicated_species
+
+```
+
+```{r}
+
+NAS_fishes_MiFish_all_db_mini %>% 
+  filter(., !is.na(Type)) -> NAS_fishes_MiFish_all_db_mini_species
+
+NAS_fishes_MiFish_all_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="MiFish all") -> NAS_fishes_MiFish_all_db_mini_absent
+
+
+rbind(NAS_fishes_MiFish_all_db_mini_species, NAS_fishes_MiFish_all_db_mini_absent,NAS_fishes_MiFish_all_db_higher_level_no_dup, MiFish_all_duplicated_species) %>% distinct() -> NAS_MiFish_all_cat_db
+
+setdiff(NAS_fishes$Species, NAS_MiFish_all_cat_db$Species)
+setdiff(NAS_MiFish_all_cat_db$Species, NAS_fishes$Species)
+
+intersect(NAS_MiFish_all_cat_db$Species, NAS_fishes$Species) %>% length()
+
+length(NAS_MiFish_all_cat_db$Species)
+
+```
+
+```{r}
+NAS_MiFish_all_cat_db %>% 
+    filter(., !is.na(Type)) ->NAS_MiFish_all_cat_db
+  
+NAS_MiFish_all_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> MiFish_all_cat_sum_NAS
+
+NAS_MiFish_all_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(NAS_MiFish_all_cat_db$Species)) -> MiFish_all_cat_tot_NAS
+
+MiFish_all_cat_sum_NAS %>% 
+  mutate(tot= MiFish_all_cat_tot_NAS$tot,
+         Barcode = "Mifish_all 12S") %>% 
+   mutate(., perc=( n/ tot)) -> MiFish_all_cat_dat_NAS
+  
+```
+
+
+## Ford 16S
+
+```{r, warning=FALSE}
+
+NAS_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% Ford_16S_raw_tax$Species,"Present","Absent")) -> NAS_fishes_Ford_16S_db
+
+NAS_fishes_Ford_16S_db %>% 
+  left_join(Ford_16S_cat, by="Species") -> NAS_fishes_Ford_16S_db
+
+NAS_fishes_Ford_16S_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_Ford_16S_db_mini
+
+```
+
+```{r}
+ NAS_fishes_Ford_16S_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> Ford_16S_species_in_db_higher_tax
+
+Ford_16S_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:94`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% Ford_16S_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_Ford_16S_higher_level
+
+Ford_16S_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_Ford_16S_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_Ford_16S_db_higher_level
+  
+NAS_fishes_Ford_16S_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> Ford_16S_dup
+
+NAS_fishes_Ford_16S_db_higher_level %>% 
+  filter(., !Species %in% Ford_16S_dup$Species) -> NAS_fishes_Ford_16S_db_higher_level_no_dup
+
+Ford_16S_dup %>% 
+  filter(., Type=="Family Level ID")-> Ford_16S_duplicated_species
+
+```
+
+```{r}
+
+NAS_fishes_Ford_16S_db_mini %>% 
+  filter(., !is.na(Type)) -> NAS_fishes_Ford_16S_db_mini_species
+
+NAS_fishes_Ford_16S_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="Ford 16S") -> NAS_fishes_Ford_16S_db_mini_absent
+
+
+rbind(NAS_fishes_Ford_16S_db_mini_species, NAS_fishes_Ford_16S_db_mini_absent,NAS_fishes_Ford_16S_db_higher_level_no_dup, Ford_16S_duplicated_species) %>% distinct() -> NAS_Ford_16S_cat_db
+
+setdiff(NAS_fishes$Species, NAS_Ford_16S_cat_db$Species)
+setdiff(NAS_Ford_16S_cat_db$Species, NAS_fishes$Species)
+
+intersect(NAS_Ford_16S_cat_db$Species, NAS_fishes$Species) %>% length()
+
+length(NAS_Ford_16S_cat_db$Species)
+
+NAS_Ford_16S_cat_db %>% 
+  filter(., is.na(Type))
+```
+
+```{r}
+NAS_Ford_16S_cat_db %>% 
+    filter(., !is.na(Type)) -> NAS_Ford_16S_cat_db
+
+NAS_Ford_16S_cat_db  %>% 
+  group_by(Type) %>% 
+  mutate(., Type=if_else(is.na(Type), "Family Level ID", Type)) %>% 
+  count()-> Ford_16S_cat_sum_NAS
+
+NAS_Ford_16S_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(NAS_Ford_16S_cat_db$Species)) -> Ford_16S_cat_tot_NAS
+
+Ford_16S_cat_sum_NAS %>% 
+  mutate(tot= Ford_16S_cat_tot_NAS$tot,
+         Barcode = "Ford_16S") %>% 
+   mutate(., perc=( n/ tot)) -> Ford_16S_cat_dat_NAS
+  
+```
+
+## MiSebastes
+
+
+```{r, warning=FALSE}
+
+NAS_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% MiSebastes_raw_tax$Species,"Present","Absent")) -> NAS_fishes_MiSebastes_db
+
+NAS_fishes_MiSebastes_db %>% 
+  left_join(MiSebastes_cat, by="Species") -> NAS_fishes_MiSebastes_db
+
+NAS_fishes_MiSebastes_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_MiSebastes_db_mini
+```
+
+```{r}
+ NAS_fishes_MiSebastes_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> MiSebastes_species_in_db_higher_tax
+
+MiSebastes_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:23`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% MiSebastes_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_MiSebastes_higher_level
+
+MiSebastes_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_MiSebastes_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_MiSebastes_db_higher_level
+
+NAS_fishes_MiSebastes_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> MiSebastes_dup
+
+NAS_fishes_MiSebastes_db_higher_level %>% 
+  filter(., !Species %in% MiSebastes_dup$Species) -> NAS_fishes_MiSebastes_db_higher_level_no_dup
+
+MiSebastes_dup %>% 
+  filter(., Type=="Family Level ID")-> MiSebastes_duplicated_species
+
+```
+
+```{r}
+
+NAS_fishes_MiSebastes_db_mini %>% 
+  filter(., !is.na(Type)) -> NAS_fishes_MiSebastes_db_mini_species
+
+NAS_fishes_MiSebastes_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="MiSebastes") -> NAS_fishes_MiSebastes_db_mini_absent
+
+
+rbind(NAS_fishes_MiSebastes_db_mini_species, NAS_fishes_MiSebastes_db_mini_absent,NAS_fishes_MiSebastes_db_higher_level_no_dup, MiSebastes_duplicated_species) %>% distinct() -> NAS_MiSebastes_cat_db
+
+setdiff(NAS_fishes$Species, NAS_MiSebastes_cat_db$Species)
+setdiff(NAS_MiSebastes_cat_db$Species, NAS_fishes$Species)
+
+intersect(NAS_MiSebastes_cat_db$Species, NAS_fishes$Species) %>% length()
+
+length(NAS_MiSebastes_cat_db$Species)
+```
+
+```{r}
+NAS_MiSebastes_cat_db %>% 
+    filter(., !is.na(Type)) -> NAS_MiSebastes_cat_db
+
+NAS_MiSebastes_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> MiSebastes_cat_sum_NAS
+
+NAS_MiSebastes_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(NAS_MiSebastes_cat_db$Species)) -> MiSebastes_cat_tot_NAS
+
+MiSebastes_cat_sum_NAS %>% 
+  mutate(tot= MiSebastes_cat_tot_NAS$tot,
+         Barcode = "MiSebastes") %>% 
+   mutate(., perc=( n/ tot)) -> MiSebastes_cat_dat_NAS
+  
+```
+
+## MarVer3
+
+
+```{r, warning=FALSE}
+
+NAS_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% MarVer3_raw_tax$Species,"Present","Absent")) -> NAS_fishes_MarVer3_db
+
+NAS_fishes_MarVer3_db %>% 
+  left_join(MarVer3_cat, by="Species") -> NAS_fishes_MarVer3_db
+
+NAS_fishes_MarVer3_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_MarVer3_db_mini
+```
+
+```{r}
+ NAS_fishes_MarVer3_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> MarVer3_species_in_db_higher_tax
+
+MarVer3_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:173`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% MarVer3_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_MarVer3_higher_level
+
+MarVer3_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_MarVer3_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_MarVer3_db_higher_level
+
+NAS_fishes_MarVer3_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> MarVer3_dup
+
+NAS_fishes_MarVer3_db_higher_level %>% 
+  filter(., !Species %in% MarVer3_dup$Species) -> NAS_fishes_MarVer3_db_higher_level_no_dup
+
+MarVer3_dup %>% 
+  filter(., Type=="Family Level ID")-> MarVer3_duplicated_species
+
+```
+
+```{r}
+
+NAS_fishes_MarVer3_db_mini %>% 
+  filter(., !is.na(Type)) -> NAS_fishes_MarVer3_db_mini_species
+
+NAS_fishes_MarVer3_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="MarVer3") -> NAS_fishes_MarVer3_db_mini_absent
+
+
+rbind(NAS_fishes_MarVer3_db_mini_species, NAS_fishes_MarVer3_db_mini_absent,NAS_fishes_MarVer3_db_higher_level_no_dup, MarVer3_duplicated_species) %>% distinct() -> NAS_MarVer3_cat_db
+
+setdiff(NAS_fishes$Species, NAS_MarVer3_cat_db$Species)
+setdiff(NAS_MarVer3_cat_db$Species, NAS_fishes$Species)
+
+intersect(NAS_MarVer3_cat_db$Species, NAS_fishes$Species) %>% length()
+
+length(NAS_MarVer3_cat_db$Species)
+```
+
+```{r}
+NAS_MarVer3_cat_db  %>% 
+    filter(., !is.na(Type)) ->NAS_MarVer3_cat_db
+
+NAS_MarVer3_cat_db  %>% 
+  group_by(Type) %>% 
+    mutate(., Type=if_else(is.na(Type), "Family Level ID", Type)) %>% 
+  count()-> MarVer3_cat_sum_NAS
+
+NAS_MarVer3_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(NAS_MarVer3_cat_db$Species)) -> MarVer3_cat_tot_NAS
+
+MarVer3_cat_sum_NAS %>% 
+  mutate(tot= MarVer3_cat_tot_NAS$tot,
+         Barcode = "MarVer3") %>% 
+   mutate(., perc=( n/ tot)) -> MarVer3_cat_dat_NAS
+  
+```
+
+## teleo
+
+```{r, warning=FALSE}
+
+NAS_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% teleo_raw_tax$Species,"Present","Absent")) -> NAS_fishes_teleo_db
+
+NAS_fishes_teleo_db %>% 
+  left_join(teleo_cat, by="Species") -> NAS_fishes_teleo_db
+
+NAS_fishes_teleo_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_teleo_db_mini
+```
+
+```{r}
+ NAS_fishes_teleo_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> teleo_species_in_db_higher_tax
+
+teleo_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:9258`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% teleo_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_teleo_higher_level
+
+teleo_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_teleo_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_teleo_db_higher_level
+
+NAS_fishes_teleo_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> teleo_dup
+
+NAS_fishes_teleo_db_higher_level %>% 
+  filter(., !Species %in% teleo_dup$Species) -> NAS_fishes_teleo_db_higher_level_no_dup
+
+teleo_dup %>% 
+  filter(., Type=="Family Level ID")-> teleo_duplicated_species
+
+```
+
+```{r}
+
+NAS_fishes_teleo_db_mini %>% 
+  filter(., !is.na(Type)) -> NAS_fishes_teleo_db_mini_species
+
+NAS_fishes_teleo_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="teleo") -> NAS_fishes_teleo_db_mini_absent
+
+
+rbind(NAS_fishes_teleo_db_mini_species, NAS_fishes_teleo_db_mini_absent,NAS_fishes_teleo_db_higher_level_no_dup, teleo_duplicated_species) %>% distinct() -> NAS_teleo_cat_db
+
+setdiff(NAS_fishes$Species, NAS_teleo_cat_db$Species)
+setdiff(NAS_teleo_cat_db$Species, NAS_fishes$Species)
+
+intersect(NAS_teleo_cat_db$Species, NAS_fishes$Species) %>% length()
+
+length(NAS_teleo_cat_db$Species)
+```
+
+```{r}
+NAS_teleo_cat_db %>% 
+    filter(., !is.na(Type)) -> NAS_teleo_cat_db
+
+NAS_teleo_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> teleo_cat_sum_NAS
+
+NAS_teleo_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(NAS_teleo_cat_db$Species)) -> teleo_cat_tot_NAS
+
+teleo_cat_sum_NAS %>% 
+  mutate(tot= teleo_cat_tot_NAS$tot,
+         Barcode = "teleo 12S") %>% 
+   mutate(., perc=( n/ tot)) -> teleo_cat_dat_NAS
+  
+```
+
+## Berry
+
+
+```{r, warning=FALSE}
+
+NAS_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% berry_raw_tax$Species,"Present","Absent")) -> NAS_fishes_Berry_db
+
+NAS_fishes_Berry_db %>% 
+  left_join(Berry_cat, by="Species") -> NAS_fishes_Berry_db
+
+NAS_fishes_Berry_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_Berry_db_mini
+```
+
+```{r}
+ NAS_fishes_Berry_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> Berry_species_in_db_higher_tax
+
+Berry_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:191`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% Berry_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_Berry_higher_level
+
+Berry_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_Berry_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_Berry_db_higher_level
+
+NAS_fishes_Berry_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> Berry_dup
+
+NAS_fishes_Berry_db_higher_level %>% 
+  filter(., !Species %in% Berry_dup$Species) -> NAS_fishes_Berry_db_higher_level_no_dup
+
+Berry_dup %>% 
+  filter(., Type=="Family Level ID")-> Berry_duplicated_species
+
+```
+
+```{r}
+
+NAS_fishes_Berry_db_mini %>% 
+  filter(., !is.na(Type)) -> NAS_fishes_Berry_db_mini_species
+
+NAS_fishes_Berry_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="Berry") -> NAS_fishes_Berry_db_mini_absent
+
+
+rbind(NAS_fishes_Berry_db_mini_species, NAS_fishes_Berry_db_mini_absent,NAS_fishes_Berry_db_higher_level_no_dup, Berry_duplicated_species) %>% distinct() -> NAS_Berry_cat_db
+
+setdiff(NAS_fishes$Species, NAS_Berry_cat_db$Species)
+setdiff(NAS_Berry_cat_db$Species, NAS_fishes$Species)
+
+intersect(NAS_Berry_cat_db$Species, NAS_fishes$Species) %>% length()
+
+length(NAS_Berry_cat_db$Species)
+```
+
+```{r}
+NAS_Berry_cat_db %>% 
+    filter(., !is.na(Type)) -> NAS_Berry_cat_db
+
+NAS_Berry_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> Berry_cat_sum_NAS
+
+NAS_Berry_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(NAS_Berry_cat_db$Species)) -> Berry_cat_tot_NAS
+
+Berry_cat_sum_NAS %>% 
+  mutate(tot= Berry_cat_tot_NAS$tot,
+         Barcode = "Berry 12S") %>% 
+   mutate(., perc=( n/ tot)) -> Berry_cat_dat_NAS
+  
+```
+
+## Riaz
+
+
+```{r, warning=FALSE}
+
+NAS_fishes %>% 
+  dplyr::select(Species, Genus) %>% 
+  mutate(., Species_In_Database = if_else(Species %in% Riaz_raw_tax$Species,"Present","Absent")) -> NAS_fishes_Riaz_db
+
+NAS_fishes_Riaz_db %>% 
+  left_join(Riaz_cat, by="Species") -> NAS_fishes_Riaz_db
+
+NAS_fishes_Riaz_db %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_Riaz_db_mini
+```
+
+```{r}
+ NAS_fishes_Riaz_db %>% 
+   filter(., Species_In_Database =="Present") %>% 
+   filter(., is.na(cluster)) -> Riaz_species_in_db_higher_tax
+
+Riaz_cat %>% 
+  filter(., Type !="Species Level ID") %>% 
+  unnest(data) %>% 
+    dplyr::select(-Same_Species,-Same_Genus,-Same_Family,-Same_Order,   -Same_Class,-Same_Phylum,-Same_Domain) %>% 
+  pivot_longer(cols = `taxonomic_path:1`:`Species:56`, names_to = "Metric", values_to = "Values") %>% 
+  filter(Values %in% Riaz_species_in_db_higher_tax$Species) %>% 
+  ungroup() %>% 
+  select(Species=Values, lca_taxonomic_path, Domain, Phylum, Class, Order, Family, Genus,Barcode,Type) %>% distinct()-> long_Riaz_higher_level
+
+Riaz_species_in_db_higher_tax %>%  
+  dplyr::select(Species, Species_In_Database) %>% 
+left_join(long_Riaz_higher_level, by="Species") %>% 
+  dplyr::select(Species, Species_In_Database, lca_taxonomic_path, Barcode, Type) -> NAS_fishes_Riaz_db_higher_level
+
+NAS_fishes_Riaz_db_higher_level%>% 
+  group_by(Species) %>% 
+  filter(n()>1) -> Riaz_dup
+
+NAS_fishes_Riaz_db_higher_level %>% 
+  filter(., !Species %in% Riaz_dup$Species) -> NAS_fishes_Riaz_db_higher_level_no_dup
+
+Riaz_dup %>% 
+  filter(., Type=="Family Level ID")-> Riaz_duplicated_species
+
+```
+
+```{r}
+
+NAS_fishes_Riaz_db_mini %>% 
+  filter(., !is.na(Type)) -> NAS_fishes_Riaz_db_mini_species
+
+NAS_fishes_Riaz_db_mini %>% 
+  filter(., is.na(Type)) %>% 
+  filter(., Species_In_Database=="Absent") %>% 
+  mutate(., Type = "Not in Reference Database") %>% 
+  mutate(., Barcode ="Riaz")  -> NAS_fishes_Riaz_db_mini_absent
+
+
+rbind(NAS_fishes_Riaz_db_mini_species, NAS_fishes_Riaz_db_mini_absent,NAS_fishes_Riaz_db_higher_level_no_dup, Riaz_duplicated_species) %>% distinct() -> NAS_Riaz_cat_db
+
+setdiff(NAS_fishes$Species, NAS_Riaz_cat_db$Species)
+setdiff(NAS_Riaz_cat_db$Species, NAS_fishes$Species)
+
+intersect(NAS_Riaz_cat_db$Species, NAS_fishes$Species) %>% length()
+
+length(NAS_Riaz_cat_db$Species)
+```
+
+```{r}
+NAS_Riaz_cat_db %>% 
+    filter(., !is.na(Type)) -> NAS_Riaz_cat_db
+
+NAS_Riaz_cat_db  %>% 
+  group_by(Type) %>% 
+  count()-> Riaz_cat_sum_NAS
+
+NAS_Riaz_cat_db %>% 
+  ungroup() %>% 
+  dplyr::summarise(tot=length(NAS_Riaz_cat_db$Species)) -> Riaz_cat_tot_NAS
+
+Riaz_cat_sum_NAS %>% 
+  mutate(tot= Riaz_cat_tot_NAS$tot,
+         Barcode = "Riaz 12S") %>% 
+   mutate(., perc=( n/ tot)) -> Riaz_cat_dat_NAS
+  
+```
+
+
+
+## Combined Plots
+
+```{r}
+rbind(MiFish_all_cat_dat_NAS,Ford_16S_cat_dat_NAS,MarVer3_cat_dat_NAS,MiSebastes_cat_dat_NAS,teleo_cat_dat_NAS, Berry_cat_dat_NAS,Riaz_cat_dat_NAS) -> combined_cat_dat_NAS
+
+saveRDS(combined_cat_dat_NAS, here("LCA","Figures","Fish_ref_dbs_combined_cat_dat_NAS_20250517.RDS"))
+
+combined_cat_dat_NAS$Type <- factor(combined_cat_dat_NAS$Type, levels=c("Not in Reference Database","Phylum Level ID", "Order Level ID", 'Class Level ID','Family Level ID','Genus Level ID','Species Level ID'))
+
+combined_cat_dat_NAS %>% 
+ggplot(., aes(y=perc, color=Type, fill=Type, x=Barcode)) + geom_col() + ylab("Percent") + 
+  theme_classic() +
+  scale_fill_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) +
+  scale_color_manual(values=c(`Phylum Level ID`=moon2[3], `Order Level ID`=moon3[3],`Class Level ID`=moon3[4],`Family Level ID`=moon3[5],`Genus Level ID`=moon2[2],`Species Level ID`=moon2[4])) + 
+  guides(fill=guide_legend(title="Resolution of Taxonomic Identification"), color=guide_legend(title="Resolution of Taxonomic Identification"))+
+  scale_y_continuous(labels = scales::percent) +
+  geom_hline(yintercept = 1, linetype="dashed") + theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust=1))-> a1_NAS
+
+a1_NAS
+
+ggsave(here("LCA","Figures","Combined_plots_figure_percent_NAS.png"), width = 8, height = 6)
+```
+
+## Rank accumulation curves to identify which barcode performs the best
+
+## Species
+```{r}
+
+rbind(NAS_MiFish_all_cat_db, NAS_Ford_16S_cat_db,NAS_MarVer3_cat_db,NAS_MiSebastes_cat_db,NAS_teleo_cat_db,NAS_Berry_cat_db,NAS_Riaz_cat_db) ->  barcode_cat_NAS
+
+barcode_cat_NAS %>% 
+  filter(., Species != "") %>% 
+  ungroup() %>% 
+  dplyr::select(Barcode, Species, Type) %>% 
+  unite(., `Barcode:Species`, c("Barcode","Species"), sep = ":", remove=F)-> ranks_of_species
+
+
+ranks_of_species %>% 
+  group_by(Barcode) %>%   filter(., Type =="Species Level ID") %>% 
+  dplyr::summarise(Total_species = n_distinct(Species)) -> tot_species
+
+ranks_of_species %>%
+  filter(., Type =="Species Level ID") %>% 
+  group_by(Barcode) %>% 
+  dplyr::summarise(Species = list(unique(Species))) -> nested_species
+
+rrapply(nested_species, how = "unmelt") -> species_for_venn
+
+
+# Initialize variables to track the maximum
+max_unique <- 0
+best_pair <- tibble(
+  Barcode = character(),
+  level_2_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(species_for_venn)) {
+  for (j in (i + 1):length(species_for_venn)-1) {
+    # Get the two lists
+    list1 <- species_for_venn[[i]]
+    list2 <- species_for_venn[[j]]
+    names1 <- names(species_for_venn[i])
+    names2 <- names(species_for_venn[j])
+    # Find the union of the two lists
+    combined_list <- union(list1, list2)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_pair %>%  add_row(Barcode = paste0(names1,":",names2), level_2_unique_tot = num_unique) -> best_pair
+    }
+}
+
+best_pair %>% 
+  arrange(desc(level_2_unique_tot)) -> level_2_clean
+
+
+```
+
+```{r}
+
+
+# Initialize variables to track the maximum
+best_tri <- tibble(
+  Barcode = character(),
+  level_3_unique_tot = numeric())
+
+# Iterate through all possible pairs of lists
+for (i in 1:length(species_for_venn)) {
+  for (j in (i + 1):length(species_for_venn)-1) {
+    for (k in (i + 1):length(species_for_venn)-1) {
+    # Get the two lists
+    list1 <- species_for_venn[[i]]
+    list2 <- species_for_venn[[j]]
+    list3 <- species_for_venn[[k]]
+    names1 <- names(species_for_venn[i])
+    names2 <- names(species_for_venn[j])
+    names3 <- names(species_for_venn[k])
+    # Find the union of the two lists
+    combined_list <- union(union(list1, list2),list3)
+
+    # Count the unique elements
+    num_unique <- length(unique(combined_list))
+    best_tri %>%  add_row(Barcode = paste0(names1,":",names2,":",names3), level_3_unique_tot = num_unique) -> best_tri
+    }
+  }
+}
+
+best_tri %>% 
+  arrange(desc(level_3_unique_tot)) -> level_3_clean
+
+
+```
+
+```{r}
+tot_species %>% 
+  arrange(desc(Total_species)) %>% 
+  dplyr::slice(1) -> intersection_1_clean
+
+level_2_clean %>% 
+  arrange(desc(level_2_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_2_clean
+
+level_3_clean %>% 
+  arrange(desc(level_3_unique_tot)) %>% 
+  dplyr::slice(1) -> intersection_3_clean
+  
+tibble(
+total_species = c(intersection_1_clean$Total_species[[1]], 
+                   intersection_2_clean$level_2_unique_tot[[1]],
+                   intersection_3_clean$level_3_unique_tot[[1]]),
+Barcode = c(intersection_1_clean$Barcode[[1]], 
+           intersection_2_clean$Barcode[[1]],
+               intersection_3_clean$Barcode[[1]]     ),
+Level="Species"
+) -> tibble_for_plotting
+
+```
+
+## Plot 
+
+```{r plot-accumulation-curve-taxa}
+
+# set colors
+my_pal <- c("steelblue", "darkcyan", "darkseagreen3")
+
+
+rbind(tibble_for_plotting) %>% 
+  mutate(., counts_level = str_count(Barcode, pattern = ":")) %>% 
+  ggplot() +
+  theme_bw() +
+  expand_limits(y = 0) +
+  xlab("Loci") + 
+  ylab("Reference \n species") +
+  labs(color = "Taxonomic rank") +
+    labs(linetype = "Taxonomic rank") +
+  scale_color_manual(values = my_pal) +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 0.95, size=24),
+    axis.text.y = element_text(size=24),
+    #axis.text.x = element_blank(),
+    axis.title.x = element_text(size = 28),
+    axis.title.y = element_text(size = 28),
+    legend.text = element_text(size = 24),
+    #legend.title = element_text(size = 12),
+    legend.position="none",
+    legend.title = element_blank()
+  )  +
+  geom_point(aes(x = reorder(Barcode, counts_level), y = total_species, color = Level), size=8) +
+  geom_line(aes(x = reorder(Barcode, counts_level), y = total_species, color = Level, group = Level, linetype = Level), size=3)-> plot3_nas
+
+plot3_nas
+
+ggsave(here("LCA","Figures","rank_accumulation_curve_nas.png"), width = 6, height = 10)
+
+```
+
+
+
