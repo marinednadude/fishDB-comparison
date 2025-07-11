@@ -541,6 +541,8 @@ ggsave(here("LCA","Figures","tile_plot_for_taxa_of_interest_surfperch_figure.png
 tile_plot_for_taxa_of_interest("Class","Chondrichthyes",barcode_cat )
 tile_plot_for_taxa_of_interest("Class","Hyperoartia",barcode_cat )
 
+tile_plot_for_taxa_of_interest("Genus","Gadus",barcode_cat )
+
 ```
 
 

@@ -11,7 +11,7 @@ library(tidyverse)
 library(readxl)
 ```
 
-# CA Seaweed
+# CA Seaweed - Zack Manually copied from website
 
 ```{r}
 read_xlsx(here("CA_seaweeds","CA_seaweeds.xlsx"), col_names = F) -> CA_seaweeds
@@ -27,6 +27,19 @@ cbind(CA_seaweeds,splitted) %>%
   write_excel_csv(., here("CA_seaweeds","CA_seaweeds_names_fixed.csv"))
 
 ```
+
+# CA Seaweed - Kathy Ann emailed
+```{r}
+ka_sw <- read_xlsx(here("CA_seaweeds/kathy_ann_CA_names_MAY_2025_formatted.xlsx"), col_names = F)
+
+ka_sw %>% 
+  dplyr::rename(raw=`...1`) %>% 
+  mutate(., Species = word(raw, 1,2)) %>% 
+  mutate(., Species=if_else(is.na(Species), word(raw, 1), Species)) %>% 
+  write_excel_csv(., here("CA_seaweeds","kathy_ann_CA_names_MAY_2025_names_fixed.csv"))
+  
+```
+
 
 # GOM
 
