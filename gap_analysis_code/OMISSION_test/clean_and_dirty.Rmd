@@ -1,0 +1,37 @@
+---
+title: "rCRUX CO1 - OMISSION Quick and Dirty"
+author: "Zack Gold"
+date: "2025-08-08"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(here)
+
+```
+
+```{r}
+int_tid_test <- read_delim(here("gap_analysis_code/OMISSION_test/filtered_merge_records.txt"), col_types = cols(.default = col_character()), na = c("","NA"))
+
+# scientificName , NCBI_identifier_species, NCBI_accepted_species
+
+c(int_tid_test$scientificName, int_tid_test$NCBI_identifier_species, int_tid_test$NCBI_accepted_species) %>% unique() %>% noquote() -> species_names
+```
+
+```{r}
+
+rCRUX_CO1 <- read.table(here("rCRUX_dbs/CO1_combined/blast_seeds_output/CO1_combined_taxonomy.txt"), header = T) %>% 
+  separate(taxonomic_path, into = c("Kingdom","Phylum","Class","Order","Family","Genus","Species"), sep=";")
+
+rCRUX_CO1$Species %>%  unique() -> rcrux_co1_species
+length(rcrux_co1_species) -> total_species
+length(species_names) -> int_tid_species
+
+intersect(species_names, rcrux_co1_species) %>%  length() -> intersect
+
+intersect/int_tid_species
+
+```
+
+
